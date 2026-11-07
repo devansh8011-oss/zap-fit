@@ -180,8 +180,15 @@
     },
     saveSession(user) {
       try {
-        if (user) localStorage.setItem(SESSION_KEY, JSON.stringify({ uid: user.uid, name: user.name }));
-        else localStorage.removeItem(SESSION_KEY);
+        if (user) {
+          localStorage.setItem(SESSION_KEY, JSON.stringify({
+            uid: user.uid,
+            name: user.name,
+            sessionToken: user.sessionToken || ''
+          }));
+        } else {
+          localStorage.removeItem(SESSION_KEY);
+        }
       } catch (e) {}
     },
     loadDidiOrders() {
@@ -232,7 +239,13 @@
   }
 
   async function apiRequest(url, method = 'GET', body = undefined) {
-    const opts = { method, headers: { 'Content-Type': 'application/json' } };
+    const headers = { 'Content-Type': 'application/json' };
+    const savedSession = Store.loadSession();
+    const token = S.user?.sessionToken || savedSession?.sessionToken;
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    if (isDidiRoute() || S.view === 'didi') headers['X-ZapFit-Client'] = 'didi-partner';
+
+    const opts = { method, headers, credentials: 'same-origin' };
     if (body !== undefined) opts.body = JSON.stringify(body);
     const res = await withTimeout(fetch(url, opts), 8000);
     const data = await res.json().catch(() => ({}));
@@ -796,7 +809,8 @@ Return ONLY a JSON object with these keys:
     S.user = {
       uid: userObj.uid,
       name: userObj.name || 'Athlete',
-      photo: userObj.photo || ''
+      photo: userObj.photo || '',
+      sessionToken: userObj.sessionToken || S.user?.sessionToken || Store.loadSession()?.sessionToken || ''
     };
     Store.saveSession(S.user);
     S.data = Store.load(userObj.uid);
@@ -825,6 +839,7 @@ Return ONLY a JSON object with these keys:
     // Immediately sync merged history (today, yesterday, and all past days) to backend database
     persist();
     subscribeAthleteData(userObj.uid);
+    subscribeDidiOrders();
 
     S.modal = null; S.authBusy = false; S.authError = '';
     if (isDidiRoute()) {
@@ -888,10 +903,15 @@ Return ONLY a JSON object with these keys:
       const authClient = await getGoogleAuth();
       const res = await authClient.signInWithPopup(new firebase.auth.GoogleAuthProvider());
       const u = res.user;
+      const idToken = await u.getIdToken();
+      const authRes = await apiRequest('/api/auth', 'POST', {
+        mode: 'google',
+        idToken
+      });
+      if (!authRes || !authRes.user) throw new Error('Google authentication verification failed');
       await handleSignedIn({
-        uid: u.uid,
-        name: u.displayName || (u.email ? u.email.split('@')[0] : 'Athlete'),
-        photo: u.photoURL || ''
+        ...authRes.user,
+        sessionToken: authRes.sessionToken || ''
       });
     } catch (err) {
       S.authError = friendlyAuthError(err);
@@ -907,7 +927,10 @@ Return ONLY a JSON object with these keys:
         password
       });
       if (!res || !res.user) throw new Error('Authentication failed');
-      await handleSignedIn(res.user);
+      await handleSignedIn({
+        ...res.user,
+        sessionToken: res.sessionToken || ''
+      });
     } catch (err) {
       S.authError = friendlyAuthError(err);
     } finally { S.explicitSignIn = false; S.authBusy = false; render(); }
@@ -915,6 +938,7 @@ Return ONLY a JSON object with these keys:
 
   async function signOut() {
     if (athleteSyncInterval) { clearInterval(athleteSyncInterval); athleteSyncInterval = null; }
+    try { await apiRequest('/api/auth', 'DELETE'); } catch (e) {}
     try { if (googleAuthInstance) await googleAuthInstance.signOut(); } catch (e) {}
     Store.saveSession(null);
     S.user = null; S.data = null; S.modal = null; S.chat = []; S.view = isDidiRoute() ? 'didi' : 'landing';
@@ -3497,16 +3521,25 @@ ${recentDays.join('\n\n')}
   async function boot() {
     if (isDidiRoute()) S.view = 'didi';
     render();
-    subscribeDidiOrders();
     getGoogleAuth().catch(() => {});
 
     const savedUser = Store.loadSession();
     if (savedUser && savedUser.uid) {
-      await handleSignedIn(savedUser);
-    } else {
-      S.view = isDidiRoute() ? 'didi' : 'landing';
-      render();
+      try {
+        const verified = await apiRequest('/api/auth', 'GET');
+        if (verified && verified.user && verified.user.uid === savedUser.uid) {
+          await handleSignedIn({ ...savedUser, ...verified.user });
+          subscribeDidiOrders();
+          return;
+        }
+      } catch (e) {
+        // Session expired or unsigned; clear stale local session
+        Store.saveSession(null);
+      }
     }
+    S.view = isDidiRoute() ? 'didi' : 'landing';
+    if (isDidiRoute()) subscribeDidiOrders();
+    render();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);

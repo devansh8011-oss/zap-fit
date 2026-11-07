@@ -53,18 +53,18 @@ This guide walks you through setting up **Firebase Authentication**, **Cloud Fir
 
 ---
 
-### Step 4: Create Cloud Firestore Database
-1. In the left navigation menu, click **Build** > **Firestore Database**.
-2. Click **Create database**.
-3. **Database location**: Choose a region close to you (e.g., `asia-south1` (Mumbai) or default).
-4. **Security rules**:
-   - For quick development & exhibition testing, select **Start in test mode** (allows read/write for 30 days).
-   - Click **Create**.
-5. Your Firestore database is now ready!
-   - The app will automatically create and sync collections:
-     - `users/{uid}`: Stores user preferences (diet, allergies, goal, daily macros, pantry).
-     - `users/{uid}/workouts`: Logs training sessions.
-     - `users/{uid}/meals`: Logs meals eaten.
+### Step 4: Lock Down Firebase Realtime Database Rules
+1. In the left navigation menu, click **Build** > **Realtime Database** > **Rules**.
+2. To prevent direct public read/write access to `auth_accounts`, `athletes`, and `chef_didi_orders`, lock the database so only your authenticated backend server (via Service Account or Database Secret) can access it:
+   ```json
+   {
+     "rules": {
+       ".read": false,
+       ".write": false
+     }
+   }
+   ```
+3. In **Project Settings** > **Service accounts** > **Database secrets** (or **Generate new private key**), copy your secret/service account JSON and add it to `.env` and Vercel Environment Variables as `FIREBASE_DATABASE_SECRET` (or `FIREBASE_SERVICE_ACCOUNT_KEY`).
 
 ---
 
