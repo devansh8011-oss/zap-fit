@@ -1,0 +1,130 @@
+[
+  {
+    "category": "Supplements",
+    "name": "Whey Protein Isolate",
+    "active_nutrients": "BCAAs, Leucine, EAA",
+    "fitness_benefits": "Fast-acting muscle protein synthesis, accelerates tissue repair, highly bioavailable.",
+    "optimal_timing": "Within 30-45 mins post-workout",
+    "recommended_dosage": "25 - 30g per scoop"
+  },
+  {
+    "category": "Supplements",
+    "name": "Creatine Monohydrate",
+    "active_nutrients": "Creatine Phosphate",
+    "fitness_benefits": "Increases phosphocreatine stores, boosts power output, peak strength, and cell hydration.",
+    "optimal_timing": "Daily post-workout or morning",
+    "recommended_dosage": "3 - 5g daily"
+  },
+  {
+    "category": "Supplements",
+    "name": "Branched-Chain Amino Acids (BCAAs)",
+    "active_nutrients": "Leucine, Isoleucine, Valine",
+    "fitness_benefits": "Reduces muscle breakdown during prolonged fasts/cardio, mitigates DOMS.",
+    "optimal_timing": "Intra-workout or pre-cardio",
+    "recommended_dosage": "5 - 10g during training"
+  },
+  {
+    "category": "Supplements",
+    "name": "Beta-Alanine",
+    "active_nutrients": "Carnosine Precursor",
+    "fitness_benefits": "Buffers lactic acid build-up, delays neuromuscular fatigue during glycolytic sets.",
+    "optimal_timing": "Pre-workout (20 mins prior)",
+    "recommended_dosage": "3.2 - 5g daily"
+  },
+  {
+    "category": "Supplements",
+    "name": "Pre-Workout (Caffeine + Citrulline)",
+    "active_nutrients": "Caffeine, L-Citrulline Malate",
+    "fitness_benefits": "Enhances vasodilation (muscle pump), mental focus, and fatigue resistance.",
+    "optimal_timing": "20 - 30 mins before lifting",
+    "recommended_dosage": "200-300mg Caffeine / 6-8g Citrulline"
+  },
+  {
+    "category": "Supplements",
+    "name": "Omega-3 Fish / Algal Oil",
+    "active_nutrients": "EPA & DHA Fatty Acids",
+    "fitness_benefits": "Reduces joint inflammation, improves insulin sensitivity, supports cardiac health.",
+    "optimal_timing": "With meals (Breakfast/Dinner)",
+    "recommended_dosage": "1000 - 2000mg combined EPA/DHA"
+  },
+  {
+    "category": "Supplements",
+    "name": "Electrolyte Powder / Salt Tabs",
+    "active_nutrients": "Sodium, Potassium, Magnesium",
+    "fitness_benefits": "Prevents muscle cramping, maintains plasma volume during high sweat workouts.",
+    "optimal_timing": "Intra-workout / Post-sweat",
+    "recommended_dosage": "500mg Sodium + 200mg Potassium"
+  },
+  {
+    "category": "Supplements",
+    "name": "Casein Protein",
+    "active_nutrients": "Slow-release Micellar Casein",
+    "fitness_benefits": "Provides sustained anti-catabolic amino acid drip over 6-8 hours during sleep.",
+    "optimal_timing": "Before sleep or long fasts",
+    "recommended_dosage": "30 - 40g before bed"
+  },
+  {
+    "category": "Whole Foods",
+    "name": "Bananas",
+    "active_nutrients": "Potassium, Fructose, Glucose",
+    "fitness_benefits": "Rapid glycogen restocking, prevents muscle spasms, easy on the stomach.",
+    "optimal_timing": "Immediate pre or post-workout",
+    "recommended_dosage": "1 - 2 medium bananas"
+  },
+  {
+    "category": "Whole Foods",
+    "name": "Sweet Potatoes",
+    "active_nutrients": "Complex Carbs, Beta-Carotene",
+    "fitness_benefits": "Sustained glucose release without insulin spikes; high potassium for pumps.",
+    "optimal_timing": "Post-heavy lifting meal",
+    "recommended_dosage": "150 - 250g cooked"
+  },
+  {
+    "category": "Whole Foods",
+    "name": "Eggs (Whole & Whites)",
+    "active_nutrients": "Choline, Leucine, Albumen",
+    "fitness_benefits": "Gold-standard protein bioavailability, choline supports mind-muscle connection.",
+    "optimal_timing": "Breakfast or post-training",
+    "recommended_dosage": "3-5 whites / 2 whole eggs"
+  },
+  {
+    "category": "Whole Foods",
+    "name": "Almonds & Walnuts",
+    "active_nutrients": "Vitamin E, Magnesium, Healthy Fats",
+    "fitness_benefits": "Anti-inflammatory, balances anabolic hormones, prolongs fullness on cuts.",
+    "optimal_timing": "Snack / Rest day meal",
+    "recommended_dosage": "30g handful"
+  },
+  {
+    "category": "Whole Foods",
+    "name": "Greek Yogurt",
+    "active_nutrients": "Probiotics, Whey + Casein Blend",
+    "fitness_benefits": "Supports gut microbiome for better protein absorption; dual protein speed.",
+    "optimal_timing": "Snack or post-workout",
+    "recommended_dosage": "150 - 200g"
+  },
+  {
+    "category": "Whole Foods",
+    "name": "Oats",
+    "active_nutrients": "Beta-Glucan, Complex Starch",
+    "fitness_benefits": "Low GI carbohydrate source, sustains energy for grueling volume training.",
+    "optimal_timing": "Pre-workout (2 hours prior)",
+    "recommended_dosage": "50 - 100g dry oats"
+  },
+  {
+    "category": "Recovery Gear",
+    "name": "Foam Roller / Lacrosse Ball",
+    "active_nutrients": "Myofascial Release",
+    "fitness_benefits": "Relieves muscle tightness, increases blood circulation, reduces DOMS intensity.",
+    "optimal_timing": "Pre-workout warm-up / Post-session",
+    "recommended_dosage": "10-15 mins target areas"
+  },
+  {
+    "category": "Recovery Gear",
+    "name": "Lifting Belt & Wrist Wraps",
+    "active_nutrients": "Intra-Abdominal Pressure Support",
+    "fitness_benefits": "Stabilizes lumbar spine during maximal heavy loads (Squat/Deadlift).",
+    "optimal_timing": "Working sets above 80% 1RM",
+    "recommended_dosage": "As needed on heavy sets"
+  }
+]

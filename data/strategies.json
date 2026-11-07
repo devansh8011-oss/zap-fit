@@ -1,0 +1,107 @@
+[
+  {
+    "workout_type": "Heavy Strength / Powerlifting",
+    "primary_goal": "ATP-CP recovery, Central Nervous System repair, peak glycogen reloading",
+    "optimal_macro_ratio": "50% Carbs : 35% Protein : 15% Fat",
+    "carb_pct": 50,
+    "protein_pct": 35,
+    "fat_pct": 15,
+    "key_nutrients": "High fast/moderate carbs, dense protein, Sodium, Creatine, Iron",
+    "recommended_meals": [
+      "Minced Chicken (Keema) Bowl",
+      "Chickpea Curry with Rice",
+      "Jain Lobiya Curry",
+      "Grilled Chicken & Sweet Potato Mash"
+    ]
+  },
+  {
+    "workout_type": "Hypertrophy / Muscle Building",
+    "primary_goal": "Maximize Muscle Protein Synthesis (MPS), cell swelling, sarcoplasmic refuel",
+    "optimal_macro_ratio": "45% Carbs : 40% Protein : 15% Fat",
+    "carb_pct": 45,
+    "protein_pct": 40,
+    "fat_pct": 15,
+    "key_nutrients": "Leucine-rich protein (25g+), moderate starch, Magnesium, Zinc",
+    "recommended_meals": [
+      "Chicken Breast & Sweet Potato",
+      "Soya Chunks Stir-fry",
+      "Jain Paneer Bhurji",
+      "Classic Chicken & Basmati Rice"
+    ]
+  },
+  {
+    "workout_type": "Leg Day / High Volume Refeed",
+    "primary_goal": "Massive muscle tissue micro-trauma repair, deep glycogen depletion refuel",
+    "optimal_macro_ratio": "60% Carbs : 30% Protein : 10% Fat",
+    "carb_pct": 60,
+    "protein_pct": 30,
+    "fat_pct": 10,
+    "key_nutrients": "High glycemic carbs, potassium, ultra-lean protein to speed gastric emptying",
+    "recommended_meals": [
+      "Lentil Quinoa Bowl",
+      "Jain Banana Cutlet Wrap",
+      "Chicken Keema Meatballs with Pasta",
+      "Buckwheat Chilla"
+    ]
+  },
+  {
+    "workout_type": "HIIT / Circuit Training",
+    "primary_goal": "Rapid lactate clearance, quick glycogen restocking, electrolyte balance",
+    "optimal_macro_ratio": "55% Carbs : 35% Protein : 10% Fat",
+    "carb_pct": 55,
+    "protein_pct": 35,
+    "fat_pct": 10,
+    "key_nutrients": "Fast-digesting simple carbs, whey/soy isolate, Sodium, Potassium",
+    "recommended_meals": [
+      "Comforting Chicken Noodle Soup",
+      "Green Pea & Plant Protein Bowl",
+      "Jain Banana Tomato Rice",
+      "Curd & Mango Recovery Bowl"
+    ]
+  },
+  {
+    "workout_type": "Endurance / Long Distance Cardio",
+    "primary_goal": "Aerobic glycogen restoration, rehydration, anti-inflammatory support",
+    "optimal_macro_ratio": "65% Carbs : 20% Protein : 15% Fat",
+    "carb_pct": 65,
+    "protein_pct": 20,
+    "fat_pct": 15,
+    "key_nutrients": "High complex carbs, Omega-3s, Magnesium, Antioxidants, High Sodium",
+    "recommended_meals": [
+      "Oatmeal with Soy Protein",
+      "Curd & Honey Granola Bowl",
+      "Jain Buckwheat Khichdi",
+      "Allergen-Free Buckwheat Porridge"
+    ]
+  },
+  {
+    "workout_type": "Fat Loss / Cutting Phase",
+    "primary_goal": "Preserve lean muscle mass, maximize satiety, minimize caloric intake",
+    "optimal_macro_ratio": "20% Carbs : 60% Protein : 20% Fat",
+    "carb_pct": 20,
+    "protein_pct": 60,
+    "fat_pct": 20,
+    "key_nutrients": "Lean protein isolates, high fiber veggies, low GI carbs, Chromium",
+    "recommended_meals": [
+      "Egg White & Spinach Omelet",
+      "Pan-Fried Fish Fillet",
+      "Jain Tofu & Capsicum Stir-Fry",
+      "Tawa Fish Fillet with Potatoes"
+    ]
+  },
+  {
+    "workout_type": "Light Mobility / Rest Day",
+    "primary_goal": "Tissue repair, systemic anti-inflammation, hormone regulation",
+    "optimal_macro_ratio": "30% Carbs : 35% Protein : 35% Fat",
+    "carb_pct": 30,
+    "protein_pct": 35,
+    "fat_pct": 35,
+    "key_nutrients": "Healthy monounsaturated fats, collagen, gut-friendly fiber, Zinc",
+    "recommended_meals": [
+      "Chia Seed Pudding",
+      "Paneer & Pineapple Bowl",
+      "Pumpkin Seed Smoothie Bowl",
+      "Steamed Fish & Boiled Egg Salad"
+    ]
+  }
+]

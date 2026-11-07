@@ -1,0 +1,11 @@
+{
+  "name": "zap-fit",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "python server.py",
+    "dev": "python server.py",
+    "build": "python generate_app.py"
+  }
+}

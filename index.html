@@ -1,0 +1,3200 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>ZAP FIT™ Chef Didi | AI-Powered Post-Workout Nutrition</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="/logo-mark.png?v=3">
+  <link rel="apple-touch-icon" href="/logo-mark.png?v=3">
+  <link rel="stylesheet" href="/src/index.css?v=3">
+  <style>
+    /* Dish Plate Artwork Graphic */
+    .plate-art-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: 
+        radial-gradient(circle at 35% 35%, #FAF0DF 0 16%, transparent 17%),
+        radial-gradient(circle at 65% 35%, #708050 0 18%, transparent 19%),
+        radial-gradient(circle at 45% 65%, #C05020 0 18%, transparent 19%),
+        radial-gradient(circle at 50% 50%, #F2E5CE 0 58%, #FAF0DF 59% 68%, #D06828 69% 70%, transparent 71%);
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="modalsContainer"></div>
+  <div id="zapToast" style="display: none; position: fixed; bottom: 24px; right: 24px; z-index: 9999;"></div>
+
+  <!-- Static Meal, Strategy & Supplement Catalog (Zero API Keys or Credentials in Frontend) -->
+  <script>
+    window.ZAP_MEALS = [
+  {
+    "id": "VEG-01",
+    "source_id": "MEAL-01",
+    "group": "VEGAN",
+    "name": "Tofu Bhurji with Spinach & Whole Wheat Toast",
+    "category": "Vegan",
+    "calories": 380,
+    "carbs": 42,
+    "protein": 24,
+    "fat": 12,
+    "micronutrients": [
+      "Iron",
+      "Calcium",
+      "Magnesium"
+    ],
+    "allergens_present": [
+      "Gluten",
+      "Soy"
+    ],
+    "allergens_avoided": "Dairy, Eggs, Fish, Shellfish, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Hypertrophy / Resistance",
+    "benefits": "High-protein scrambled tofu with spinach and whole wheat toast to start your day strong.",
+    "ingredients": [
+      "Tofu",
+      "Spinach",
+      "Whole wheat bread",
+      "Olive oil",
+      "Turmeric",
+      "Green chillies",
+      "Salt"
+    ],
+    "prep_time": "5 mins",
+    "cook_time": "10 mins",
+    "steps": [
+      "Chef Didi crumbles firm tofu into bite-sized pieces and washes fresh spinach.",
+      "Heat 1 tbsp olive oil in a pan over medium heat; add a pinch of turmeric, chopped green chillies, and salt.",
+      "Add crumbled tofu and sauté for 4-5 minutes until heated through and lightly golden.",
+      "Add fresh spinach and stir gently for 2 minutes until wilted and tender.",
+      "Toast whole wheat bread until crisp, plate alongside the hot tofu bhurji, and serve."
+    ]
+  },
+  {
+    "id": "VEG-02",
+    "source_id": "MEAL-02",
+    "group": "VEGAN",
+    "name": "Oatmeal with Soy Protein, Chia Seeds & Banana",
+    "category": "Vegan",
+    "calories": 420,
+    "carbs": 58,
+    "protein": 26,
+    "fat": 10,
+    "micronutrients": [
+      "Magnesium",
+      "Zinc",
+      "Antioxidants"
+    ],
+    "allergens_present": [
+      "Soy"
+    ],
+    "allergens_avoided": "Dairy, Eggs, Fish, Shellfish, Gluten, Tree Nuts, Peanuts",
+    "recommended_post_workout": "Endurance / HIIT",
+    "benefits": "Warm oatmeal with soy protein, chia seeds, and sliced banana for sustained energy.",
+    "ingredients": [
+      "Oats",
+      "Soy protein",
+      "Chia seeds",
+      "Banana",
+      "Water"
+    ],
+    "prep_time": "3 mins",
+    "cook_time": "5 mins",
+    "steps": [
+      "Chef Didi brings water to a gentle simmer in a small saucepan over medium heat.",
+      "Stir in rolled oats and cook for 4-5 minutes, stirring occasionally until thick and creamy.",
+      "Remove saucepan from heat and allow to cool for 60 seconds.",
+      "Whisk in soy protein powder and chia seeds vigorously until completely smooth.",
+      "Transfer to a bowl, slice fresh ripe banana over the top, and serve warm."
+    ]
+  },
+  {
+    "id": "VEG-03",
+    "source_id": "MEAL-03",
+    "group": "VEGAN",
+    "name": "Lentil & Quinoa Salad with Lemon Coriander Dressing",
+    "category": "Vegan",
+    "calories": 490,
+    "carbs": 65,
+    "protein": 22,
+    "fat": 15,
+    "micronutrients": [
+      "Iron",
+      "Potassium",
+      "Folate"
+    ],
+    "allergens_present": [
+      "Sesame"
+    ],
+    "allergens_avoided": "Dairy, Eggs, Fish, Shellfish, Gluten, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Leg Day / High Volume",
+    "benefits": "Hearty lentils and quinoa with a refreshing lemon coriander dressing to fuel muscle recovery.",
+    "ingredients": [
+      "Brown lentils",
+      "Quinoa",
+      "Cucumber",
+      "Tomatoes",
+      "Lemon",
+      "Coriander",
+      "Olive oil",
+      "Salt"
+    ],
+    "prep_time": "10 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi washes brown lentils and quinoa thoroughly in cold water.",
+      "Cook quinoa and lentils in boiling water until tender and fluffy, then drain.",
+      "Finely dice fresh cucumber and tomatoes into small pieces.",
+      "In a small bowl, whisk lemon juice, olive oil, salt, and freshly chopped coriander for the dressing.",
+      "Assemble bowl with warm quinoa, lentils, and diced vegetables, toss with dressing, and serve."
+    ]
+  },
+  {
+    "id": "VEG-04",
+    "source_id": "MEAL-04",
+    "group": "VEGAN",
+    "name": "Chickpea (Chole) & Sweet Potato Curry with Brown Rice",
+    "category": "Vegan",
+    "calories": 540,
+    "carbs": 78,
+    "protein": 18,
+    "fat": 14,
+    "micronutrients": [
+      "Potassium",
+      "Vitamin A",
+      "Iron"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Top 9 Common Allergens (Allergen-Free)",
+    "recommended_post_workout": "Heavy Strength / Powerlifting",
+    "benefits": "Comforting chickpea and sweet potato curry served with brown rice to recharge your body.",
+    "ingredients": [
+      "Chickpeas",
+      "Sweet potato",
+      "Brown rice",
+      "Coconut milk",
+      "Curry powder",
+      "Spinach",
+      "Salt"
+    ],
+    "prep_time": "10 mins",
+    "cook_time": "20 mins",
+    "steps": [
+      "Chef Didi washes brown rice and sets it to boil with water and a pinch of salt until tender and fluffy.",
+      "Peel and dice sweet potatoes into cubes; rinse cooked chickpeas.",
+      "Sauté sweet potatoes in a pan with curry powder, then add chickpeas and coconut milk.",
+      "Simmer for 10-12 minutes until sweet potatoes are tender, then fold in fresh spinach for 2 minutes.",
+      "Ladle the rich chickpea curry hot over the freshly boiled brown rice and serve."
+    ]
+  },
+  {
+    "id": "VEG-05",
+    "source_id": "MEAL-05",
+    "group": "VEGAN",
+    "name": "Green Pea & Plant Protein Smoothie Bowl",
+    "category": "Vegan",
+    "calories": 350,
+    "carbs": 38,
+    "protein": 30,
+    "fat": 8,
+    "micronutrients": [
+      "Iron",
+      "Magnesium",
+      "Phosphorus"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Dairy, Eggs, Fish, Shellfish, Gluten, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Post-Cardio / Conditioning",
+    "benefits": "Refreshing smoothie bowl packed with plant protein, green peas, and fresh fruits.",
+    "ingredients": [
+      "Plant protein",
+      "Banana",
+      "Green peas",
+      "Flaxseeds",
+      "Oats",
+      "Water"
+    ],
+    "prep_time": "5 mins",
+    "cook_time": "2 mins",
+    "steps": [
+      "Chef Didi lightly steams fresh green peas for 2 minutes and cools.",
+      "In a blender jar, combine plant protein powder, sliced banana, steamed peas, rolled oats, and water.",
+      "Blend on high speed until thick, creamy, and velvety-smooth.",
+      "Pour into a wide breakfast bowl.",
+      "Top with roasted flaxseeds and fresh banana slices, and serve chilled."
+    ]
+  },
+  {
+    "id": "VEG-06",
+    "source_id": "MEAL-06",
+    "group": "VEGAN",
+    "name": "High-Protein Soya Chunks Stir-Fry with Broccoli & Cashews",
+    "category": "Vegan",
+    "calories": 480,
+    "carbs": 35,
+    "protein": 42,
+    "fat": 16,
+    "micronutrients": [
+      "Zinc",
+      "Iron",
+      "Selenium"
+    ],
+    "allergens_present": [
+      "Soy",
+      "Tree Nuts"
+    ],
+    "allergens_avoided": "Dairy, Eggs, Fish, Shellfish, Peanuts, Sesame",
+    "recommended_post_workout": "Hypertrophy / Resistance",
+    "benefits": "Savory high-protein soya chunks stir-fry with crunchy broccoli and toasted cashews.",
+    "ingredients": [
+      "Soya chunks",
+      "Broccoli",
+      "Cashews",
+      "Soy sauce",
+      "Garlic",
+      "Ginger",
+      "Olive oil"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "10 mins",
+    "steps": [
+      "Chef Didi soaks soya chunks in boiling water for 5 minutes, then rinses and firmly squeezes out excess water.",
+      "Cut broccoli into florets; finely mince garlic and ginger.",
+      "Heat olive oil in a wok or pan; roast whole cashews until golden-crisp and set aside.",
+      "Add garlic, ginger, soya chunks, and broccoli; stir-fry vigorously on high heat for 5 minutes.",
+      "Drizzle soy sauce, toss with roasted cashews, and serve hot."
+    ]
+  },
+  {
+    "id": "VEG-07",
+    "source_id": "MEAL-07",
+    "group": "VEGAN",
+    "name": "Rajma (Kidney Bean) & Avocado Rice Bowl",
+    "category": "Vegan",
+    "calories": 520,
+    "carbs": 68,
+    "protein": 20,
+    "fat": 18,
+    "micronutrients": [
+      "Potassium",
+      "Magnesium",
+      "Fiber"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Top 9 Common Allergens (Allergen-Free)",
+    "recommended_post_workout": "Leg Day / High Volume",
+    "benefits": "Hearty spiced rajma, avocado, and rice for lasting workout fuel.",
+    "ingredients": [
+      "Kidney beans",
+      "Avocado",
+      "Brown rice",
+      "Sweet corn",
+      "Tomatoes",
+      "Coriander",
+      "Cumin seeds"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi washes brown rice and boils in a pot until tender and fluffy.",
+      "In a skillet, sauté cooked rajma (kidney beans) and sweet corn with cumin seeds, diced tomatoes, and salt for 4 minutes.",
+      "Slice fresh ripe avocado and chop fresh coriander.",
+      "Scoop freshly boiled brown rice into a wide bowl and top with the spiced rajma and sweet corn.",
+      "Arrange avocado slices on top, garnish with coriander, and serve warm."
+    ]
+  },
+  {
+    "id": "VEG-08",
+    "source_id": "MEAL-08",
+    "group": "VEGAN",
+    "name": "Tofu & Quinoa Power Bowl with Spinach",
+    "category": "Vegan",
+    "calories": 460,
+    "carbs": 45,
+    "protein": 28,
+    "fat": 16,
+    "micronutrients": [
+      "Calcium",
+      "Manganese",
+      "Iron"
+    ],
+    "allergens_present": [
+      "Soy"
+    ],
+    "allergens_avoided": "Dairy, Eggs, Fish, Shellfish, Gluten, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Strength & Conditioning",
+    "benefits": "Wholesome tofu with quinoa and spinach, gentle on digestion and full of nutrients.",
+    "ingredients": [
+      "Tofu",
+      "Quinoa",
+      "Spinach",
+      "Olive oil",
+      "Lemon",
+      "Sunflower seeds",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "12 mins",
+    "steps": [
+      "Chef Didi cooks washed quinoa in boiling water for 12 minutes until fluffy.",
+      "Cut firm tofu into bite-sized cubes and pan-sear in 1 tbsp olive oil until crispy and golden.",
+      "In the same pan, wilt fresh spinach leaves with a pinch of salt and a squeeze of fresh lemon juice.",
+      "Arrange the cooked quinoa, crispy tofu cubes, and tender spinach in a bowl.",
+      "Garnish with toasted sunflower seeds and serve warm."
+    ]
+  },
+  {
+    "id": "VEG-09",
+    "source_id": "MEAL-09",
+    "group": "VEGAN",
+    "name": "Peanut Butter & Banana Protein Oatmeal",
+    "category": "Vegan",
+    "calories": 510,
+    "carbs": 62,
+    "protein": 22,
+    "fat": 20,
+    "micronutrients": [
+      "Potassium",
+      "Magnesium"
+    ],
+    "allergens_present": [
+      "Peanuts"
+    ],
+    "allergens_avoided": "Dairy, Eggs, Fish, Shellfish, Gluten, Soy, Tree Nuts",
+    "recommended_post_workout": "Pre/Post Heavy Compound",
+    "benefits": "Creamy peanut butter and banana oatmeal to refuel right after your workout.",
+    "ingredients": [
+      "Oats",
+      "Peanut butter",
+      "Banana",
+      "Pea protein",
+      "Cinnamon",
+      "Water"
+    ],
+    "prep_time": "3 mins",
+    "cook_time": "5 mins",
+    "steps": [
+      "Chef Didi brings water to a boil in a saucepan, adds rolled oats, and cooks for 4-5 minutes until thick.",
+      "Remove from heat and whisk in pea protein powder until completely smooth.",
+      "Stir in creamy peanut butter and ground cinnamon until well incorporated.",
+      "Slice fresh ripe banana evenly over the oatmeal.",
+      "Serve warm for immediate post-workout energy."
+    ]
+  },
+  {
+    "id": "VEG-10",
+    "source_id": "MEAL-10",
+    "group": "VEGAN",
+    "name": "Red Masoor Dal with Fresh Whole Wheat Roti",
+    "category": "Vegan",
+    "calories": 440,
+    "carbs": 64,
+    "protein": 22,
+    "fat": 9,
+    "micronutrients": [
+      "Iron",
+      "Folate",
+      "Zinc"
+    ],
+    "allergens_present": [
+      "Gluten"
+    ],
+    "allergens_avoided": "Dairy, Eggs, Fish, Shellfish, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Endurance / HIIT",
+    "benefits": "Warm red lentil dal served with freshly made whole wheat roti.",
+    "ingredients": [
+      "Red lentils",
+      "Whole wheat flour",
+      "Cumin seeds",
+      "Turmeric",
+      "Tomatoes",
+      "Coriander",
+      "Salt"
+    ],
+    "prep_time": "10 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi washes red masoor lentils and pressure-cooks with turmeric, salt, and water until soft.",
+      "Prepare tadka: temper cumin seeds and chopped tomatoes in 1 tsp oil, then stir into the cooked dal.",
+      "Knead whole wheat flour with water into a soft dough and roll into round rotis.",
+      "Cook rotis on a hot tawa until puffed and soft.",
+      "Serve the steaming dal garnished with fresh coriander alongside the warm rotis."
+    ]
+  },
+  {
+    "id": "VEG-11",
+    "source_id": "MEAL-11",
+    "group": "VEGAN",
+    "name": "Buckwheat (Kuttu) Chilla with Pea Protein",
+    "category": "Vegan",
+    "calories": 430,
+    "carbs": 66,
+    "protein": 20,
+    "fat": 8,
+    "micronutrients": [
+      "Magnesium",
+      "Manganese",
+      "Iron"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Top 9 Common Allergens (Allergen-Free)",
+    "recommended_post_workout": "Leg Day / Refeed",
+    "benefits": "Crispy buckwheat chillas boosted with pea protein and mild spices.",
+    "ingredients": [
+      "Buckwheat flour",
+      "Pea protein",
+      "Green chillies",
+      "Coriander",
+      "Cumin seeds",
+      "Olive oil",
+      "Salt"
+    ],
+    "prep_time": "5 mins",
+    "cook_time": "8 mins",
+    "steps": [
+      "Chef Didi whisks buckwheat flour, pea protein, water, chopped green chillies, coriander, and cumin seeds into a smooth pouring batter.",
+      "Heat a flat non-stick tawa and lightly brush with olive oil.",
+      "Pour a ladle of batter onto the center and spread into a thin, even circular chilla.",
+      "Cook for 2-3 minutes until golden-crisp on the underside, then flip and cook the other side for 1 minute.",
+      "Fold and serve hot and crisp with green coriander chutney."
+    ]
+  },
+  {
+    "id": "VEG-12",
+    "source_id": "MEAL-12",
+    "group": "VEGAN",
+    "name": "Rajma & Black Dal with Steamed Basmati Rice",
+    "category": "Vegan",
+    "calories": 490,
+    "carbs": 70,
+    "protein": 24,
+    "fat": 11,
+    "micronutrients": [
+      "Iron",
+      "Potassium",
+      "Zinc"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Top 9 Common Allergens (Allergen-Free)",
+    "recommended_post_workout": "Heavy Strength / Powerlifting",
+    "benefits": "Rich and hearty rajma and dal served with wholesome steamed basmati rice.",
+    "ingredients": [
+      "Kidney beans",
+      "White rice",
+      "Tomatoes",
+      "Bell peppers",
+      "Cumin seeds",
+      "Coriander",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi washes basmati rice and boils in water until fluffy and tender.",
+      "In a pot, simmer cooked rajma with diced bell peppers, tomato puree, cumin seeds, and spices for 10 minutes.",
+      "Season with salt and stir until the curry becomes rich and fragrant.",
+      "Ladle the hot rajma over a bed of freshly boiled basmati rice.",
+      "Top with chopped fresh coriander and serve."
+    ]
+  },
+  {
+    "id": "VEG-13",
+    "source_id": "MEAL-13",
+    "group": "VEGAN",
+    "name": "Crispy Tawa Tofu with Sautéed Green Beans",
+    "category": "Vegan",
+    "calories": 360,
+    "carbs": 20,
+    "protein": 26,
+    "fat": 18,
+    "micronutrients": [
+      "Calcium",
+      "Vitamin K",
+      "Iron"
+    ],
+    "allergens_present": [
+      "Soy"
+    ],
+    "allergens_avoided": "Dairy, Eggs, Fish, Shellfish, Gluten, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Fat Loss / Hypertrophy",
+    "benefits": "Crispy seasoned tofu with tender sautéed green beans, light and high in protein.",
+    "ingredients": [
+      "Tofu",
+      "Green beans",
+      "Olive oil",
+      "Soy sauce",
+      "Garlic",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "10 mins",
+    "steps": [
+      "Chef Didi presses firm tofu to remove water and cuts into even cubes.",
+      "Trim fresh green beans and finely mince fresh garlic cloves.",
+      "Heat olive oil in a skillet and pan-sear tofu cubes until all sides are crisp and golden.",
+      "Add minced garlic and green beans; toss on high heat for 3-4 minutes until tender-crisp.",
+      "Drizzle with soy sauce, toss well, and serve immediately."
+    ]
+  },
+  {
+    "id": "VEG-14",
+    "source_id": "MEAL-14",
+    "group": "VEGAN",
+    "name": "Roasted Chana & Avocado Whole Wheat Roti Roll",
+    "category": "Vegan",
+    "calories": 470,
+    "carbs": 58,
+    "protein": 18,
+    "fat": 18,
+    "micronutrients": [
+      "Folate",
+      "Potassium",
+      "Magnesium"
+    ],
+    "allergens_present": [
+      "Gluten"
+    ],
+    "allergens_avoided": "Dairy, Eggs, Fish, Shellfish, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Post-Cardio / Conditioning",
+    "benefits": "Crispy spiced chickpeas wrapped with fresh avocado and greens in a warm roti.",
+    "ingredients": [
+      "Chickpeas",
+      "Avocado",
+      "Whole wheat flour",
+      "Cucumber",
+      "Lemon",
+      "Coriander",
+      "Cumin powder"
+    ],
+    "prep_time": "10 mins",
+    "cook_time": "10 mins",
+    "steps": [
+      "Chef Didi kneads whole wheat flour and rolls fresh rotis, cooking them on the tawa.",
+      "Pan-roast boiled chickpeas with cumin powder, lemon juice, and a pinch of salt until lightly crisp.",
+      "Mash ripe avocado with a dash of lemon juice and spread across the warm roti.",
+      "Layer roasted chickpeas, sliced cucumber, and fresh coriander in the center.",
+      "Roll tightly into a wholesome wrap and serve fresh."
+    ]
+  },
+  {
+    "id": "VEG-15",
+    "source_id": "MEAL-15",
+    "group": "VEGAN",
+    "name": "Chia Seed Pudding with Almonds & Plant Protein",
+    "category": "Vegan",
+    "calories": 310,
+    "carbs": 28,
+    "protein": 20,
+    "fat": 12,
+    "micronutrients": [
+      "Calcium",
+      "Omega-3",
+      "Magnesium"
+    ],
+    "allergens_present": [
+      "Tree Nuts"
+    ],
+    "allergens_avoided": "Dairy, Eggs, Fish, Shellfish, Gluten, Soy, Peanuts",
+    "recommended_post_workout": "Light Mobility / Rest Day",
+    "benefits": "Cool chia seed pudding with almond milk, rich in healthy fats and protein.",
+    "ingredients": [
+      "Chia seeds",
+      "Almond milk",
+      "Plant protein",
+      "Almonds",
+      "Banana"
+    ],
+    "prep_time": "5 mins",
+    "cook_time": "0 mins",
+    "steps": [
+      "Chef Didi whisks plant protein powder into almond milk until completely dissolved.",
+      "Stir in chia seeds thoroughly to ensure even distribution without clumps.",
+      "Let rest for 10 minutes until thick and pudding-like.",
+      "Slice fresh banana and coarsely chop raw almonds.",
+      "Top pudding with banana slices and crunchy chopped almonds before serving."
+    ]
+  },
+  {
+    "id": "VGT-01",
+    "source_id": "MEAL-01",
+    "group": "VEGETARIAN",
+    "name": "Curd & Honey Bowl with Granola & Chia Seeds",
+    "category": "Vegetarian",
+    "calories": 380,
+    "carbs": 45,
+    "protein": 28,
+    "fat": 8,
+    "micronutrients": [
+      "Calcium",
+      "Potassium",
+      "B12"
+    ],
+    "allergens_present": [
+      "Dairy",
+      "Gluten"
+    ],
+    "allergens_avoided": "Eggs, Fish, Shellfish, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Post-Cardio / Conditioning",
+    "benefits": "Creamy fresh curd with golden honey, crunchy granola, and chia seeds.",
+    "ingredients": [
+      "Curd",
+      "Granola",
+      "Honey",
+      "Banana",
+      "Chia seeds"
+    ],
+    "prep_time": "4 mins",
+    "cook_time": "0 mins",
+    "steps": [
+      "Chef Didi whisks thick fresh curd until velvety and smooth.",
+      "Pour curd into a wide bowl and drizzle pure honey across the top.",
+      "Scatter crunchy granola and chia seeds over one half.",
+      "Slice ripe banana into neat rounds and arrange alongside.",
+      "Serve cool for immediate gut-friendly recovery."
+    ]
+  },
+  {
+    "id": "VGT-02",
+    "source_id": "MEAL-02",
+    "group": "VEGETARIAN",
+    "name": "Paneer & Capsicum Bhurji with Whole Wheat Toast",
+    "category": "Vegetarian",
+    "calories": 420,
+    "carbs": 32,
+    "protein": 28,
+    "fat": 20,
+    "micronutrients": [
+      "Calcium",
+      "Phosphorus",
+      "Vitamin C"
+    ],
+    "allergens_present": [
+      "Dairy",
+      "Gluten"
+    ],
+    "allergens_avoided": "Eggs, Fish, Shellfish, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Hypertrophy / Resistance",
+    "benefits": "Fresh paneer and colorful capsicum stir-fried for a satisfying high-protein meal.",
+    "ingredients": [
+      "Paneer",
+      "Bell peppers",
+      "Whole wheat bread",
+      "Olive oil",
+      "Cumin seeds",
+      "Tomatoes",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "10 mins",
+    "steps": [
+      "Chef Didi crumbles fresh paneer and finely dices capsicum (bell peppers) and tomatoes.",
+      "Heat olive oil in a pan, add cumin seeds, and let them crackle.",
+      "Add chopped capsicum and tomatoes; sauté for 3-4 minutes until tender.",
+      "Add crumbled paneer and salt, tossing gently for 2-3 minutes on medium flame.",
+      "Toast whole wheat bread slices until golden-crisp and plate alongside the hot paneer bhurji."
+    ]
+  },
+  {
+    "id": "VGT-03",
+    "source_id": "MEAL-03",
+    "group": "VEGETARIAN",
+    "name": "Egg White & Spinach Omelet with Whole Wheat Toast",
+    "category": "Eggetarian",
+    "calories": 320,
+    "carbs": 28,
+    "protein": 26,
+    "fat": 6,
+    "micronutrients": [
+      "Selenium",
+      "Choline",
+      "Iron"
+    ],
+    "allergens_present": [
+      "Eggs",
+      "Gluten"
+    ],
+    "allergens_avoided": "Dairy, Fish, Shellfish, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Fat Loss / Hypertrophy",
+    "benefits": "Light and fluffy egg white omelet with fresh spinach and toasted bread.",
+    "ingredients": [
+      "Egg whites",
+      "Spinach",
+      "Whole wheat bread",
+      "Olive oil",
+      "Black pepper",
+      "Salt"
+    ],
+    "prep_time": "5 mins",
+    "cook_time": "6 mins",
+    "steps": [
+      "Chef Didi washes spinach and separates egg whites into a bowl.",
+      "Whisk egg whites with salt and freshly cracked black pepper until frothy.",
+      "Heat a pan with a drop of olive oil, sauté spinach for 60 seconds until wilted.",
+      "Pour whisked egg whites evenly over the spinach and cook on low heat until set, then fold.",
+      "Toast whole wheat bread until crisp and serve hot alongside the fluffy omelet."
+    ]
+  },
+  {
+    "id": "VGT-04",
+    "source_id": "MEAL-04",
+    "group": "VEGETARIAN",
+    "name": "Whey Protein Shake with Oats & Almond Butter",
+    "category": "Vegetarian",
+    "calories": 410,
+    "carbs": 46,
+    "protein": 32,
+    "fat": 10,
+    "micronutrients": [
+      "Calcium",
+      "Magnesium",
+      "Potassium"
+    ],
+    "allergens_present": [
+      "Dairy",
+      "Tree Nuts"
+    ],
+    "allergens_avoided": "Eggs, Fish, Shellfish, Gluten, Soy, Peanuts",
+    "recommended_post_workout": "Post-Cardio / Conditioning",
+    "benefits": "Classic protein shake blended with oats and creamy almond butter.",
+    "ingredients": [
+      "Whey protein",
+      "Oats",
+      "Almond butter",
+      "Milk",
+      "Banana"
+    ],
+    "prep_time": "3 mins",
+    "cook_time": "0 mins",
+    "steps": [
+      "Chef Didi measures milk and pours into the blender jar.",
+      "Add rolled oats, one scoop of whey protein powder, and creamy almond butter.",
+      "Add half a sliced banana and a pinch of cinnamon for natural sweetness.",
+      "Blend on high speed for 45-60 seconds until silky and smooth.",
+      "Pour into a tall shaker glass and serve immediately."
+    ]
+  },
+  {
+    "id": "VGT-05",
+    "source_id": "MEAL-05",
+    "group": "VEGETARIAN",
+    "name": "Paneer & Blueberry Protein Pancakes",
+    "category": "Vegetarian",
+    "calories": 440,
+    "carbs": 48,
+    "protein": 30,
+    "fat": 12,
+    "micronutrients": [
+      "Calcium",
+      "Antioxidants",
+      "Vitamin C"
+    ],
+    "allergens_present": [
+      "Dairy",
+      "Eggs"
+    ],
+    "allergens_avoided": "Fish, Shellfish, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Leg Day / Refeed",
+    "benefits": "Soft paneer pancakes loaded with juicy blueberries and whey protein.",
+    "ingredients": [
+      "Oats",
+      "Paneer",
+      "Blueberries",
+      "Whey protein",
+      "Eggs",
+      "Honey"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "8 mins",
+    "steps": [
+      "Chef Didi grinds rolled oats into fine oat flour in a grinder.",
+      "In a mixing bowl, whisk oat flour, whey protein, 1 egg, and a splash of milk into a smooth pancake batter.",
+      "Heat a flat tawa on medium heat and lightly grease with ghee or oil.",
+      "Pour 3-inch rounds of batter onto the tawa, scatter fresh blueberries and crumbled paneer on top.",
+      "Flip when bubbles form and cook until golden brown; drizzle with honey to serve."
+    ]
+  },
+  {
+    "id": "VGT-06",
+    "source_id": "MEAL-06",
+    "group": "VEGETARIAN",
+    "name": "Paneer Tikka with Basmati Rice Pilaf",
+    "category": "Vegetarian",
+    "calories": 510,
+    "carbs": 52,
+    "protein": 28,
+    "fat": 18,
+    "micronutrients": [
+      "Calcium",
+      "Phosphorus",
+      "Vitamin A"
+    ],
+    "allergens_present": [
+      "Dairy"
+    ],
+    "allergens_avoided": "Eggs, Fish, Shellfish, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Strength & Conditioning",
+    "benefits": "Tender spiced paneer tikka served with a light basmati rice pilaf.",
+    "ingredients": [
+      "Paneer",
+      "White rice",
+      "Curd",
+      "Curry powder",
+      "Bell peppers",
+      "Onion",
+      "Salt"
+    ],
+    "prep_time": "10 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi washes basmati rice and boils it with a pinch of cumin and salt until fluffy.",
+      "Cut paneer, onion, and capsicum into cubes; toss in thick curd mixed with curry spices and salt.",
+      "Sear the marinated paneer and veggies on a hot tawa or grill pan for 5-6 minutes until charred at edges.",
+      "Fluff the cooked rice pilaf with a fork.",
+      "Serve smoky paneer tikka hot over the fragrant rice pilaf."
+    ]
+  },
+  {
+    "id": "VGT-07",
+    "source_id": "MEAL-07",
+    "group": "VEGETARIAN",
+    "name": "Scrambled Eggs with Cheese & Avocado Toast",
+    "category": "Eggetarian",
+    "calories": 430,
+    "carbs": 22,
+    "protein": 24,
+    "fat": 26,
+    "micronutrients": [
+      "Choline",
+      "Vitamin B12",
+      "Lutein"
+    ],
+    "allergens_present": [
+      "Dairy",
+      "Eggs",
+      "Gluten"
+    ],
+    "allergens_avoided": "Fish, Shellfish, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Strength & Conditioning",
+    "benefits": "Creamy scrambled eggs paired with melted cheese and fresh avocado toast.",
+    "ingredients": [
+      "Eggs",
+      "Whole wheat bread",
+      "Cheddar cheese",
+      "Avocado",
+      "Butter",
+      "Black pepper",
+      "Salt"
+    ],
+    "prep_time": "5 mins",
+    "cook_time": "5 mins",
+    "steps": [
+      "Chef Didi cracks eggs into a bowl and whisks lightly with salt and pepper.",
+      "Melt butter in a non-stick pan on low heat; pour eggs and gently fold to create soft curds.",
+      "Remove from heat just before fully set and fold in grated cheese.",
+      "Toast whole wheat bread and spread sliced avocado on top.",
+      "Spoon the creamy scrambled eggs over the avocado toast and serve immediately."
+    ]
+  },
+  {
+    "id": "VGT-08",
+    "source_id": "MEAL-08",
+    "group": "VEGETARIAN",
+    "name": "Moong Dal & Paneer Tikka Salad",
+    "category": "Vegetarian",
+    "calories": 410,
+    "carbs": 36,
+    "protein": 26,
+    "fat": 16,
+    "micronutrients": [
+      "Calcium",
+      "Iron",
+      "Folate"
+    ],
+    "allergens_present": [
+      "Dairy"
+    ],
+    "allergens_avoided": "Eggs, Fish, Shellfish, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Hypertrophy / Resistance",
+    "benefits": "Satisfying salad with boiled moong dal, golden paneer cubes, and fresh greens.",
+    "ingredients": [
+      "Yellow moong dal",
+      "Paneer",
+      "Spinach",
+      "Tomatoes",
+      "Olive oil",
+      "Lemon",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "12 mins",
+    "steps": [
+      "Chef Didi boils yellow moong dal until tender but retaining its shape (not mushy).",
+      "Cut paneer into bite-sized cubes and pan-sear in 1 tsp olive oil until golden.",
+      "Chop fresh spinach and tomatoes into bite-sized pieces.",
+      "Whisk lemon juice, olive oil, salt, and black pepper into a light dressing.",
+      "Toss boiled moong dal, golden paneer cubes, and veggies in the dressing and serve."
+    ]
+  },
+  {
+    "id": "VGT-09",
+    "source_id": "MEAL-09",
+    "group": "VEGETARIAN",
+    "name": "Thick Curd Bowl with Mango & Pumpkin Seeds",
+    "category": "Vegetarian",
+    "calories": 360,
+    "carbs": 44,
+    "protein": 24,
+    "fat": 9,
+    "micronutrients": [
+      "Calcium",
+      "Zinc",
+      "Vitamin A"
+    ],
+    "allergens_present": [
+      "Dairy"
+    ],
+    "allergens_avoided": "Eggs, Fish, Shellfish, Gluten, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Post-Cardio / Conditioning",
+    "benefits": "Cool fresh curd bowl topped with crunchy pumpkin seeds and sweet mango.",
+    "ingredients": [
+      "Curd",
+      "Mango",
+      "Pumpkin seeds",
+      "Honey",
+      "Chia seeds"
+    ],
+    "prep_time": "5 mins",
+    "cook_time": "0 mins",
+    "steps": [
+      "Chef Didi whisks thick fresh curd until velvety.",
+      "Peel and dice fresh ripe sweet mango into juicy cubes.",
+      "Spoon curd into a wide serving bowl and drizzle pure honey.",
+      "Scatter mango cubes, toasted pumpkin seeds, and chia seeds over the curd.",
+      "Serve cool for rapid glycogen restoration and muscle recovery."
+    ]
+  },
+  {
+    "id": "VGT-10",
+    "source_id": "MEAL-10",
+    "group": "VEGETARIAN",
+    "name": "Fresh Paneer with Sweet Pineapple & Walnuts",
+    "category": "Vegetarian",
+    "calories": 340,
+    "carbs": 32,
+    "protein": 24,
+    "fat": 10,
+    "micronutrients": [
+      "Calcium",
+      "Vitamin C",
+      "Omega-3"
+    ],
+    "allergens_present": [
+      "Dairy",
+      "Tree Nuts"
+    ],
+    "allergens_avoided": "Eggs, Fish, Shellfish, Gluten, Soy, Peanuts",
+    "recommended_post_workout": "HIIT / Circuit Training",
+    "benefits": "Fresh soft paneer with sweet juicy pineapple, easy to digest and soothing.",
+    "ingredients": [
+      "Paneer",
+      "Pineapple",
+      "Walnuts",
+      "Mint",
+      "Honey"
+    ],
+    "prep_time": "5 mins",
+    "cook_time": "0 mins",
+    "steps": [
+      "Chef Didi dices soft fresh paneer into delicate cubes.",
+      "Chop fresh ripe pineapple into bite-sized chunks.",
+      "Lightly crush walnuts and finely tear fresh mint leaves.",
+      "Combine paneer and pineapple chunks in a bowl, drizzling with honey.",
+      "Garnish with crunchy walnuts and fresh mint leaves for a soothing high-protein meal."
+    ]
+  },
+  {
+    "id": "VGT-11",
+    "source_id": "MEAL-11",
+    "group": "VEGETARIAN",
+    "name": "Egg & Cheese Stuffed Whole Wheat Paratha",
+    "category": "Eggetarian",
+    "calories": 480,
+    "carbs": 38,
+    "protein": 26,
+    "fat": 22,
+    "micronutrients": [
+      "Calcium",
+      "Vitamin A",
+      "B12"
+    ],
+    "allergens_present": [
+      "Dairy",
+      "Eggs",
+      "Gluten"
+    ],
+    "allergens_avoided": "Fish, Shellfish, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Strength & Conditioning",
+    "benefits": "Warm paratha stuffed with spiced egg and melted cheese.",
+    "ingredients": [
+      "Whole wheat flour",
+      "Eggs",
+      "Mozzarella cheese",
+      "Coriander",
+      "Green chillies",
+      "Ghee",
+      "Salt"
+    ],
+    "prep_time": "10 mins",
+    "cook_time": "8 mins",
+    "steps": [
+      "Chef Didi kneads whole wheat flour into a soft, pliable dough.",
+      "Whisk eggs with chopped green chillies, coriander, and a pinch of salt.",
+      "Roll out dough on a tawa; cook egg mixture inside with grated cheese and fold into a stuffed paratha.",
+      "Toast with a dab of ghee on both sides until golden-brown and crisp.",
+      "Serve hot with fresh mint chutney."
+    ]
+  },
+  {
+    "id": "VGT-12",
+    "source_id": "MEAL-12",
+    "group": "VEGETARIAN",
+    "name": "Vegetable & Egg White Fried Rice",
+    "category": "Eggetarian",
+    "calories": 410,
+    "carbs": 52,
+    "protein": 24,
+    "fat": 8,
+    "micronutrients": [
+      "Selenium",
+      "Choline",
+      "B-Vitamins"
+    ],
+    "allergens_present": [
+      "Eggs",
+      "Soy"
+    ],
+    "allergens_avoided": "Dairy, Fish, Shellfish, Gluten, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Post-Cardio / Conditioning",
+    "benefits": "Quick vegetable fried rice with egg whites for an easy post-workout meal.",
+    "ingredients": [
+      "White rice",
+      "Egg whites",
+      "Peas",
+      "Carrots",
+      "Soy sauce",
+      "Garlic",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "10 mins",
+    "steps": [
+      "Chef Didi washes white rice and boils in a pot until tender, spreading on a plate to cool slightly.",
+      "Finely dice carrots and mince garlic.",
+      "Heat a wok with 1 tsp oil, scramble egg whites until fluffy, and set aside.",
+      "Sauté garlic, green peas, and carrots for 3 minutes on high flame.",
+      "Add the cooked rice, scrambled egg whites, and soy sauce; toss briskly for 2 minutes and serve."
+    ]
+  },
+  {
+    "id": "VGT-13",
+    "source_id": "MEAL-13",
+    "group": "VEGETARIAN",
+    "name": "Oat & Curd Protein Pancakes with Mixed Berries",
+    "category": "Vegetarian",
+    "calories": 420,
+    "carbs": 52,
+    "protein": 22,
+    "fat": 11,
+    "micronutrients": [
+      "Calcium",
+      "Vitamin C"
+    ],
+    "allergens_present": [
+      "Dairy",
+      "Eggs"
+    ],
+    "allergens_avoided": "Fish, Shellfish, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Leg Day / Refeed",
+    "benefits": "Fluffy oat and curd pancakes topped with sweet mixed berries.",
+    "ingredients": [
+      "Oats",
+      "Curd",
+      "Egg whites",
+      "Mixed berries",
+      "Honey",
+      "Baking powder"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "8 mins",
+    "steps": [
+      "Chef Didi grinds rolled oats into fine oat flour.",
+      "Whisk oat flour, fresh curd, egg whites, and a pinch of baking powder into a smooth batter.",
+      "Heat a non-stick tawa on medium heat and lightly grease with oil.",
+      "Pour ladlefuls of batter to make fluffy round pancakes; cook until golden on both sides.",
+      "Top with fresh berries and a drizzle of honey."
+    ]
+  },
+  {
+    "id": "VGT-14",
+    "source_id": "MEAL-14",
+    "group": "VEGETARIAN",
+    "name": "Masala Egg Omelet with Tomatoes & Mozzarella",
+    "category": "Eggetarian",
+    "calories": 390,
+    "carbs": 6,
+    "protein": 25,
+    "fat": 29,
+    "micronutrients": [
+      "Calcium",
+      "Vitamin A",
+      "Lycopene"
+    ],
+    "allergens_present": [
+      "Dairy",
+      "Eggs"
+    ],
+    "allergens_avoided": "Fish, Shellfish, Gluten, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Fat Loss / Hypertrophy",
+    "benefits": "Savory masala omelet with melted mozzarella, ripe tomatoes, and herbs.",
+    "ingredients": [
+      "Eggs",
+      "Mozzarella cheese",
+      "Tomatoes",
+      "Coriander",
+      "Olive oil",
+      "Green chillies",
+      "Salt"
+    ],
+    "prep_time": "5 mins",
+    "cook_time": "6 mins",
+    "steps": [
+      "Chef Didi finely chops tomatoes, green chillies, and coriander.",
+      "Crack whole eggs into a bowl and whisk vigorously with salt and pepper.",
+      "Heat olive oil in a skillet, pour eggs, and sprinkle chopped tomatoes and chillies on top.",
+      "Scatter shredded mozzarella cheese over one half as the eggs set.",
+      "Fold omelet over and cook for 1 minute until cheese melts; serve hot."
+    ]
+  },
+  {
+    "id": "VGT-15",
+    "source_id": "MEAL-15",
+    "group": "VEGETARIAN",
+    "name": "Whey Protein Shake with Roasted Oats & Banana",
+    "category": "Vegetarian",
+    "calories": 310,
+    "carbs": 45,
+    "protein": 28,
+    "fat": 2,
+    "micronutrients": [
+      "Calcium",
+      "Sodium",
+      "Potassium"
+    ],
+    "allergens_present": [
+      "Dairy"
+    ],
+    "allergens_avoided": "Eggs, Fish, Shellfish, Gluten, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "HIIT / Circuit Training",
+    "benefits": "Smooth whey protein shake paired with lightly roasted oats and banana to refuel fast.",
+    "ingredients": [
+      "Oats",
+      "Whey protein",
+      "Banana",
+      "Water",
+      "Cinnamon"
+    ],
+    "prep_time": "3 mins",
+    "cook_time": "2 mins",
+    "steps": [
+      "Chef Didi lightly dry-roasts rolled oats in a pan for 2 minutes until fragrant.",
+      "In a blender, add roasted oats, 1 scoop whey protein powder, and fresh banana.",
+      "Pour chilled water or milk and add a pinch of ground cinnamon.",
+      "Blend on high speed for 60 seconds until creamy and silky-smooth.",
+      "Pour into a shaker and serve cold for rapid muscle replenishment."
+    ]
+  },
+  {
+    "id": "NON-01",
+    "source_id": "MEAL-01",
+    "group": "NON-VEGETARIAN",
+    "name": "Grilled Chicken Breast with Sweet Potato & Broccoli",
+    "category": "Non-Vegetarian",
+    "calories": 450,
+    "carbs": 42,
+    "protein": 45,
+    "fat": 8,
+    "micronutrients": [
+      "Potassium",
+      "Vitamin A",
+      "B6"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Top 9 Common Allergens (Allergen-Free)",
+    "recommended_post_workout": "Hypertrophy / Resistance",
+    "benefits": "Classic favorite: tender grilled chicken breast with sweet potato and steamed broccoli.",
+    "ingredients": [
+      "Chicken breast",
+      "Sweet potato",
+      "Broccoli",
+      "Olive oil",
+      "Garlic",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "12 mins",
+    "steps": [
+      "Chef Didi steams sweet potato cubes and broccoli florets until tender.",
+      "Season skinless chicken breast with minced garlic, black pepper, and salt.",
+      "Heat 1 tbsp olive oil in a skillet or grill pan over medium-high heat.",
+      "Sear chicken breast for 6-7 minutes per side until fully cooked and juicy.",
+      "Plate the sliced chicken alongside steamed sweet potato and broccoli."
+    ]
+  },
+  {
+    "id": "NON-02",
+    "source_id": "MEAL-02",
+    "group": "NON-VEGETARIAN",
+    "name": "Pan-Seared Fish Fillet with Quinoa & Green Beans",
+    "category": "Non-Vegetarian",
+    "calories": 420,
+    "carbs": 35,
+    "protein": 38,
+    "fat": 14,
+    "micronutrients": [
+      "Omega-3",
+      "Selenium",
+      "Vitamin D"
+    ],
+    "allergens_present": [
+      "Fish"
+    ],
+    "allergens_avoided": "Dairy, Eggs, Shellfish, Gluten, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Strength & Conditioning",
+    "benefits": "Fresh pan-seared fish fillet with fluffy quinoa and green beans, full of omega-3s.",
+    "ingredients": [
+      "White fish fillet",
+      "Quinoa",
+      "Green beans",
+      "Lemon",
+      "Olive oil",
+      "Black pepper",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "12 mins",
+    "steps": [
+      "Chef Didi cooks quinoa in boiling water for 12 minutes until fluffy.",
+      "Trim fresh green beans and blanch in hot water for 3 minutes.",
+      "Season fresh white fish fillet with lemon juice, black pepper, and salt.",
+      "Pan-sear fish in olive oil for 3-4 minutes per side until flaky and golden.",
+      "Serve the hot fish fillet over fluffy quinoa with sautéed green beans."
+    ]
+  },
+  {
+    "id": "NON-03",
+    "source_id": "MEAL-03",
+    "group": "NON-VEGETARIAN",
+    "name": "Minced Chicken (Keema) Bowl with Basmati Rice",
+    "category": "Non-Vegetarian",
+    "calories": 480,
+    "carbs": 52,
+    "protein": 42,
+    "fat": 12,
+    "micronutrients": [
+      "Iron",
+      "Zinc",
+      "Vitamin B12"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Top 9 Common Allergens (Allergen-Free)",
+    "recommended_post_workout": "Heavy Strength / Powerlifting",
+    "benefits": "Savory spiced chicken keema over fluffy basmati rice to rebuild strength.",
+    "ingredients": [
+      "Minced chicken",
+      "White rice",
+      "Onion",
+      "Tomatoes",
+      "Garlic",
+      "Coriander",
+      "Cumin seeds",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi washes basmati rice and boils in a pot until tender and fragrant.",
+      "Finely chop onions, tomatoes, and garlic.",
+      "Heat oil in a pan, temper cumin seeds, then sauté onions and garlic until golden.",
+      "Add minced chicken (keema), tomatoes, and spices; cook for 10-12 minutes until thoroughly done.",
+      "Spoon savory chicken keema over hot basmati rice and garnish with coriander."
+    ]
+  },
+  {
+    "id": "NON-04",
+    "source_id": "MEAL-04",
+    "group": "NON-VEGETARIAN",
+    "name": "Grilled Chicken Breast Roll with Whole Wheat Roti",
+    "category": "Non-Vegetarian",
+    "calories": 410,
+    "carbs": 38,
+    "protein": 36,
+    "fat": 10,
+    "micronutrients": [
+      "B-Vitamins",
+      "Selenium",
+      "Potassium"
+    ],
+    "allergens_present": [
+      "Gluten"
+    ],
+    "allergens_avoided": "Dairy, Eggs, Fish, Shellfish, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Fat Loss / Hypertrophy",
+    "benefits": "Juicy grilled chicken breast rolled in fresh whole wheat roti with mint chutney.",
+    "ingredients": [
+      "Chicken breast",
+      "Whole wheat flour",
+      "Onion",
+      "Tomatoes",
+      "Mint chutney",
+      "Lemon",
+      "Salt"
+    ],
+    "prep_time": "10 mins",
+    "cook_time": "12 mins",
+    "steps": [
+      "Chef Didi kneads whole wheat flour and cooks fresh rotis on the tawa.",
+      "Slice chicken breast into strips and toss with mild spices, lemon juice, and salt.",
+      "Sauté chicken strips in a hot pan for 5-6 minutes until tender and browned.",
+      "Spread fresh mint chutney over the warm roti; layer chicken strips and sliced onions.",
+      "Roll tightly into a wholesome wrap and serve."
+    ]
+  },
+  {
+    "id": "NON-05",
+    "source_id": "MEAL-05",
+    "group": "NON-VEGETARIAN",
+    "name": "Steamed Fish & Boiled Egg Salad with Whole Wheat Toast",
+    "category": "Non-Vegetarian",
+    "calories": 380,
+    "carbs": 30,
+    "protein": 36,
+    "fat": 12,
+    "micronutrients": [
+      "Omega-3",
+      "Selenium",
+      "Niacin"
+    ],
+    "allergens_present": [
+      "Fish",
+      "Eggs",
+      "Gluten"
+    ],
+    "allergens_avoided": "Dairy, Shellfish, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Fat Loss / Hypertrophy",
+    "benefits": "Light steamed fish and boiled eggs with olive oil dressing and crisp toast.",
+    "ingredients": [
+      "White fish fillet",
+      "Eggs",
+      "Whole wheat bread",
+      "Lemon",
+      "Olive oil",
+      "Black pepper",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "10 mins",
+    "steps": [
+      "Chef Didi boils eggs for 8 minutes, peels, and slices.",
+      "Steam fresh fish fillet with a pinch of turmeric and salt until flaky (6-8 minutes).",
+      "Flake the fish into a bowl and combine with sliced boiled eggs.",
+      "Dress with a drizzle of olive oil, fresh lemon juice, salt, and cracked black pepper.",
+      "Toast whole wheat bread and serve alongside the high-protein salad."
+    ]
+  },
+  {
+    "id": "NON-06",
+    "source_id": "MEAL-06",
+    "group": "NON-VEGETARIAN",
+    "name": "Egg Bhurji & Cheese Whole Wheat Toast",
+    "category": "Non-Vegetarian",
+    "calories": 380,
+    "carbs": 28,
+    "protein": 28,
+    "fat": 16,
+    "micronutrients": [
+      "Choline",
+      "B12",
+      "Sodium"
+    ],
+    "allergens_present": [
+      "Eggs",
+      "Gluten",
+      "Dairy"
+    ],
+    "allergens_avoided": "Fish, Shellfish, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Strength & Conditioning",
+    "benefits": "Flavorful egg bhurji and melted cheese on crisp whole wheat toast.",
+    "ingredients": [
+      "Eggs",
+      "Whole wheat bread",
+      "Onion",
+      "Tomatoes",
+      "Green chillies",
+      "Ghee",
+      "Salt"
+    ],
+    "prep_time": "5 mins",
+    "cook_time": "6 mins",
+    "steps": [
+      "Chef Didi finely chops onions, tomatoes, and green chillies.",
+      "Heat a teaspoon of ghee in a pan and sauté the onions and chillies until softened.",
+      "Crack eggs directly into the pan, add tomatoes and salt, and scramble gently on medium heat.",
+      "Toast whole wheat bread slices until golden brown.",
+      "Pile the steaming, flavorful egg bhurji onto the crisp toast and serve hot."
+    ]
+  },
+  {
+    "id": "NON-07",
+    "source_id": "MEAL-07",
+    "group": "NON-VEGETARIAN",
+    "name": "Tawa Grilled Prawns with Basmati Rice & Salad",
+    "category": "Non-Vegetarian",
+    "calories": 410,
+    "carbs": 44,
+    "protein": 34,
+    "fat": 8,
+    "micronutrients": [
+      "Astaxanthin",
+      "Selenium",
+      "Zinc"
+    ],
+    "allergens_present": [
+      "Shellfish"
+    ],
+    "allergens_avoided": "Dairy, Eggs, Fish, Gluten, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Post-Cardio / Conditioning",
+    "benefits": "Flavorful tawa-grilled prawns served with fluffy basmati rice and fresh salad.",
+    "ingredients": [
+      "Shrimp",
+      "White rice",
+      "Lemon",
+      "Coriander",
+      "Cucumber",
+      "Olive oil",
+      "Turmeric",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "12 mins",
+    "steps": [
+      "Chef Didi rinses basmati rice and boils in a pot until light and fluffy.",
+      "Clean and devein fresh prawns (shrimp); marinate with turmeric, lemon juice, and salt.",
+      "Heat olive oil in a tawa and sear prawns on high heat for 2 minutes per side until pink and succulent.",
+      "Slice crisp fresh cucumber and chop fresh coriander.",
+      "Serve the grilled prawns hot over steamed basmati rice with cucumber salad."
+    ]
+  },
+  {
+    "id": "NON-08",
+    "source_id": "MEAL-08",
+    "group": "NON-VEGETARIAN",
+    "name": "Grilled Chicken Breast with Sweet Potato Mash",
+    "category": "Non-Vegetarian",
+    "calories": 460,
+    "carbs": 42,
+    "protein": 44,
+    "fat": 10,
+    "micronutrients": [
+      "Iron",
+      "Potassium",
+      "Zinc"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Top 9 Common Allergens (Allergen-Free)",
+    "recommended_post_workout": "Heavy Strength / Powerlifting",
+    "benefits": "Juicy chicken breast served with smooth sweet potato mash for lasting energy.",
+    "ingredients": [
+      "Chicken breast",
+      "Sweet potato",
+      "Garlic",
+      "Olive oil",
+      "Black pepper",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi peels and boils sweet potatoes until tender, then mashes smoothly with salt and pepper.",
+      "Marinate chicken breast with crushed garlic, black pepper, and salt.",
+      "Heat olive oil in a grill pan and sear chicken for 6 minutes per side until nicely marked and cooked through.",
+      "Let chicken rest for 2 minutes, then slice diagonally.",
+      "Serve juicy chicken breast over the warm, velvety sweet potato mash."
+    ]
+  },
+  {
+    "id": "NON-09",
+    "source_id": "MEAL-09",
+    "group": "NON-VEGETARIAN",
+    "name": "Pan-Fried Fish Fillet with Brown Rice & Green Beans",
+    "category": "Non-Vegetarian",
+    "calories": 370,
+    "carbs": 40,
+    "protein": 36,
+    "fat": 6,
+    "micronutrients": [
+      "Iodine",
+      "Vitamin B12",
+      "Selenium"
+    ],
+    "allergens_present": [
+      "Fish"
+    ],
+    "allergens_avoided": "Dairy, Eggs, Shellfish, Gluten, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Fat Loss / Hypertrophy",
+    "benefits": "Flaky fish fillet with wholesome brown rice and tender green beans.",
+    "ingredients": [
+      "White fish fillet",
+      "Brown rice",
+      "Green beans",
+      "Lemon",
+      "Olive oil",
+      "Turmeric",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi washes brown rice and cooks in a pot until soft and fluffy.",
+      "Snap fresh green beans and steam for 3-4 minutes.",
+      "Rub white fish fillet with turmeric, lemon juice, and salt.",
+      "Pan-fry in olive oil for 3 minutes per side until crisp at the edges.",
+      "Plate the fish fillet alongside steaming brown rice and tender green beans."
+    ]
+  },
+  {
+    "id": "NON-10",
+    "source_id": "MEAL-10",
+    "group": "NON-VEGETARIAN",
+    "name": "Comforting Chicken Noodle Soup",
+    "category": "Non-Vegetarian",
+    "calories": 420,
+    "carbs": 48,
+    "protein": 32,
+    "fat": 8,
+    "micronutrients": [
+      "Sodium",
+      "Potassium",
+      "Collagen"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Dairy, Eggs, Fish, Shellfish, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "HIIT / Circuit Training",
+    "benefits": "Comforting warm noodle soup with shredded chicken breast and fresh herbs.",
+    "ingredients": [
+      "Chicken breast",
+      "Rice noodles",
+      "Ginger",
+      "Garlic",
+      "Coriander",
+      "Black pepper",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi boils chicken breast in water with ginger and crushed garlic to create a rich, aromatic broth.",
+      "Shred the cooked chicken breast into tender strips.",
+      "In boiling water, soften rice noodles for 3-4 minutes and drain.",
+      "Place warm noodles in a bowl and ladle piping hot chicken broth and shredded chicken on top.",
+      "Season with black pepper and garnish with fresh chopped coriander."
+    ]
+  },
+  {
+    "id": "NON-11",
+    "source_id": "MEAL-11",
+    "group": "NON-VEGETARIAN",
+    "name": "Tawa Fish Fillet with Roasted Potatoes",
+    "category": "Non-Vegetarian",
+    "calories": 380,
+    "carbs": 42,
+    "protein": 34,
+    "fat": 7,
+    "micronutrients": [
+      "Selenium",
+      "Phosphorus",
+      "Potassium"
+    ],
+    "allergens_present": [
+      "Fish"
+    ],
+    "allergens_avoided": "Dairy, Eggs, Shellfish, Gluten, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Post-Cardio / Conditioning",
+    "benefits": "Crispy pan-cooked fish fillet with golden roasted potatoes and veggies.",
+    "ingredients": [
+      "White fish fillet",
+      "Potatoes",
+      "Lemon",
+      "Olive oil",
+      "Turmeric",
+      "Cumin powder",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "14 mins",
+    "steps": [
+      "Chef Didi cuts potatoes into cubes and boils until tender, then roasts in olive oil with cumin powder until crisp.",
+      "Marinate fish fillet with turmeric, lemon juice, and salt.",
+      "Cook fish on a flat tawa with a drizzle of oil for 3 minutes per side until flaky.",
+      "Plate the crisp fish fillet alongside golden roasted potato cubes.",
+      "Finish with a squeeze of fresh lemon."
+    ]
+  },
+  {
+    "id": "NON-12",
+    "source_id": "MEAL-12",
+    "group": "NON-VEGETARIAN",
+    "name": "Chicken Shami Kebab / Patty with Basmati Rice",
+    "category": "Non-Vegetarian",
+    "calories": 460,
+    "carbs": 48,
+    "protein": 40,
+    "fat": 10,
+    "micronutrients": [
+      "Iron",
+      "Zinc",
+      "Niacin"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Top 9 Common Allergens (Allergen-Free)",
+    "recommended_post_workout": "Heavy Strength / Powerlifting",
+    "benefits": "Spiced minced chicken patties served with fluffy basmati rice.",
+    "ingredients": [
+      "Minced chicken",
+      "White rice",
+      "Onion",
+      "Green chillies",
+      "Coriander",
+      "Ghee",
+      "Salt"
+    ],
+    "prep_time": "10 mins",
+    "cook_time": "12 mins",
+    "steps": [
+      "Chef Didi washes and boils fragrant basmati rice until fluffy.",
+      "Mix minced chicken with finely chopped onions, green chillies, coriander, and spices into round patties.",
+      "Heat a tawa with a teaspoon of ghee and shallow fry patties for 4-5 minutes per side until browned and juicy.",
+      "Fluff the basmati rice onto a serving plate.",
+      "Serve the chicken patties hot alongside the rice with sliced onions and lemon."
+    ]
+  },
+  {
+    "id": "NON-13",
+    "source_id": "MEAL-13",
+    "group": "NON-VEGETARIAN",
+    "name": "Classic Chicken & Basmati Rice Recovery Bowl",
+    "category": "Non-Vegetarian",
+    "calories": 450,
+    "carbs": 52,
+    "protein": 42,
+    "fat": 7,
+    "micronutrients": [
+      "Niacin",
+      "Phosphorus",
+      "Selenium"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Dairy, Eggs, Fish, Shellfish, Gluten, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Hypertrophy / Resistance",
+    "benefits": "Simple and clean chicken breast with basmati rice, the ultimate recovery meal.",
+    "ingredients": [
+      "Chicken breast",
+      "White rice",
+      "Broccoli",
+      "Garlic",
+      "Olive oil",
+      "Black pepper",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi washes basmati rice and boils in a pot until tender.",
+      "Dice chicken breast into bite-sized pieces and season with garlic, salt, and black pepper.",
+      "Sauté chicken and fresh broccoli florets in olive oil for 6-8 minutes until chicken is tender.",
+      "Scoop freshly boiled rice into a recovery bowl.",
+      "Top with sautéed chicken breast and broccoli for clean post-workout nourishment."
+    ]
+  },
+  {
+    "id": "NON-14",
+    "source_id": "MEAL-14",
+    "group": "NON-VEGETARIAN",
+    "name": "Grilled Fish Fillet with Brown Rice & Spinach",
+    "category": "Non-Vegetarian",
+    "calories": 410,
+    "carbs": 42,
+    "protein": 36,
+    "fat": 10,
+    "micronutrients": [
+      "Omega-3",
+      "Iron",
+      "Selenium"
+    ],
+    "allergens_present": [
+      "Fish"
+    ],
+    "allergens_avoided": "Dairy, Eggs, Shellfish, Gluten, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Strength & Conditioning",
+    "benefits": "Pan-seared fish fillet served with hearty brown rice and sautéed spinach.",
+    "ingredients": [
+      "White fish fillet",
+      "Brown rice",
+      "Spinach",
+      "Lemon",
+      "Olive oil",
+      "Garlic",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi washes and cooks brown rice until fluffy.",
+      "Marinate white fish fillet with minced garlic, lemon juice, and salt.",
+      "Pan-sear fish in olive oil for 3-4 minutes per side until golden.",
+      "In the same pan, quickly wilt fresh spinach with a dash of garlic and salt.",
+      "Plate the fish fillet over a bed of warm brown rice and sautéed spinach."
+    ]
+  },
+  {
+    "id": "NON-15",
+    "source_id": "MEAL-15",
+    "group": "NON-VEGETARIAN",
+    "name": "Chicken Keema Meatballs with Whole Wheat Pasta",
+    "category": "Non-Vegetarian",
+    "calories": 460,
+    "carbs": 50,
+    "protein": 38,
+    "fat": 11,
+    "micronutrients": [
+      "Selenium",
+      "B-Vitamins",
+      "Iron"
+    ],
+    "allergens_present": [
+      "Gluten"
+    ],
+    "allergens_avoided": "Dairy, Eggs, Fish, Shellfish, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Leg Day / High Volume",
+    "benefits": "Tender chicken keema meatballs served over warm whole wheat pasta.",
+    "ingredients": [
+      "Minced chicken",
+      "Whole wheat spaghetti",
+      "Tomato puree",
+      "Garlic",
+      "Olive oil",
+      "Coriander",
+      "Salt"
+    ],
+    "prep_time": "10 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi boils whole wheat pasta in salted water until tender, then drains.",
+      "Shape minced chicken seasoned with garlic, salt, and pepper into bite-sized meatballs.",
+      "Brown meatballs in olive oil, then pour in rich tomato puree and simmer for 10 minutes.",
+      "Toss the cooked pasta in the hot tomato and chicken meatball sauce.",
+      "Garnish with chopped coriander and serve hot."
+    ]
+  },
+  {
+    "id": "JAI-01",
+    "source_id": "MEAL-01",
+    "group": "JAIN",
+    "name": "Jain Yellow Lentil Soup (Dal) with Quinoa",
+    "category": "Jain Vegan",
+    "calories": 390,
+    "carbs": 54,
+    "protein": 22,
+    "fat": 9,
+    "micronutrients": [
+      "Folate",
+      "Iron",
+      "Magnesium"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Top 9 Allergens, Meat, Dairy, Eggs, Root Veggies",
+    "recommended_post_workout": "Strength & Conditioning",
+    "benefits": "Clean sattvic lentil soup seasoned with cumin and coriander, served with quinoa.",
+    "ingredients": [
+      "Yellow moong dal",
+      "Quinoa",
+      "Cumin seeds",
+      "Coriander",
+      "Tomatoes",
+      "Turmeric",
+      "Ghee",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi washes yellow moong dal and quinoa thoroughly.",
+      "Cook moong dal with turmeric, water, and rock salt until soft; boil quinoa until fluffy.",
+      "Heat ghee in a small pan, temper cumin seeds and diced tomatoes, and pour into the dal.",
+      "Simmer dal for 2 minutes to let the flavours meld.",
+      "Serve the comforting sattvic dal hot alongside fluffy quinoa, garnished with coriander."
+    ]
+  },
+  {
+    "id": "JAI-02",
+    "source_id": "MEAL-02",
+    "group": "JAIN",
+    "name": "Jain Raw Banana & Chickpea Cutlet with Whole Wheat Roti",
+    "category": "Jain Vegan",
+    "calories": 450,
+    "carbs": 58,
+    "protein": 20,
+    "fat": 14,
+    "micronutrients": [
+      "Potassium",
+      "Vitamin B6",
+      "Iron"
+    ],
+    "allergens_present": [
+      "Gluten"
+    ],
+    "allergens_avoided": "Dairy, Eggs, Meat, Root Veggies, Soy, Peanuts",
+    "recommended_post_workout": "Leg Day / Refeed",
+    "benefits": "Crispy spiced banana and chickpea patty wrap made without onion or garlic.",
+    "ingredients": [
+      "Raw banana",
+      "Chickpeas",
+      "Whole wheat flour",
+      "Mint chutney",
+      "Cumin seeds",
+      "Salt"
+    ],
+    "prep_time": "10 mins",
+    "cook_time": "12 mins",
+    "steps": [
+      "Chef Didi boils raw banana and mashes with boiled chickpeas, cumin seeds, and rock salt into cutlets.",
+      "Knead whole wheat flour and roll out fresh rotis on the tawa.",
+      "Pan-sear the banana-chickpea cutlets on a tawa with a few drops of oil until golden-crisp on both sides.",
+      "Spread fresh mint chutney (no garlic) onto the warm roti.",
+      "Place the hot cutlet inside the roti and roll into a delicious wrap."
+    ]
+  },
+  {
+    "id": "JAI-03",
+    "source_id": "MEAL-03",
+    "group": "JAIN",
+    "name": "Jain Black-Eyed Peas (Lobiya) Curry with Basmati Rice",
+    "category": "Jain Vegan",
+    "calories": 480,
+    "carbs": 66,
+    "protein": 22,
+    "fat": 14,
+    "micronutrients": [
+      "Iron",
+      "Potassium",
+      "Folate"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Top 9 Allergens, Meat, Dairy, Eggs, Root Veggies",
+    "recommended_post_workout": "Heavy Strength / Powerlifting",
+    "benefits": "Rich black-eyed peas curry served with steamed basmati rice, high in fiber and protein.",
+    "ingredients": [
+      "Black-eyed peas",
+      "White rice",
+      "Tomato puree",
+      "Cumin seeds",
+      "Hing (asafoetida)",
+      "Coriander",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi washes basmati rice and boils in a pot until grains are separate and fluffy.",
+      "Pressure-cook soaked lobiya (black-eyed peas) until tender.",
+      "Heat oil in a pan, add hing (asafoetida) and cumin seeds, then stir in fresh tomato puree and spices.",
+      "Add the cooked lobiya and simmer for 8-10 minutes until the gravy thickens.",
+      "Serve the warm lobiya curry over steaming basmati rice, topped with coriander."
+    ]
+  },
+  {
+    "id": "JAI-04",
+    "source_id": "MEAL-04",
+    "group": "JAIN",
+    "name": "Jain Tofu & Capsicum Stir-Fry with White Sesame",
+    "category": "Jain Vegan",
+    "calories": 360,
+    "carbs": 22,
+    "protein": 26,
+    "fat": 18,
+    "micronutrients": [
+      "Calcium",
+      "Vitamin C",
+      "Iron"
+    ],
+    "allergens_present": [
+      "Soy",
+      "Sesame"
+    ],
+    "allergens_avoided": "Meat, Dairy, Eggs, Root Veggies, Gluten, Peanuts",
+    "recommended_post_workout": "Fat Loss / Hypertrophy",
+    "benefits": "High-protein tofu and bell peppers stir-fry made without onion or garlic.",
+    "ingredients": [
+      "Tofu",
+      "Bell peppers",
+      "Sesame seeds",
+      "Mustard oil",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "8 mins",
+    "steps": [
+      "Chef Didi cuts firm tofu and fresh capsicum into bite-sized cubes.",
+      "Lightly dry-toast white sesame seeds in a pan until fragrant, then remove.",
+      "Heat mustard oil in a wok and sear tofu cubes until golden.",
+      "Add capsicum cubes and rock salt; stir-fry on high heat for 3-4 minutes to keep them crisp.",
+      "Sprinkle toasted sesame seeds over the top and serve hot."
+    ]
+  },
+  {
+    "id": "JAI-05",
+    "source_id": "MEAL-05",
+    "group": "JAIN",
+    "name": "Jain Amaranth (Rajgira) Porridge with Almond Milk",
+    "category": "Jain Vegan",
+    "calories": 350,
+    "carbs": 48,
+    "protein": 16,
+    "fat": 10,
+    "micronutrients": [
+      "Calcium",
+      "Magnesium",
+      "Manganese"
+    ],
+    "allergens_present": [
+      "Tree Nuts"
+    ],
+    "allergens_avoided": "Meat, Dairy, Eggs, Root Veggies, Gluten, Soy, Peanuts",
+    "recommended_post_workout": "Light Mobility / Rest Day",
+    "benefits": "Warm amaranth porridge cooked in almond milk for a gentle morning recharge.",
+    "ingredients": [
+      "Amaranth",
+      "Almond milk",
+      "Jaggery",
+      "Cardamom",
+      "Almonds"
+    ],
+    "prep_time": "5 mins",
+    "cook_time": "12 mins",
+    "steps": [
+      "Chef Didi lightly dry-roasts rajgira (amaranth) grains in a pan until popped.",
+      "Pour almond milk into the pan and bring to a gentle simmer.",
+      "Cook on low heat for 10-12 minutes until thick and porridge-like.",
+      "Stir in natural jaggery and freshly ground cardamom powder.",
+      "Garnish with sliced almonds and serve warm."
+    ]
+  },
+  {
+    "id": "JAI-06",
+    "source_id": "MEAL-06",
+    "group": "JAIN",
+    "name": "Jain Paneer Bhurji with Whole Wheat Paratha",
+    "category": "Jain Vegetarian",
+    "calories": 460,
+    "carbs": 38,
+    "protein": 26,
+    "fat": 22,
+    "micronutrients": [
+      "Calcium",
+      "Phosphorus",
+      "B12"
+    ],
+    "allergens_present": [
+      "Dairy",
+      "Gluten"
+    ],
+    "allergens_avoided": "Meat, Eggs, Root Veggies, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Hypertrophy / Resistance",
+    "benefits": "Fresh paneer scramble cooked with mild spices and served with warm paratha.",
+    "ingredients": [
+      "Paneer",
+      "Tomatoes",
+      "Bell peppers",
+      "Cumin seeds",
+      "Whole wheat paratha",
+      "Ghee",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "10 mins",
+    "steps": [
+      "Chef Didi crumbles fresh paneer and finely chops ripe tomatoes and capsicum (no onion/garlic).",
+      "Knead whole wheat flour and roast parathas on a tawa with a touch of ghee until crisp.",
+      "In a pan, temper cumin seeds in ghee; add tomatoes, capsicum, and rock salt, cooking for 3 minutes.",
+      "Add crumbled paneer and toss gently for 2 minutes to keep it soft and juicy.",
+      "Serve the warm sattvic paneer bhurji with hot parathas."
+    ]
+  },
+  {
+    "id": "JAI-07",
+    "source_id": "MEAL-07",
+    "group": "JAIN",
+    "name": "Jain Moong Dal Chilla with Paneer Stuffing",
+    "category": "Jain Vegetarian",
+    "calories": 380,
+    "carbs": 42,
+    "protein": 24,
+    "fat": 12,
+    "micronutrients": [
+      "Iron",
+      "Potassium",
+      "Calcium"
+    ],
+    "allergens_present": [
+      "Dairy"
+    ],
+    "allergens_avoided": "Meat, Eggs, Root Veggies, Gluten, Soy, Peanuts",
+    "recommended_post_workout": "Post-Cardio / Conditioning",
+    "benefits": "Golden crispy moong dal chilla stuffed with fresh spiced paneer.",
+    "ingredients": [
+      "Yellow moong dal",
+      "Paneer",
+      "Green chillies",
+      "Coriander",
+      "Ghee",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "8 mins",
+    "steps": [
+      "Chef Didi blends soaked yellow moong dal with green chillies, hing, and rock salt into a smooth pouring batter.",
+      "Grate fresh paneer and mix with chopped coriander and a pinch of cumin powder.",
+      "Heat a non-stick tawa, lightly brush with ghee, and spread a ladle of moong dal batter into a thin circular chilla.",
+      "Cook for 2 minutes until the underside is crisp and golden, then flip.",
+      "Place grated paneer filling on one half, fold over, and serve hot and crisp."
+    ]
+  },
+  {
+    "id": "JAI-08",
+    "source_id": "MEAL-08",
+    "group": "JAIN",
+    "name": "Jain Buckwheat (Kuttu) & Paneer Khichdi",
+    "category": "Jain Vegetarian",
+    "calories": 410,
+    "carbs": 50,
+    "protein": 22,
+    "fat": 14,
+    "micronutrients": [
+      "Magnesium",
+      "Zinc",
+      "Calcium"
+    ],
+    "allergens_present": [
+      "Dairy"
+    ],
+    "allergens_avoided": "Meat, Eggs, Root Veggies, Gluten, Soy, Peanuts",
+    "recommended_post_workout": "Endurance / HIIT",
+    "benefits": "Wholesome buckwheat khichdi cooked with fresh paneer and ghee.",
+    "ingredients": [
+      "Buckwheat",
+      "Paneer",
+      "Green chillies",
+      "Ghee",
+      "Cumin seeds",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "12 mins",
+    "steps": [
+      "Chef Didi washes buckwheat groats (kuttu) thoroughly in water.",
+      "Cut fresh paneer into small cubes and slit green chillies.",
+      "Heat ghee in a pot, temper cumin seeds and green chillies.",
+      "Add buckwheat, 2 cups water, and rock salt; cook until tender and fluffy (10 minutes).",
+      "Gently fold in paneer cubes, simmer for 2 minutes, and serve warm."
+    ]
+  },
+  {
+    "id": "JAI-09",
+    "source_id": "MEAL-09",
+    "group": "JAIN",
+    "name": "Jain Raw Banana & Tomato Rice Bowl with Fresh Curd",
+    "category": "Jain Vegetarian",
+    "calories": 440,
+    "carbs": 62,
+    "protein": 18,
+    "fat": 12,
+    "micronutrients": [
+      "Calcium",
+      "Potassium",
+      "Probiotics"
+    ],
+    "allergens_present": [
+      "Dairy"
+    ],
+    "allergens_avoided": "Meat, Eggs, Root Veggies, Gluten, Soy, Peanuts",
+    "recommended_post_workout": "HIIT / Circuit Training",
+    "benefits": "Cooling curd and rice bowl with raw banana and tomato, soothing on the stomach.",
+    "ingredients": [
+      "White rice",
+      "Raw banana",
+      "Curd",
+      "Cumin seeds",
+      "Tomatoes",
+      "Ghee",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi washes basmati rice and boils in water until fluffy.",
+      "Peel, dice, and boil raw banana cubes; sauté with cumin seeds, chopped tomatoes, and rock salt.",
+      "Whisk fresh homemade curd until smooth.",
+      "Layer warm basmati rice in a bowl, add spiced raw banana subzi, and spoon cool curd on the side.",
+      "Serve as a soothing, electrolyte-rich post-workout meal."
+    ]
+  },
+  {
+    "id": "JAI-10",
+    "source_id": "MEAL-10",
+    "group": "JAIN",
+    "name": "Jain Paneer & Cucumber Salad",
+    "category": "Jain Vegetarian",
+    "calories": 320,
+    "carbs": 12,
+    "protein": 24,
+    "fat": 20,
+    "micronutrients": [
+      "Calcium",
+      "Vitamin C",
+      "Phosphorus"
+    ],
+    "allergens_present": [
+      "Dairy"
+    ],
+    "allergens_avoided": "Meat, Eggs, Root Veggies, Gluten, Soy, Peanuts",
+    "recommended_post_workout": "Fat Loss / Hypertrophy",
+    "benefits": "Crisp cucumber and fresh paneer salad seasoned with lemon and cumin.",
+    "ingredients": [
+      "Paneer",
+      "Cucumber",
+      "Lemon",
+      "Cumin powder",
+      "Black pepper",
+      "Salt"
+    ],
+    "prep_time": "6 mins",
+    "cook_time": "0 mins",
+    "steps": [
+      "Chef Didi cuts fresh paneer into delicate bite-sized cubes.",
+      "Wash, peel, and dice fresh cucumber.",
+      "In a salad bowl, combine paneer cubes and diced cucumber.",
+      "Squeeze fresh lemon juice and sprinkle roasted cumin powder, black pepper, and rock salt.",
+      "Toss gently and serve chilled or fresh for light muscle recovery."
+    ]
+  },
+  {
+    "id": "JAI-11",
+    "source_id": "MEAL-11",
+    "group": "JAIN",
+    "name": "Jain Sprouted Moong & Fresh Coconut Salad",
+    "category": "Jain Vegan",
+    "calories": 340,
+    "carbs": 44,
+    "protein": 22,
+    "fat": 8,
+    "micronutrients": [
+      "Vitamin C",
+      "Iron",
+      "Folate"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Top 9 Allergens, Meat, Dairy, Eggs, Root Veggies",
+    "recommended_post_workout": "Hypertrophy / Resistance",
+    "benefits": "Nutrient-packed sprouted moong salad with freshly grated coconut and lemon.",
+    "ingredients": [
+      "Yellow moong dal",
+      "Coconut milk",
+      "Green chillies",
+      "Coriander",
+      "Lemon",
+      "Salt"
+    ],
+    "prep_time": "6 mins",
+    "cook_time": "4 mins",
+    "steps": [
+      "Chef Didi steams sprouted green moong for 4 minutes until tender yet crunchy.",
+      "Finely chop green chillies and fresh coriander leaves.",
+      "Grates fresh coconut and tosses with the steamed moong in a mixing bowl.",
+      "Add fresh lemon juice and rock salt; mix well.",
+      "Serve as a refreshing, enzyme-rich high-protein salad."
+    ]
+  },
+  {
+    "id": "JAI-12",
+    "source_id": "MEAL-12",
+    "group": "JAIN",
+    "name": "Jain Soya Chunks & Capsicum Stir-Fry",
+    "category": "Jain Vegan",
+    "calories": 380,
+    "carbs": 32,
+    "protein": 38,
+    "fat": 10,
+    "micronutrients": [
+      "Iron",
+      "Calcium",
+      "Zinc"
+    ],
+    "allergens_present": [
+      "Soy"
+    ],
+    "allergens_avoided": "Meat, Dairy, Eggs, Root Veggies, Gluten, Peanuts",
+    "recommended_post_workout": "Strength & Conditioning",
+    "benefits": "Ultra-high protein soya chunks and capsicum stir-fried with pure sattvic spices.",
+    "ingredients": [
+      "Soya chunks",
+      "Bell peppers",
+      "Tomatoes",
+      "Cumin seeds",
+      "Mustard oil",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "10 mins",
+    "steps": [
+      "Chef Didi boils soya chunks in water for 5 minutes, rinses in cold water, and squeezes out liquid.",
+      "Dice capsicum and puree fresh ripe tomatoes.",
+      "Heat mustard oil in a pan, crackle cumin seeds, then sauté tomato puree and spices until aromatic.",
+      "Add squeezed soya chunks and capsicum cubes; stir-fry on high flame for 5 minutes.",
+      "Season with rock salt, garnish with coriander, and serve hot."
+    ]
+  },
+  {
+    "id": "JAI-13",
+    "source_id": "MEAL-13",
+    "group": "JAIN",
+    "name": "Jain Moong Dal & Palak Khichdi",
+    "category": "Jain Vegetarian",
+    "calories": 410,
+    "carbs": 56,
+    "protein": 22,
+    "fat": 10,
+    "micronutrients": [
+      "Iron",
+      "Folate",
+      "Magnesium"
+    ],
+    "allergens_present": [
+      "Dairy"
+    ],
+    "allergens_avoided": "Meat, Eggs, Root Veggies, Gluten, Soy, Peanuts",
+    "recommended_post_workout": "Fat Loss / Hypertrophy",
+    "benefits": "Warm, comforting moong dal and spinach khichdi that is light and gentle on digestion.",
+    "ingredients": [
+      "Yellow moong dal",
+      "White rice",
+      "Spinach",
+      "Cumin seeds",
+      "Ghee",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi washes yellow moong dal and white rice together.",
+      "Wash and finely chop fresh spinach (palak).",
+      "Heat ghee in a pressure cooker, add cumin seeds and a pinch of hing.",
+      "Add dal, rice, chopped spinach, water, and rock salt; pressure cook for 3 whistles until soft and porridge-like.",
+      "Stir with a spoon and serve steaming hot with a teaspoon of ghee."
+    ]
+  },
+  {
+    "id": "JAI-14",
+    "source_id": "MEAL-14",
+    "group": "JAIN",
+    "name": "Jain Paneer & Tomato Rice Bowl with Curd",
+    "category": "Jain Vegetarian",
+    "calories": 450,
+    "carbs": 58,
+    "protein": 24,
+    "fat": 14,
+    "micronutrients": [
+      "Calcium",
+      "Phosphorus",
+      "Vitamin C"
+    ],
+    "allergens_present": [
+      "Dairy"
+    ],
+    "allergens_avoided": "Meat, Eggs, Root Veggies, Gluten, Soy, Peanuts",
+    "recommended_post_workout": "Post-Cardio / Conditioning",
+    "benefits": "Sautéed paneer and juicy tomatoes served over steamed basmati rice with cool curd.",
+    "ingredients": [
+      "Paneer",
+      "White rice",
+      "Tomatoes",
+      "Curd",
+      "Cumin seeds",
+      "Ghee",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi washes basmati rice and boils until tender and fluffy.",
+      "Cut fresh paneer into cubes and sauté with cumin seeds and chopped tomatoes in ghee until lightly golden.",
+      "Whisk fresh curd until creamy.",
+      "Place fluffy basmati rice in a bowl and spoon the warm paneer-tomato preparation on top.",
+      "Serve with a side of cool fresh curd."
+    ]
+  },
+  {
+    "id": "JAI-15",
+    "source_id": "MEAL-15",
+    "group": "JAIN",
+    "name": "Jain Kabuli Chana Sundal with Basmati Rice",
+    "category": "Jain Vegan",
+    "calories": 460,
+    "carbs": 64,
+    "protein": 22,
+    "fat": 12,
+    "micronutrients": [
+      "Iron",
+      "Zinc",
+      "Fiber"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Top 9 Allergens, Meat, Dairy, Eggs, Root Veggies",
+    "recommended_post_workout": "Heavy Strength / Powerlifting",
+    "benefits": "Spiced kabuli chana sundal served with steaming basmati rice for sustained muscle energy.",
+    "ingredients": [
+      "Chickpeas",
+      "White rice",
+      "Cumin seeds",
+      "Lemon",
+      "Coriander",
+      "Olive oil",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi boils white rice in a pot until soft and fluffy.",
+      "Pressure cook soaked chickpeas (kabuli chana) with salt until tender.",
+      "Heat 1 tsp oil in a pan, add cumin seeds, and toss the cooked chickpeas with salt and lemon juice.",
+      "Fold in freshly chopped coriander.",
+      "Serve the high-protein chana sundal hot alongside fluffy basmati rice."
+    ]
+  },
+  {
+    "id": "ALL-01",
+    "source_id": "MEAL-01",
+    "group": "ALLERGEN-FREE",
+    "name": "Quinoa & Black Bean Power Bowl",
+    "category": "Allergen-Free Vegan",
+    "calories": 450,
+    "carbs": 62,
+    "protein": 18,
+    "fat": 14,
+    "micronutrients": [
+      "Iron",
+      "Potassium",
+      "Fiber"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Top 9 Common Allergens (Gluten, Dairy, Soy, Nuts, etc.)",
+    "recommended_post_workout": "Leg Day / High Volume",
+    "benefits": "Clean plant-based muscle refuel free of top common allergens.",
+    "ingredients": [
+      "Quinoa",
+      "Black beans",
+      "Sweet corn",
+      "Tomatoes",
+      "Avocado",
+      "Coriander",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "12 mins",
+    "steps": [
+      "Chef Didi washes quinoa and boils in 2 cups water until light and fluffy.",
+      "Sauté cooked black beans with sweet corn, chopped tomatoes, and salt for 3 minutes.",
+      "Slice ripe avocado and chop fresh coriander.",
+      "Layer quinoa in a bowl and top with the black bean and corn mix.",
+      "Garnish with avocado slices and coriander."
+    ]
+  },
+  {
+    "id": "ALL-02",
+    "source_id": "MEAL-02",
+    "group": "ALLERGEN-FREE",
+    "name": "Chickpea & Sweet Potato Stew",
+    "category": "Allergen-Free Vegan",
+    "calories": 420,
+    "carbs": 64,
+    "protein": 16,
+    "fat": 11,
+    "micronutrients": [
+      "Potassium",
+      "Vitamin A",
+      "Iron"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Top 9 Common Allergens",
+    "recommended_post_workout": "Post-Cardio / Conditioning",
+    "benefits": "Warm and soothing chickpea and sweet potato stew, easy on the stomach.",
+    "ingredients": [
+      "Chickpeas",
+      "Sweet potato",
+      "Olive oil",
+      "Turmeric",
+      "Cumin seeds",
+      "Tomatoes",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi peels sweet potatoes and cuts into small cubes.",
+      "Heat olive oil in a pot, add cumin seeds, chopped tomatoes, and turmeric.",
+      "Add sweet potatoes and cooked chickpeas with 1.5 cups water.",
+      "Cover and simmer for 12-14 minutes until sweet potatoes are tender.",
+      "Season with salt, garnish with coriander, and serve warm."
+    ]
+  },
+  {
+    "id": "ALL-03",
+    "source_id": "MEAL-03",
+    "group": "ALLERGEN-FREE",
+    "name": "Buckwheat Porridge with Berries & Flaxseeds",
+    "category": "Allergen-Free Vegan",
+    "calories": 360,
+    "carbs": 52,
+    "protein": 16,
+    "fat": 10,
+    "micronutrients": [
+      "Magnesium",
+      "Antioxidants",
+      "Fiber"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Top 9 Common Allergens",
+    "recommended_post_workout": "Endurance / HIIT",
+    "benefits": "Warm gluten-free buckwheat porridge topped with sweet berries and ground flaxseeds.",
+    "ingredients": [
+      "Buckwheat",
+      "Water",
+      "Blueberries",
+      "Flaxseeds",
+      "Banana",
+      "Salt"
+    ],
+    "prep_time": "5 mins",
+    "cook_time": "12 mins",
+    "steps": [
+      "Chef Didi simmers buckwheat in water over medium heat for 12 minutes until soft.",
+      "Stir in roasted ground flaxseeds and a pinch of salt.",
+      "Remove from heat and pour into a breakfast bowl.",
+      "Top with fresh berries and sliced banana.",
+      "Serve warm for clean, allergy-safe energy recovery."
+    ]
+  },
+  {
+    "id": "ALL-04",
+    "source_id": "MEAL-04",
+    "group": "ALLERGEN-FREE",
+    "name": "Yellow Lentil Dal with Basmati Rice",
+    "category": "Allergen-Free Vegan",
+    "calories": 430,
+    "carbs": 65,
+    "protein": 20,
+    "fat": 9,
+    "micronutrients": [
+      "Folate",
+      "Iron",
+      "Zinc"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Top 9 Common Allergens",
+    "recommended_post_workout": "Strength & Conditioning",
+    "benefits": "Comforting yellow dal and rice that is light and gentle on the stomach.",
+    "ingredients": [
+      "Yellow split peas",
+      "White rice",
+      "Cumin seeds",
+      "Turmeric",
+      "Tomatoes",
+      "Olive oil",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi washes basmati rice and yellow dal in separate bowls.",
+      "Boil rice until grains are fluffy and tender; cook yellow dal with turmeric and salt until smooth.",
+      "Heat olive oil in a small pan, crackle cumin seeds and chopped tomatoes, then pour into the dal.",
+      "Stir dal over low heat for 2 minutes.",
+      "Serve piping hot dal over fluffy basmati rice."
+    ]
+  },
+  {
+    "id": "ALL-05",
+    "source_id": "MEAL-05",
+    "group": "ALLERGEN-FREE",
+    "name": "Pumpkin Seed & Fruit Smoothie Bowl",
+    "category": "Allergen-Free Vegan",
+    "calories": 340,
+    "carbs": 38,
+    "protein": 22,
+    "fat": 12,
+    "micronutrients": [
+      "Zinc",
+      "Magnesium",
+      "Omega-3"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Top 9 Common Allergens",
+    "recommended_post_workout": "Light Mobility / Rest Day",
+    "benefits": "Nut-free, soy-free protein bowl rich in seed minerals and fresh fruits.",
+    "ingredients": [
+      "Pumpkin seeds",
+      "Banana",
+      "Blueberries",
+      "Water",
+      "Cinnamon",
+      "Chia seeds"
+    ],
+    "prep_time": "5 mins",
+    "cook_time": "0 mins",
+    "steps": [
+      "Chef Didi lightly blends pumpkin seeds into a fine powder.",
+      "Add sliced banana, blueberries, cinnamon, and water into the blender.",
+      "Blend on high until thick and creamy.",
+      "Pour into a bowl.",
+      "Garnish with chia seeds and whole pumpkin seeds."
+    ]
+  },
+  {
+    "id": "ALL-06",
+    "source_id": "MEAL-06",
+    "group": "ALLERGEN-FREE",
+    "name": "Fresh Paneer with Pineapple & Honey",
+    "category": "Allergen-Free Veg",
+    "calories": 310,
+    "carbs": 30,
+    "protein": 26,
+    "fat": 6,
+    "micronutrients": [
+      "Calcium",
+      "Bromelain",
+      "Potassium"
+    ],
+    "allergens_present": [
+      "Dairy"
+    ],
+    "allergens_avoided": "Gluten, Soy, Eggs, Fish, Shellfish, Peanuts, Tree Nuts, Sesame",
+    "recommended_post_workout": "HIIT / Circuit Training",
+    "benefits": "Simple fresh paneer bowl with sweet fresh pineapple slices and honey.",
+    "ingredients": [
+      "Paneer",
+      "Pineapple",
+      "Honey",
+      "Mint"
+    ],
+    "prep_time": "5 mins",
+    "cook_time": "0 mins",
+    "steps": [
+      "Chef Didi cuts fresh soft paneer into cubes.",
+      "Chop fresh ripe pineapple into bite-sized chunks.",
+      "Combine paneer and pineapple in a bowl.",
+      "Drizzle pure honey over the top and garnish with fresh mint leaves.",
+      "Serve cool and fresh."
+    ]
+  },
+  {
+    "id": "ALL-07",
+    "source_id": "MEAL-07",
+    "group": "ALLERGEN-FREE",
+    "name": "Egg White & Spinach Omelet with Toasted Rice Cakes",
+    "category": "Allergen-Free Veg",
+    "calories": 290,
+    "carbs": 22,
+    "protein": 26,
+    "fat": 4,
+    "micronutrients": [
+      "Choline",
+      "Iron",
+      "Calcium"
+    ],
+    "allergens_present": [
+      "Eggs"
+    ],
+    "allergens_avoided": "Gluten, Dairy, Soy, Fish, Shellfish, Peanuts, Tree Nuts, Sesame",
+    "recommended_post_workout": "Fat Loss / Hypertrophy",
+    "benefits": "Light egg white and spinach omelet served with crunchy rice cakes.",
+    "ingredients": [
+      "Egg whites",
+      "Spinach",
+      "Rice cakes",
+      "Olive oil",
+      "Salt",
+      "Black pepper"
+    ],
+    "prep_time": "5 mins",
+    "cook_time": "6 mins",
+    "steps": [
+      "Chef Didi separates egg whites into a bowl and whisks with salt and black pepper.",
+      "Heat 1/2 tsp olive oil in a pan, toss spinach until wilted.",
+      "Pour whisked egg whites over spinach and cook on low heat until set, then fold.",
+      "Plate the fluffy omelet with crisp puffed rice cakes.",
+      "Serve warm for clean, gluten-free, dairy-free recovery."
+    ]
+  },
+  {
+    "id": "ALL-08",
+    "source_id": "MEAL-08",
+    "group": "ALLERGEN-FREE",
+    "name": "Plant Protein & Berry Shake",
+    "category": "Allergen-Free Veg",
+    "calories": 320,
+    "carbs": 42,
+    "protein": 28,
+    "fat": 4,
+    "micronutrients": [
+      "Calcium",
+      "Antioxidants",
+      "Potassium"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Top 9 Common Allergens",
+    "recommended_post_workout": "Post-Cardio / Conditioning",
+    "benefits": "Hypoallergenic plant-based protein recovery shake with sweet berries.",
+    "ingredients": [
+      "Plant protein",
+      "Mixed berries",
+      "Water",
+      "Banana",
+      "Chia seeds"
+    ],
+    "prep_time": "3 mins",
+    "cook_time": "0 mins",
+    "steps": [
+      "Chef Didi measures clean water into a blender.",
+      "Add plant protein powder, mixed berries, and ripe banana.",
+      "Blend on high speed for 45 seconds until velvety and smooth.",
+      "Pour into a tall glass and stir in chia seeds.",
+      "Serve cold."
+    ]
+  },
+  {
+    "id": "ALL-09",
+    "source_id": "MEAL-09",
+    "group": "ALLERGEN-FREE",
+    "name": "Fresh Paneer & Roasted Pumpkin Seed Bowl",
+    "category": "Allergen-Free Veg",
+    "calories": 330,
+    "carbs": 20,
+    "protein": 26,
+    "fat": 14,
+    "micronutrients": [
+      "Zinc",
+      "Magnesium",
+      "Calcium"
+    ],
+    "allergens_present": [
+      "Dairy"
+    ],
+    "allergens_avoided": "Gluten, Soy, Eggs, Fish, Shellfish, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Hypertrophy / Resistance",
+    "benefits": "Fresh paneer topped with crunchy roasted pumpkin seeds, honey, and cinnamon.",
+    "ingredients": [
+      "Paneer",
+      "Pumpkin seeds",
+      "Honey",
+      "Cinnamon"
+    ],
+    "prep_time": "5 mins",
+    "cook_time": "2 mins",
+    "steps": [
+      "Chef Didi dices soft fresh paneer into cubes.",
+      "Toast pumpkin seeds in a dry pan until lightly golden and aromatic.",
+      "Place paneer in a serving bowl, drizzle with honey, and dust with ground cinnamon.",
+      "Scatter toasted pumpkin seeds on top and serve."
+    ]
+  },
+  {
+    "id": "ALL-10",
+    "source_id": "MEAL-10",
+    "group": "ALLERGEN-FREE",
+    "name": "Whey Protein Shake with Banana & Cinnamon",
+    "category": "Allergen-Free Veg",
+    "calories": 280,
+    "carbs": 32,
+    "protein": 28,
+    "fat": 2,
+    "micronutrients": [
+      "Calcium",
+      "Potassium"
+    ],
+    "allergens_present": [
+      "Dairy"
+    ],
+    "allergens_avoided": "Top 9 Common Allergens (Except Dairy)",
+    "recommended_post_workout": "Fat Loss / Hypertrophy",
+    "benefits": "Smooth whey protein shake blended with fresh banana and cinnamon.",
+    "ingredients": [
+      "Whey protein",
+      "Banana",
+      "Water",
+      "Cinnamon"
+    ],
+    "prep_time": "3 mins",
+    "cook_time": "0 mins",
+    "steps": [
+      "Chef Didi slices a ripe banana into a blender.",
+      "Add 1 scoop whey protein powder and a dash of ground cinnamon.",
+      "Pour chilled water and blend until smooth and frothy (45 seconds).",
+      "Pour into a shaker and serve fresh."
+    ]
+  },
+  {
+    "id": "ALL-11",
+    "source_id": "MEAL-11",
+    "group": "ALLERGEN-FREE",
+    "name": "Grilled Chicken Breast with Sweet Potato Mash",
+    "category": "Allergen-Free Non-Veg",
+    "calories": 450,
+    "carbs": 40,
+    "protein": 44,
+    "fat": 8,
+    "micronutrients": [
+      "Potassium",
+      "Vitamin A",
+      "B6"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Top 9 Common Allergens (Allergen-Free)",
+    "recommended_post_workout": "Strength & Conditioning",
+    "benefits": "Tender grilled chicken breast served with smooth sweet potato mash.",
+    "ingredients": [
+      "Chicken breast",
+      "Sweet potato",
+      "Olive oil",
+      "Salt",
+      "Black pepper",
+      "Garlic"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi peels and boils sweet potatoes until tender, then mashes with salt and black pepper.",
+      "Season skinless chicken breast with crushed garlic, salt, and black pepper.",
+      "Heat olive oil in a pan and cook chicken for 6-7 minutes per side until juicy and golden.",
+      "Slice chicken breast and arrange over the sweet potato mash.",
+      "Serve hot."
+    ]
+  },
+  {
+    "id": "ALL-12",
+    "source_id": "MEAL-12",
+    "group": "ALLERGEN-FREE",
+    "name": "Minced Chicken & Pumpkin Bowl with Brown Rice",
+    "category": "Allergen-Free Non-Veg",
+    "calories": 430,
+    "carbs": 46,
+    "protein": 38,
+    "fat": 9,
+    "micronutrients": [
+      "Vitamin A",
+      "Zinc",
+      "Potassium"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Top 9 Common Allergens",
+    "recommended_post_workout": "Leg Day / Refeed",
+    "benefits": "Gentle minced chicken and roasted pumpkin bowl, great for easy digestion.",
+    "ingredients": [
+      "Minced chicken",
+      "Pumpkin",
+      "Brown rice",
+      "Olive oil",
+      "Garlic",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi cooks brown rice in a pot until tender and fluffy.",
+      "Dice pumpkin into small cubes and steam until soft.",
+      "Sauté minced chicken with minced garlic and salt in olive oil for 8 minutes until cooked through.",
+      "Toss in the steamed pumpkin cubes and stir gently for 2 minutes.",
+      "Serve hot over a bed of freshly cooked brown rice."
+    ]
+  },
+  {
+    "id": "ALL-13",
+    "source_id": "MEAL-13",
+    "group": "ALLERGEN-FREE",
+    "name": "Grilled Chicken Fillet with White Rice & Carrots",
+    "category": "Allergen-Free Non-Veg",
+    "calories": 440,
+    "carbs": 48,
+    "protein": 42,
+    "fat": 8,
+    "micronutrients": [
+      "Niacin",
+      "Vitamin A",
+      "Selenium"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Top 9 Common Allergens (Allergen-Free)",
+    "recommended_post_workout": "Hypertrophy / Resistance",
+    "benefits": "Wholesome chicken fillet with fluffy white rice and tender carrots.",
+    "ingredients": [
+      "Chicken breast",
+      "White rice",
+      "Carrots",
+      "Olive oil",
+      "Salt",
+      "Black pepper"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi washes basmati rice and boils in water until grains are tender and fluffy.",
+      "Slice carrots into rounds and steam for 3-4 minutes.",
+      "Season chicken breast with salt and black pepper; pan-sear in olive oil for 6 minutes per side.",
+      "Slice cooked chicken breast neatly.",
+      "Plate chicken alongside steaming white rice and sweet steamed carrots."
+    ]
+  },
+  {
+    "id": "ALL-14",
+    "source_id": "MEAL-14",
+    "group": "ALLERGEN-FREE",
+    "name": "Roast Chicken Breast with Beetroot & Quinoa",
+    "category": "Allergen-Free Non-Veg",
+    "calories": 460,
+    "carbs": 42,
+    "protein": 44,
+    "fat": 12,
+    "micronutrients": [
+      "Iron",
+      "Folate",
+      "Magnesium"
+    ],
+    "allergens_present": [],
+    "allergens_avoided": "Top 9 Common Allergens (Allergen-Free)",
+    "recommended_post_workout": "Heavy Strength / Powerlifting",
+    "benefits": "Pan-seared chicken breast with sweet roasted beetroot and quinoa.",
+    "ingredients": [
+      "Chicken breast",
+      "Beetroot",
+      "Quinoa",
+      "Olive oil",
+      "Lemon",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi boils quinoa in water for 12 minutes until fluffy.",
+      "Dice fresh beetroot and roast in a pan with 1 tsp olive oil until tender and sweet.",
+      "Season chicken breast with salt and lemon juice; pan-sear in olive oil until golden and cooked through.",
+      "Slice chicken and place over the warm quinoa.",
+      "Top with roasted beetroot cubes and serve."
+    ]
+  },
+  {
+    "id": "ALL-15",
+    "source_id": "MEAL-15",
+    "group": "ALLERGEN-FREE",
+    "name": "Pan-Seared Fish Fillet with Green Beans & Basmati Rice",
+    "category": "Allergen-Free Non-Veg",
+    "calories": 410,
+    "carbs": 46,
+    "protein": 36,
+    "fat": 8,
+    "micronutrients": [
+      "Selenium",
+      "Iodine",
+      "B-Vitamins"
+    ],
+    "allergens_present": [
+      "Fish"
+    ],
+    "allergens_avoided": "Dairy, Eggs, Shellfish, Gluten, Soy, Peanuts, Tree Nuts",
+    "recommended_post_workout": "Fat Loss / Hypertrophy",
+    "benefits": "Fresh pan-seared fish fillet with green beans and fluffy basmati rice.",
+    "ingredients": [
+      "White fish fillet",
+      "White rice",
+      "Green beans",
+      "Lemon",
+      "Olive oil",
+      "Salt"
+    ],
+    "prep_time": "8 mins",
+    "cook_time": "15 mins",
+    "steps": [
+      "Chef Didi washes basmati rice and boils until tender and fluffy.",
+      "Trim fresh green beans and sauté in a few drops of olive oil with salt for 3 minutes.",
+      "Season fresh fish fillet with lemon juice and salt.",
+      "Pan-sear fish in olive oil for 3 minutes per side until golden and flaky.",
+      "Plate the hot fish fillet alongside basmati rice and green beans."
+    ]
+  }
+];
+    window.ZAP_STRATEGIES = [
+  {
+    "workout_type": "Heavy Strength / Powerlifting",
+    "primary_goal": "ATP-CP recovery, Central Nervous System repair, peak glycogen reloading",
+    "optimal_macro_ratio": "50% Carbs : 35% Protein : 15% Fat",
+    "carb_pct": 50,
+    "protein_pct": 35,
+    "fat_pct": 15,
+    "key_nutrients": "High fast/moderate carbs, dense protein, Sodium, Creatine, Iron",
+    "recommended_meals": [
+      "Minced Chicken (Keema) Bowl",
+      "Chickpea Curry with Rice",
+      "Jain Lobiya Curry",
+      "Grilled Chicken & Sweet Potato Mash"
+    ]
+  },
+  {
+    "workout_type": "Hypertrophy / Muscle Building",
+    "primary_goal": "Maximize Muscle Protein Synthesis (MPS), cell swelling, sarcoplasmic refuel",
+    "optimal_macro_ratio": "45% Carbs : 40% Protein : 15% Fat",
+    "carb_pct": 45,
+    "protein_pct": 40,
+    "fat_pct": 15,
+    "key_nutrients": "Leucine-rich protein (25g+), moderate starch, Magnesium, Zinc",
+    "recommended_meals": [
+      "Chicken Breast & Sweet Potato",
+      "Soya Chunks Stir-fry",
+      "Jain Paneer Bhurji",
+      "Classic Chicken & Basmati Rice"
+    ]
+  },
+  {
+    "workout_type": "Leg Day / High Volume Refeed",
+    "primary_goal": "Massive muscle tissue micro-trauma repair, deep glycogen depletion refuel",
+    "optimal_macro_ratio": "60% Carbs : 30% Protein : 10% Fat",
+    "carb_pct": 60,
+    "protein_pct": 30,
+    "fat_pct": 10,
+    "key_nutrients": "High glycemic carbs, potassium, ultra-lean protein to speed gastric emptying",
+    "recommended_meals": [
+      "Lentil Quinoa Bowl",
+      "Jain Banana Cutlet Wrap",
+      "Chicken Keema Meatballs with Pasta",
+      "Buckwheat Chilla"
+    ]
+  },
+  {
+    "workout_type": "HIIT / Circuit Training",
+    "primary_goal": "Rapid lactate clearance, quick glycogen restocking, electrolyte balance",
+    "optimal_macro_ratio": "55% Carbs : 35% Protein : 10% Fat",
+    "carb_pct": 55,
+    "protein_pct": 35,
+    "fat_pct": 10,
+    "key_nutrients": "Fast-digesting simple carbs, whey/soy isolate, Sodium, Potassium",
+    "recommended_meals": [
+      "Comforting Chicken Noodle Soup",
+      "Green Pea & Plant Protein Bowl",
+      "Jain Banana Tomato Rice",
+      "Curd & Mango Recovery Bowl"
+    ]
+  },
+  {
+    "workout_type": "Endurance / Long Distance Cardio",
+    "primary_goal": "Aerobic glycogen restoration, rehydration, anti-inflammatory support",
+    "optimal_macro_ratio": "65% Carbs : 20% Protein : 15% Fat",
+    "carb_pct": 65,
+    "protein_pct": 20,
+    "fat_pct": 15,
+    "key_nutrients": "High complex carbs, Omega-3s, Magnesium, Antioxidants, High Sodium",
+    "recommended_meals": [
+      "Oatmeal with Soy Protein",
+      "Curd & Honey Granola Bowl",
+      "Jain Buckwheat Khichdi",
+      "Allergen-Free Buckwheat Porridge"
+    ]
+  },
+  {
+    "workout_type": "Fat Loss / Cutting Phase",
+    "primary_goal": "Preserve lean muscle mass, maximize satiety, minimize caloric intake",
+    "optimal_macro_ratio": "20% Carbs : 60% Protein : 20% Fat",
+    "carb_pct": 20,
+    "protein_pct": 60,
+    "fat_pct": 20,
+    "key_nutrients": "Lean protein isolates, high fiber veggies, low GI carbs, Chromium",
+    "recommended_meals": [
+      "Egg White & Spinach Omelet",
+      "Pan-Fried Fish Fillet",
+      "Jain Tofu & Capsicum Stir-Fry",
+      "Tawa Fish Fillet with Potatoes"
+    ]
+  },
+  {
+    "workout_type": "Light Mobility / Rest Day",
+    "primary_goal": "Tissue repair, systemic anti-inflammation, hormone regulation",
+    "optimal_macro_ratio": "30% Carbs : 35% Protein : 35% Fat",
+    "carb_pct": 30,
+    "protein_pct": 35,
+    "fat_pct": 35,
+    "key_nutrients": "Healthy monounsaturated fats, collagen, gut-friendly fiber, Zinc",
+    "recommended_meals": [
+      "Chia Seed Pudding",
+      "Paneer & Pineapple Bowl",
+      "Pumpkin Seed Smoothie Bowl",
+      "Steamed Fish & Boiled Egg Salad"
+    ]
+  }
+];
+    window.ZAP_SUPPLEMENTS = [
+  {
+    "category": "Supplements",
+    "name": "Whey Protein Isolate",
+    "active_nutrients": "BCAAs, Leucine, EAA",
+    "fitness_benefits": "Fast-acting muscle protein synthesis, accelerates tissue repair, highly bioavailable.",
+    "optimal_timing": "Within 30-45 mins post-workout",
+    "recommended_dosage": "25 - 30g per scoop"
+  },
+  {
+    "category": "Supplements",
+    "name": "Creatine Monohydrate",
+    "active_nutrients": "Creatine Phosphate",
+    "fitness_benefits": "Increases phosphocreatine stores, boosts power output, peak strength, and cell hydration.",
+    "optimal_timing": "Daily post-workout or morning",
+    "recommended_dosage": "3 - 5g daily"
+  },
+  {
+    "category": "Supplements",
+    "name": "Branched-Chain Amino Acids (BCAAs)",
+    "active_nutrients": "Leucine, Isoleucine, Valine",
+    "fitness_benefits": "Reduces muscle breakdown during prolonged fasts/cardio, mitigates DOMS.",
+    "optimal_timing": "Intra-workout or pre-cardio",
+    "recommended_dosage": "5 - 10g during training"
+  },
+  {
+    "category": "Supplements",
+    "name": "Beta-Alanine",
+    "active_nutrients": "Carnosine Precursor",
+    "fitness_benefits": "Buffers lactic acid build-up, delays neuromuscular fatigue during glycolytic sets.",
+    "optimal_timing": "Pre-workout (20 mins prior)",
+    "recommended_dosage": "3.2 - 5g daily"
+  },
+  {
+    "category": "Supplements",
+    "name": "Pre-Workout (Caffeine + Citrulline)",
+    "active_nutrients": "Caffeine, L-Citrulline Malate",
+    "fitness_benefits": "Enhances vasodilation (muscle pump), mental focus, and fatigue resistance.",
+    "optimal_timing": "20 - 30 mins before lifting",
+    "recommended_dosage": "200-300mg Caffeine / 6-8g Citrulline"
+  },
+  {
+    "category": "Supplements",
+    "name": "Omega-3 Fish / Algal Oil",
+    "active_nutrients": "EPA & DHA Fatty Acids",
+    "fitness_benefits": "Reduces joint inflammation, improves insulin sensitivity, supports cardiac health.",
+    "optimal_timing": "With meals (Breakfast/Dinner)",
+    "recommended_dosage": "1000 - 2000mg combined EPA/DHA"
+  },
+  {
+    "category": "Supplements",
+    "name": "Electrolyte Powder / Salt Tabs",
+    "active_nutrients": "Sodium, Potassium, Magnesium",
+    "fitness_benefits": "Prevents muscle cramping, maintains plasma volume during high sweat workouts.",
+    "optimal_timing": "Intra-workout / Post-sweat",
+    "recommended_dosage": "500mg Sodium + 200mg Potassium"
+  },
+  {
+    "category": "Supplements",
+    "name": "Casein Protein",
+    "active_nutrients": "Slow-release Micellar Casein",
+    "fitness_benefits": "Provides sustained anti-catabolic amino acid drip over 6-8 hours during sleep.",
+    "optimal_timing": "Before sleep or long fasts",
+    "recommended_dosage": "30 - 40g before bed"
+  },
+  {
+    "category": "Whole Foods",
+    "name": "Bananas",
+    "active_nutrients": "Potassium, Fructose, Glucose",
+    "fitness_benefits": "Rapid glycogen restocking, prevents muscle spasms, easy on the stomach.",
+    "optimal_timing": "Immediate pre or post-workout",
+    "recommended_dosage": "1 - 2 medium bananas"
+  },
+  {
+    "category": "Whole Foods",
+    "name": "Sweet Potatoes",
+    "active_nutrients": "Complex Carbs, Beta-Carotene",
+    "fitness_benefits": "Sustained glucose release without insulin spikes; high potassium for pumps.",
+    "optimal_timing": "Post-heavy lifting meal",
+    "recommended_dosage": "150 - 250g cooked"
+  },
+  {
+    "category": "Whole Foods",
+    "name": "Eggs (Whole & Whites)",
+    "active_nutrients": "Choline, Leucine, Albumen",
+    "fitness_benefits": "Gold-standard protein bioavailability, choline supports mind-muscle connection.",
+    "optimal_timing": "Breakfast or post-training",
+    "recommended_dosage": "3-5 whites / 2 whole eggs"
+  },
+  {
+    "category": "Whole Foods",
+    "name": "Almonds & Walnuts",
+    "active_nutrients": "Vitamin E, Magnesium, Healthy Fats",
+    "fitness_benefits": "Anti-inflammatory, balances anabolic hormones, prolongs fullness on cuts.",
+    "optimal_timing": "Snack / Rest day meal",
+    "recommended_dosage": "30g handful"
+  },
+  {
+    "category": "Whole Foods",
+    "name": "Greek Yogurt",
+    "active_nutrients": "Probiotics, Whey + Casein Blend",
+    "fitness_benefits": "Supports gut microbiome for better protein absorption; dual protein speed.",
+    "optimal_timing": "Snack or post-workout",
+    "recommended_dosage": "150 - 200g"
+  },
+  {
+    "category": "Whole Foods",
+    "name": "Oats",
+    "active_nutrients": "Beta-Glucan, Complex Starch",
+    "fitness_benefits": "Low GI carbohydrate source, sustains energy for grueling volume training.",
+    "optimal_timing": "Pre-workout (2 hours prior)",
+    "recommended_dosage": "50 - 100g dry oats"
+  },
+  {
+    "category": "Recovery Gear",
+    "name": "Foam Roller / Lacrosse Ball",
+    "active_nutrients": "Myofascial Release",
+    "fitness_benefits": "Relieves muscle tightness, increases blood circulation, reduces DOMS intensity.",
+    "optimal_timing": "Pre-workout warm-up / Post-session",
+    "recommended_dosage": "10-15 mins target areas"
+  },
+  {
+    "category": "Recovery Gear",
+    "name": "Lifting Belt & Wrist Wraps",
+    "active_nutrients": "Intra-Abdominal Pressure Support",
+    "fitness_benefits": "Stabilizes lumbar spine during maximal heavy loads (Squat/Deadlift).",
+    "optimal_timing": "Working sets above 80% 1RM",
+    "recommended_dosage": "As needed on heavy sets"
+  }
+];
+  </script>
+
+  <!-- Firebase Auth SDK for Google OAuth Popup (Initialized on demand via /api/config) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+
+  <!-- Modern Vanilla Web App Engine (Communicates via Backend /api/* Endpoints) -->
+  <script src="/src/standalone_app.js?v=3"></script>
+</body>
+</html>

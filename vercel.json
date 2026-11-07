@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "buildCommand": null,
+  "outputDirectory": ".",
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/didi", "destination": "/index.html" },
+    { "source": "/didi/:path*", "destination": "/index.html" },
+    { "source": "/deede", "destination": "/index.html" },
+    { "source": "/deede/:path*", "destination": "/index.html" },
+    { "source": "/deedee", "destination": "/index.html" },
+    { "source": "/chef-didi", "destination": "/index.html" }
+  ]
+}
+
