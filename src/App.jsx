@@ -259,16 +259,27 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer style={{ 
+      <footer className="footer" style={{ 
         borderTop: '1px solid var(--line)', 
         padding: '24px 20px', 
-        textAlign: 'center', 
         fontSize: '13px', 
         color: 'var(--ink-muted)' 
       }}>
-        <div style={{ maxWidth: '1220px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
-          <span><b>ZAP FIT Connect</b> · AI Post-Workout Nutrition Engine</span>
-          <span>75 Curated Gym Meals · Grounded in Physiological Recovery Science</span>
+        <div className="container footer-inner" style={{ maxWidth: '1220px', margin: '0 auto' }}>
+          <div className="footer-copy">
+            <span><b>ZAP FIT Connect</b> · AI Post-Workout Nutrition Engine</span>
+            <span>·</span>
+            <span>Nutrition guidance only — not medical advice.</span>
+          </div>
+          <div className="co-engineered-wrap">
+            <a className="co-engineered-badge" href="https://steelandstack.com" target="_blank" rel="noopener noreferrer" title="Visit Steel &amp; Stack Studio" aria-label="Co-Engineered by Steel &amp; Stack">
+              <span className="co-engineered-label">Co-Engineered by</span>
+              <span className="co-engineered-brand">Steel &amp; Stack</span>
+              <span className="co-engineered-logo-wrap">
+                <img src="/steelandstack-s.png" alt="Steel &amp; Stack 'S' Monogram" className="co-engineered-logo" />
+              </span>
+            </a>
+          </div>
         </div>
       </footer>
 

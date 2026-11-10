@@ -1466,6 +1466,23 @@ Return ONLY a JSON object with these keys:
     return `<div class="progress ${cls || ''} ${v > max * 1.05 ? 'over' : ''}"><i style="width:${p}%"></i></div>`;
   }
 
+  function renderSiteFooter() {
+    return `<footer class="footer">
+      <div class="container footer-inner">
+        <div class="footer-copy"><span>© ${new Date().getFullYear()} ZAP FIT Connect</span><span>·</span><span>Nutrition guidance only — not medical advice.</span></div>
+        <div class="co-engineered-wrap">
+          <a class="co-engineered-badge" href="https://steelandstack.com" target="_blank" rel="noopener noreferrer" title="Visit Steel &amp; Stack Studio" aria-label="Co-Engineered by Steel &amp; Stack">
+            <span class="co-engineered-label">Co-Engineered by</span>
+            <span class="co-engineered-brand">Steel &amp; Stack</span>
+            <span class="co-engineered-logo-wrap">
+              <img src="/steelandstack-s.png" alt="Steel &amp; Stack 'S' Monogram" class="co-engineered-logo">
+            </span>
+          </a>
+        </div>
+      </div>
+    </footer>`;
+  }
+
   // ------------------------------------------------------------------
   // Render: landing
   // ------------------------------------------------------------------
@@ -1538,7 +1555,7 @@ Return ONLY a JSON object with these keys:
         <button class="btn btn-primary btn-lg" data-action="open-auth" data-tab="signup">Get started ${icon('arrow', 16)}</button>
       </div></section>
     </main>
-    <footer class="footer"><div class="container row-between wrap"><span>© ${new Date().getFullYear()} ZAP FIT Connect</span><span>Nutrition guidance only — not medical advice.</span></div></footer>`;
+    ${renderSiteFooter()}`;
   }
 
   // ------------------------------------------------------------------
@@ -1673,7 +1690,8 @@ Return ONLY a JSON object with these keys:
     <nav class="tabbar" aria-label="Primary navigation"><div class="container tabs">
       ${tabs.map(([k, l, ic, c]) => `<button class="tab ${S.tab === k ? 'on' : ''}" data-action="tab" data-tab="${k}">${icon(ic, 17)}<span class="tab-lbl">${l}</span>${c ? `<span class="count">${c}</span>` : ''}</button>`).join('')}
     </div></nav>
-    <main class="container page">${content}</main>`;
+    <main class="container page">${content}</main>
+    ${renderSiteFooter()}`;
   }
 
   function statCard(label, ic, v, max, unit, cls) {
