@@ -101,7 +101,6 @@
       pill: '<path d="M10.5 20.5 3.5 13.5a5 5 0 0 1 7-7l7 7a5 5 0 0 1-7 7z"/><line x1="8.5" y1="8.5" x2="15.5" y2="15.5"/>',
       clock: '<circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/>',
       home: '<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
-      chef: '<path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z"/><line x1="6" y1="17" x2="18" y2="17"/>',
       box: '<path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>',
       refresh: '<polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>',
       scooter: '<path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10l-1.5-4.5A2 2 0 0 0 12.6 4H8"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M9 17h6M12 6l-2 5h4"/>',
@@ -121,30 +120,12 @@
   const GOOGLE_SVG = '<svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>';
 
   // ------------------------------------------------------------------
-  // Route detection for Chef Didi (/didi and /deede)
-  // ------------------------------------------------------------------
-  function isDidiRoute() {
-    const p = (window.location.pathname || '').toLowerCase().replace(/\/+$/, '');
-    const h = (window.location.hash || '').toLowerCase();
-    const s = (window.location.search || '').toLowerCase();
-    return (
-      p === '/didi' || p.endsWith('/didi') || p.endsWith('/didi/index.html') ||
-      p === '/deede' || p.endsWith('/deede') || p.endsWith('/deede/index.html') ||
-      p === '/deedee' || p.endsWith('/deedee') ||
-      p === '/chef-didi' || p === '/chefdidi' ||
-      h === '#didi' || h === '#/didi' || h === '#deede' || h === '#/deede' ||
-      s.includes('didi=1') || s.includes('view=didi')
-    );
-  }
-
-  // ------------------------------------------------------------------
   // Per-athlete storage + Backend API (/api/*) Sync
   // ------------------------------------------------------------------
   const SESSION_KEY = 'zapfit:session_user_v1';
-  const DIDI_LOCAL_KEY = 'zapfit:chef_didi_orders_v1';
 
   const blankAnswers = () => ({ purpose: [], name: '', age: '', gender: '', height: '', weight: '', activity: '', training: [], days: 4, diet: '', disliked: '', allergy: [], health: '', eat: [], svc: [] });
-  const blankData = () => ({ onboarded: false, answers: null, profile: null, meals: [], workouts: [], didiOrders: [], pantry: {} });
+  const blankData = () => ({ onboarded: false, answers: null, profile: null, meals: [], workouts: [], pantry: {} });
 
   const Store = {
     key: (uid) => 'zapfit:athlete:' + uid,
@@ -190,47 +171,6 @@
           localStorage.removeItem(SESSION_KEY);
         }
       } catch (e) {}
-    },
-    loadDidiOrders() {
-      try { const raw = localStorage.getItem(DIDI_LOCAL_KEY); if (raw) return JSON.parse(raw) || []; } catch (e) {}
-      return [];
-    },
-    saveDidiOrders(list) {
-      try { localStorage.setItem(DIDI_LOCAL_KEY, JSON.stringify(list)); } catch (e) {}
-    },
-    loadDidiWallet() {
-      try {
-        const raw = localStorage.getItem('zapfit:didi_wallet');
-        if (raw) return parseInt(raw, 10) || 1250;
-      } catch (e) {}
-      return 1250;
-    },
-    saveDidiWallet(amt) {
-      try { localStorage.setItem('zapfit:didi_wallet', String(amt)); } catch (e) {}
-    },
-    loadDidiActiveOrder() {
-      try { return localStorage.getItem('zapfit:didi_active_order') || null; } catch (e) {}
-      return null;
-    },
-    saveDidiActiveOrder(id) {
-      try {
-        if (id) localStorage.setItem('zapfit:didi_active_order', id);
-        else localStorage.removeItem('zapfit:didi_active_order');
-      } catch (e) {}
-    },
-    loadDidiCheckedSteps(orderId) {
-      if (!orderId) return {};
-      try {
-        const raw = localStorage.getItem(`zapfit:didi_steps_${orderId}`);
-        if (raw) return JSON.parse(raw) || {};
-      } catch (e) {}
-      return {};
-    },
-    saveDidiCheckedSteps(orderId, stepsObj) {
-      if (!orderId) return;
-      try {
-        localStorage.setItem(`zapfit:didi_steps_${orderId}`, JSON.stringify(stepsObj || {}));
-      } catch (e) {}
     }
   };
 
@@ -243,7 +183,6 @@
     const savedSession = Store.loadSession();
     const token = S.user?.sessionToken || savedSession?.sessionToken;
     if (token) headers['Authorization'] = `Bearer ${token}`;
-    if (isDidiRoute() || S.view === 'didi') headers['X-ZapFit-Client'] = 'didi-partner';
 
     const opts = { method, headers, credentials: 'same-origin' };
     if (body !== undefined) opts.body = JSON.stringify(body);
@@ -272,7 +211,6 @@
   function buildUserHistoryObject(d) {
     const meals = d.meals || [];
     const workouts = d.workouts || [];
-    const didiOrders = d.didiOrders || [];
     const prof = d.profile || null;
     const today = todayKey();
     const yesterday = shiftKey(today, -1);
@@ -281,13 +219,11 @@
     for (let i = 0; i <= 7; i++) dateSet.add(shiftKey(today, -i));
     meals.forEach((m) => { if (m && m.date) dateSet.add(m.date); });
     workouts.forEach((w) => { if (w && w.date) dateSet.add(w.date); });
-    didiOrders.forEach((o) => { if (o && o.date) dateSet.add(o.date); });
 
     const byDate = {};
     Array.from(dateSet).sort().reverse().forEach((k) => {
       const dayMeals = meals.filter((m) => m.date === k);
       const dayWorkouts = workouts.filter((w) => w.date === k);
-      const dayOrders = didiOrders.filter((o) => o.date === k);
       const tag = k === today ? 'Today' : k === yesterday ? 'Yesterday' : shortDay(k);
       byDate[k] = {
         date: k,
@@ -295,7 +231,6 @@
         label: `${tag} (${prettyDate(k)})`,
         meals: dayMeals,
         workouts: dayWorkouts,
-        chefDidiOrders: dayOrders,
         totals: {
           protein: sum(dayMeals, 'protein'),
           carbs: sum(dayMeals, 'carbs'),
@@ -304,8 +239,7 @@
           mealsCount: dayMeals.length,
           workoutMinutes: sum(dayWorkouts, 'minutes'),
           kcalBurned: sum(dayWorkouts, 'kcal'),
-          workoutsCount: dayWorkouts.length,
-          chefDidiOrdersCount: dayOrders.length
+          workoutsCount: dayWorkouts.length
         },
         targets: prof ? {
           proteinTarget: prof.proteinTarget,
@@ -346,7 +280,6 @@
       profile: d.profile || null,
       meals: (d.meals || []).slice(0, 500),
       workouts: (d.workouts || []).slice(0, 500),
-      didiOrders: (d.didiOrders || []).slice(0, 200),
       pantry: d.pantry || {},
       history: historyObj,
       updatedAt: Date.now(),
@@ -368,35 +301,23 @@
   // ------------------------------------------------------------------
   const S = {
     theme: localStorage.getItem('zapfit_theme_v3') || 'dark',
-    view: isDidiRoute() ? 'didi' : 'boot', // boot | landing | onboarding | calibrating | calibrated | dashboard | didi
+    view: 'boot',            // boot | landing | onboarding | calibrating | calibrated | dashboard
     tab: 'today',            // today | history | meals | supplements | profile
     user: null,
     data: null,
     onb: { step: 0, answers: blankAnswers(), error: '' },
     calib: { stage: 0 },
-    modal: null,             // auth | workout | meal | ai | didi-recipe
+    modal: null,             // auth | workout | meal | ai
     authTab: 'signin',
     authBusy: false,
     authError: '',
     explicitSignIn: false,
     selectedMealId: null,
-    selectedOrderId: null,
     historyDate: todayKey(),
     libQuery: '',
     libFilter: 'all',
     pantryFilter: 'all',
     pantrySearch: '',
-    didiOrders: Store.loadDidiOrders(),
-    didiFilter: 'all',       // all | pending | preparing | ready | completed | today
-    didiQuery: '',
-    didiConnected: true,
-    didiWallet: Store.loadDidiWallet(),
-    didiView: 'orders',      // orders | map | cooking | payout
-    didiActiveOrderId: Store.loadDidiActiveOrder(),
-    didiCheckedSteps: {},
-    pendingPaymentMealId: null,
-    notifiedReachedOrders: new Set(),
-    dismissedReachedBanner: false,
     chat: [],
     chatBusy: false,
     toast: null
@@ -789,14 +710,11 @@ Return ONLY a JSON object with these keys:
       if (!val) return;
       const mergedMeals = mergeById(S.data.meals, val.meals);
       const mergedWorkouts = mergeById(S.data.workouts, val.workouts);
-      const mergedOrders = mergeById(S.data.didiOrders, val.didiOrders);
       const changed =
         mergedMeals.length !== (S.data.meals || []).length ||
-        mergedWorkouts.length !== (S.data.workouts || []).length ||
-        mergedOrders.length !== (S.data.didiOrders || []).length;
+        mergedWorkouts.length !== (S.data.workouts || []).length;
       S.data.meals = mergedMeals;
       S.data.workouts = mergedWorkouts;
-      S.data.didiOrders = mergedOrders;
       if (val.pantry && typeof val.pantry === 'object') {
         S.data.pantry = Object.assign({}, val.pantry, S.data.pantry || {});
       }
@@ -824,7 +742,6 @@ Return ONLY a JSON object with these keys:
       }
       S.data.meals = mergeById(S.data.meals, cloud.meals);
       S.data.workouts = mergeById(S.data.workouts, cloud.workouts);
-      S.data.didiOrders = mergeById(S.data.didiOrders, cloud.didiOrders);
       if (cloud.pantry && typeof cloud.pantry === 'object') {
         S.data.pantry = Object.assign({}, cloud.pantry, S.data.pantry || {});
       }
@@ -839,14 +756,8 @@ Return ONLY a JSON object with these keys:
     // Immediately sync merged history (today, yesterday, and all past days) to backend database
     persist();
     subscribeAthleteData(userObj.uid);
-    subscribeDidiOrders();
 
     S.modal = null; S.authBusy = false; S.authError = '';
-    if (isDidiRoute()) {
-      S.view = 'didi';
-      render();
-      return;
-    }
     const alreadyAnswered = Boolean(S.data?.onboarded && S.data?.profile && S.data?.answers?.purpose?.length);
     if (!alreadyAnswered) {
       startOnboarding();
@@ -941,7 +852,7 @@ Return ONLY a JSON object with these keys:
     try { await apiRequest('/api/auth', 'DELETE'); } catch (e) {}
     try { if (googleAuthInstance) await googleAuthInstance.signOut(); } catch (e) {}
     Store.saveSession(null);
-    S.user = null; S.data = null; S.modal = null; S.chat = []; S.view = isDidiRoute() ? 'didi' : 'landing';
+    S.user = null; S.data = null; S.modal = null; S.chat = []; S.view = 'landing';
     render();
     toast('Signed out');
   }
@@ -992,31 +903,12 @@ Return ONLY a JSON object with these keys:
   }
 
   // ------------------------------------------------------------------
-  // Logging (Meals, Workouts & Chef Didi Orders)
+  // Logging (Meals & Workouts)
   // ------------------------------------------------------------------
   function logMeal(mealId, date) {
     const m = MEALS.find((x) => x.id === mealId);
     if (!m) return;
     const d = date || todayKey();
-
-    // Check if there is an in-progress Chef Didi order for this meal today
-    const inProgressDidi = (S.didiOrders || []).find((o) =>
-      o.mealId === mealId &&
-      o.date === d &&
-      o.status !== 'completed' &&
-      (!S.user || !o.athlete?.uid || o.athlete.uid === S.user.uid || o.athlete.uid === 'guest')
-    );
-    if (inProgressDidi) {
-      toast(`Chef Didi is currently preparing “${m.name}”. The meal cannot be approved or logged until all cooking steps are completed by Chef Didi.`);
-      return;
-    }
-
-    const completedDidi = (S.didiOrders || []).find((o) =>
-      o.mealId === mealId &&
-      o.date === d &&
-      o.status === 'completed' &&
-      (!S.user || !o.athlete?.uid || o.athlete.uid === S.user.uid || o.athlete.uid === 'guest')
-    );
 
     S.data.meals.unshift({
       id: 'm' + Date.now(),
@@ -1029,13 +921,12 @@ Return ONLY a JSON object with these keys:
       protein: m.protein,
       carbs: m.carbs,
       fat: m.fat,
-      calories: m.calories,
-      preparedByDidi: !!completedDidi
+      calories: m.calories
     });
     S.data.meals.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
     persist();
     S.modal = null;
-    toast(completedDidi ? `Logged “${m.name}” (Prepared & approved by Chef Didi)` : `Logged “${m.name}” (${d === todayKey() ? 'Today' : prettyDate(d)})`);
+    toast(`Logged “${m.name}” (${d === todayKey() ? 'Today' : prettyDate(d)})`);
     render();
   }
 
@@ -1063,365 +954,8 @@ Return ONLY a JSON object with these keys:
   }
 
   // ------------------------------------------------------------------
-  // Chef Didi Order & Kitchen Platform Engine (Proxied via /api/didi-orders)
+  // Toast
   // ------------------------------------------------------------------
-  function normalizeDidiOrders(raw) {
-    if (!raw) return [];
-    const list = Array.isArray(raw) ? raw : Object.values(raw);
-    return list
-      .filter((x) => x && x.id && x.mealName)
-      .sort((a, b) => (Number(b.createdAt) || 0) - (Number(a.createdAt) || 0));
-  }
-
-  let lastDidiOrdersHash = '';
-  async function fetchDidiOrders() {
-    try {
-      const res = await apiRequest('/api/didi-orders', 'GET');
-      const list = normalizeDidiOrders(res && res.orders);
-      const newHash = list.map((o) => `${o.id}_${o.status}`).join('|');
-      const changed = newHash !== lastDidiOrdersHash;
-      lastDidiOrdersHash = newHash;
-
-      S.didiOrders = list;
-      S.didiConnected = true;
-      Store.saveDidiOrders(list);
-
-      // Alert athlete in real time if Chef Didi has reached
-      list.forEach((o) => {
-        if (o && o.status === 'reached' && !S.notifiedReachedOrders.has(o.id)) {
-          S.notifiedReachedOrders.add(o.id);
-          S.dismissedReachedBanner = false;
-          toast(`CHEF DIDI HAS REACHED! She is at your door ready to cook "${o.mealName}" in your kitchen.`);
-        }
-      });
-
-      // ONLY re-render if data actually changed, and NEVER while user is inside a modal or typing!
-      if (changed) {
-        if (S.modal) return list;
-        const activeTag = document.activeElement?.tagName;
-        if (activeTag === 'INPUT' || activeTag === 'TEXTAREA') return list;
-        if (S.view === 'didi' || S.view === 'dashboard') render();
-      }
-      return list;
-    } catch (e) {
-      console.warn('[Chef Didi] Fetch fallback:', e.message);
-      return S.didiOrders;
-    }
-  }
-
-  function subscribeDidiOrders() {
-    fetchDidiOrders();
-    if (!window.__zapDidiPoll) {
-      window.__zapDidiPoll = setInterval(() => {
-        if (S.view === 'didi' || (S.view === 'dashboard' && !S.modal)) fetchDidiOrders();
-      }, 3000);
-    }
-  }
-
-  function openDidiPaymentModal(mealId) {
-    const m = MEALS.find((x) => x.id === mealId);
-    if (!m) return;
-    S.pendingPaymentMealId = mealId;
-    S.modal = 'didi-payment';
-    render();
-  }
-
-  async function confirmDidiPayment(mealId) {
-    const m = MEALS.find((x) => x.id === (mealId || S.pendingPaymentMealId));
-    if (!m) return;
-
-    // Extract user contact and address input from the booking modal
-    const nameInput = document.getElementById('didi-name');
-    const phoneInput = document.getElementById('didi-phone');
-    const emailInput = document.getElementById('didi-email');
-    const addressInput = document.getElementById('didi-address');
-
-    const orderName = (nameInput?.value || '').trim() || (S.data?.answers?.name || S.user?.name || 'Athlete');
-    const orderPhone = (phoneInput?.value || '').trim();
-    const orderEmail = (emailInput?.value || '').trim();
-    const orderAddress = (addressInput?.value || '').trim();
-
-    if (!orderPhone || orderPhone.length < 8) {
-      toast('Please enter your valid phone number so Chef Didi can contact you.');
-      phoneInput?.focus();
-      return;
-    }
-    if (!orderEmail || !orderEmail.includes('@')) {
-      toast('Please enter a valid email address.');
-      emailInput?.focus();
-      return;
-    }
-    if (!orderAddress || orderAddress.length < 6) {
-      toast('Please enter your complete kitchen / flat address.');
-      addressInput?.focus();
-      return;
-    }
-
-    try {
-      localStorage.setItem('zapfit:saved_name', orderName);
-      localStorage.setItem('zapfit:saved_phone', orderPhone);
-      localStorage.setItem('zapfit:saved_email', orderEmail);
-      localStorage.setItem('zapfit:saved_address', orderAddress);
-    } catch (e) {}
-
-    const r = S.data && S.data.profile && S.data.answers ? scoreMeal(m) : null;
-    const session = S.data && S.data.profile ? currentSession() : null;
-    const ans = S.data?.answers || {};
-    const allergies = (ans.allergy || []).filter((x) => x !== 'None');
-    const sessionText = session
-      ? (session.logged ? `${session.workout.title} (${session.workout.type} · ${session.workout.minutes} min)` : session.strategy.workout_type)
-      : (m.recommended_post_workout || 'Post-Workout Recovery');
-
-    const nowMs = Date.now();
-    const orderId = 'DIDI_' + nowMs + '_' + Math.random().toString(36).slice(2, 6).toUpperCase();
-    const orderNumber = '#DIDI-' + String(nowMs).slice(-4);
-    const steps = (m.steps && m.steps.length) ? m.steps : [
-      'Verify required ingredients in athlete pantry and kitchen prep area.',
-      'Cook the primary protein and carbohydrate components according to athlete nutrition guidelines.',
-      'Sauté fresh vegetables, season to taste, and serve warm for immediate post-workout recovery.'
-    ];
-
-    const order = {
-      id: orderId,
-      orderNumber,
-      createdAt: nowMs,
-      createdAtISO: new Date(nowMs).toISOString(),
-      date: todayKey(),
-      time: nowTime(),
-      status: 'pending', // pending -> en_route -> reached -> cooking -> completed
-      paymentStatus: 'paid',
-      price: 249,
-      mealId: m.id,
-      mealName: m.name,
-      category: m.category || 'Athlete Meal',
-      recommendedPostWorkout: m.recommended_post_workout || 'Recovery',
-      benefits: m.benefits || '',
-      matchScore: r && r.allowed ? r.total : 95,
-      protein: m.protein,
-      carbs: m.carbs,
-      fat: m.fat,
-      calories: m.calories,
-      prepTime: m.prep_time || '8 mins',
-      cookTime: m.cook_time || '12 mins',
-      ingredients: m.ingredients || [],
-      steps,
-      micronutrients: m.micronutrients || [],
-      allergensPresent: m.allergens_present || [],
-      cookedWithAthletePantry: true,
-      didiCarriesFood: false,
-      athlete: {
-        uid: S.user?.uid || 'guest',
-        name: orderName,
-        address: orderAddress,
-        phone: orderPhone,
-        email: orderEmail,
-        diet: ans.diet || m.category || 'Standard',
-        allergies,
-        disliked: ans.disliked || '',
-        goal: (ans.purpose || []).join(', ') || 'Athletic Recovery',
-        workoutSession: sessionText
-      }
-    };
-
-    // Update local state immediately for instant UI response
-    S.didiOrders = [order, ...S.didiOrders.filter((o) => o.id !== order.id)];
-    Store.saveDidiOrders(S.didiOrders);
-
-    if (S.data) {
-      if (!Array.isArray(S.data.didiOrders)) S.data.didiOrders = [];
-      S.data.didiOrders.unshift(order);
-      persist();
-    }
-
-    // Push order to Firebase via secure backend endpoint
-    apiRequest('/api/didi-orders', 'POST', order)
-      .then(() => { S.didiConnected = true; })
-      .catch((e) => console.warn('[Chef Didi] Order push error:', e.message));
-
-    S.modal = null;
-    S.pendingPaymentMealId = null;
-    toast(`Payment Verified! Booked “${m.name}” with Chef Didi (${orderNumber})!`);
-    render();
-  }
-
-  function getOrderSteps(o) {
-    if (o && Array.isArray(o.steps) && o.steps.length) return o.steps;
-    return [
-      'Gather and measure all fresh ingredients and spices carried in your kit.',
-      'Cook the primary protein and carbohydrate components according to athlete nutrition guidelines.',
-      'Sauté fresh vegetables, season to taste, and serve warm for immediate post-workout recovery.'
-    ];
-  }
-
-  function getOrderCheckedSteps(orderId) {
-    if (!orderId) return {};
-    if (!S.didiCheckedSteps) S.didiCheckedSteps = {};
-    if (!S.didiCheckedSteps[orderId]) {
-      const saved = Store.loadDidiCheckedSteps(orderId);
-      const target = (S.didiOrders || []).find((x) => x.id === orderId);
-      const fromTarget = (target && target.completedSteps && typeof target.completedSteps === 'object') ? target.completedSteps : null;
-      S.didiCheckedSteps[orderId] = fromTarget || saved || {};
-    }
-    return S.didiCheckedSteps[orderId];
-  }
-
-  function areAllStepsCompleted(order) {
-    if (!order) return false;
-    const steps = getOrderSteps(order);
-    const checked = getOrderCheckedSteps(order.id);
-    return steps.length > 0 && steps.every((_, idx) => !!checked[idx]);
-  }
-
-  function toggleOrderStep(orderId, stepIdx) {
-    if (!orderId) return;
-    const checked = getOrderCheckedSteps(orderId);
-    checked[stepIdx] = !checked[stepIdx];
-    Store.saveDidiCheckedSteps(orderId, checked);
-    const target = (S.didiOrders || []).find((x) => x.id === orderId);
-    if (target) {
-      target.completedSteps = { ...checked };
-      Store.saveDidiOrders(S.didiOrders);
-      if (S.data && Array.isArray(S.data.didiOrders)) {
-        const own = S.data.didiOrders.find((o) => o.id === orderId);
-        if (own) own.completedSteps = target.completedSteps;
-      }
-      apiRequest('/api/didi-orders', 'PATCH', { id: orderId, completedSteps: target.completedSteps })
-        .catch(() => {});
-
-      const steps = getOrderSteps(target);
-      const done = steps.filter((_, i) => !!checked[i]).length;
-      if (done === steps.length) {
-        toast(`All ${steps.length} steps completed! You can now approve and complete this meal.`);
-      }
-    }
-  }
-
-  async function didiStartTrip(orderId) {
-    const target = S.didiOrders.find((o) => o.id === orderId);
-    if (!target) return;
-    await updateDidiOrderStatus(orderId, 'en_route');
-    S.didiActiveOrderId = orderId;
-    S.didiView = 'map';
-    Store.saveDidiActiveOrder(orderId);
-    toast(`Started trip to ${target.athlete?.name || 'Customer'}'s location!`);
-    render();
-  }
-
-  async function didiMarkReached(orderId) {
-    const target = S.didiOrders.find((o) => o.id === orderId);
-    if (!target) return;
-    await updateDidiOrderStatus(orderId, 'reached');
-    S.didiActiveOrderId = orderId;
-    S.didiView = 'cooking';
-    getOrderCheckedSteps(orderId);
-    Store.saveDidiActiveOrder(orderId);
-    toast(`Reached! Customer notified that you have arrived at their kitchen.`);
-    render();
-  }
-
-  async function didiCompleteOrder(orderId) {
-    const target = S.didiOrders.find((o) => o.id === orderId);
-    if (!target) return;
-
-    // The meal should not be approved until and unless all steps are completed by Chef Didi
-    if (!areAllStepsCompleted(target)) {
-      const steps = getOrderSteps(target);
-      const checked = getOrderCheckedSteps(orderId);
-      const remaining = steps.filter((_, idx) => !checked[idx]).length;
-      toast(`Cannot approve meal: Chef Didi must finish all ${steps.length} cooking steps (${remaining} remaining)!`);
-      return;
-    }
-
-    await updateDidiOrderStatus(orderId, 'completed');
-    S.didiWallet = (S.didiWallet || 0) + 250;
-    Store.saveDidiWallet(S.didiWallet);
-    S.didiActiveOrderId = null;
-    Store.saveDidiActiveOrder(null);
-    S.didiView = 'payout';
-    toast(`Meal approved! ₹250 Credited to Chef Didi account!`);
-    render();
-  }
-
-  async function updateDidiOrderStatus(orderId, newStatus) {
-    const target = S.didiOrders.find((o) => o.id === orderId);
-    if (!target) return;
-
-    // Guard: completed status requires all steps completed
-    if (newStatus === 'completed' && !areAllStepsCompleted(target)) {
-      const steps = getOrderSteps(target);
-      const checked = getOrderCheckedSteps(orderId);
-      const remaining = steps.filter((_, idx) => !checked[idx]).length;
-      toast(`Cannot approve meal: All ${steps.length} cooking steps must be completed by Chef Didi first (${remaining} remaining).`);
-      return;
-    }
-    target.status = newStatus;
-    target.updatedAt = Date.now();
-    target.updatedAtISO = new Date().toISOString();
-    Store.saveDidiOrders(S.didiOrders);
-
-    if (S.data && Array.isArray(S.data.didiOrders)) {
-      const own = S.data.didiOrders.find((o) => o.id === orderId);
-      if (own) { own.status = newStatus; own.updatedAt = target.updatedAt; persist(); }
-    }
-
-    apiRequest('/api/didi-orders', 'PATCH', { id: orderId, status: newStatus, updatedAt: target.updatedAt, updatedAtISO: target.updatedAtISO })
-      .catch((e) => console.warn('[Chef Didi] Status update error:', e.message));
-
-    const statusLabels = {
-      pending: 'marked Pending',
-      en_route: 'Departed on the way',
-      reached: 'Arrived at Customer location',
-      cooking: 'Cooking in Kitchen',
-      ready: 'marked Ready to Serve',
-      completed: 'Completed'
-    };
-    toast(`Order ${target.orderNumber || ''} ${statusLabels[newStatus] || 'updated'}`);
-    render();
-  }
-
-  async function deleteDidiOrder(orderId) {
-    const target = S.didiOrders.find((o) => o.id === orderId);
-    if (!window.confirm(`Remove order ${target?.orderNumber || ''} (${target?.mealName || ''})?`)) return;
-    S.didiOrders = S.didiOrders.filter((o) => o.id !== orderId);
-    if (S.didiActiveOrderId === orderId) {
-      S.didiActiveOrderId = null;
-      Store.saveDidiActiveOrder(null);
-      if (S.didiView === 'map' || S.didiView === 'cooking') S.didiView = 'orders';
-    }
-    Store.saveDidiOrders(S.didiOrders);
-
-    if (S.data && Array.isArray(S.data.didiOrders)) {
-      S.data.didiOrders = S.data.didiOrders.filter((o) => o.id !== orderId);
-      persist();
-    }
-
-    lastDidiOrdersHash = S.didiOrders.map((o) => `${o.id}_${o.status}`).join('|');
-    apiRequest('/api/didi-orders?id=' + encodeURIComponent(orderId), 'DELETE').catch(() => {});
-    if (S.modal === 'didi-recipe' && S.selectedOrderId === orderId) S.modal = null;
-    toast(`Removed order ${target?.orderNumber || ''}`);
-    render();
-  }
-
-  async function clearAllDidiOrders() {
-    if (!S.didiOrders.length) {
-      toast('No orders to clear.');
-      return;
-    }
-    if (!window.confirm('Are you sure you want to remove ALL orders from Chef Didi?')) return;
-    S.didiOrders = [];
-    S.didiActiveOrderId = null;
-    Store.saveDidiOrders([]);
-    Store.saveDidiActiveOrder(null);
-    if (S.data && Array.isArray(S.data.didiOrders)) {
-      S.data.didiOrders = [];
-      persist();
-    }
-    if (S.didiView === 'map' || S.didiView === 'cooking') S.didiView = 'orders';
-    lastDidiOrdersHash = '';
-    apiRequest('/api/didi-orders?all=1', 'DELETE').catch(() => {});
-    toast('All orders removed from Chef Didi!');
-    render();
-  }
 
   // ------------------------------------------------------------------
   // Toast
@@ -1704,21 +1238,6 @@ Return ONLY a JSON object with these keys:
     </div>`;
   }
 
-  function statusBadgeHTML(status) {
-    const st = status || 'pending';
-    const map = {
-      pending: ['pending', `${icon('clock', 12)} New Booking · Paid`],
-      en_route: ['en_route', `${icon('scooter', 12)} On the Way`],
-      reached: ['reached', `${icon('pin', 12)} Arrived at Location`],
-      cooking: ['cooking', `${icon('cooking', 12)} Cooking in Kitchen`],
-      preparing: ['cooking', `${icon('cooking', 12)} Cooking in Kitchen`],
-      ready: ['ready', `${icon('plate', 12)} Ready to Serve`],
-      completed: ['completed', `${icon('check', 12)} Completed & Paid`]
-    };
-    const [cls, lbl] = map[st] || ['pending', st];
-    return `<span class="didi-status ${cls}">${lbl}</span>`;
-  }
-
   function renderToday() {
     const p = S.data.profile;
     const eaten = todayMeals(), wk = todayWorkouts();
@@ -1727,78 +1246,6 @@ Return ONLY a JSON object with these keys:
     const more = ok.slice(1, 5);
     const session = currentSession();
     const trainMin = sum(wk, 'minutes');
-    const todayOrders = (S.didiOrders || []).filter((o) => o.date === todayKey() && (!S.user || !o.athlete?.uid || o.athlete.uid === S.user.uid || o.athlete.uid === 'guest')).slice(0, 5);
-    const activeDidi = (S.didiOrders || []).find((o) => ['pending', 'en_route', 'reached', 'cooking', 'preparing'].includes(o.status));
-
-    let activeDidiBannerHTML = '';
-    if (activeDidi) {
-      if (activeDidi.status === 'reached' && !S.dismissedReachedBanner) {
-        activeDidiBannerHTML = `
-        <div class="user-reached-banner">
-          <div class="row-between wrap" style="gap:10px">
-            <div class="row" style="gap:10px">
-              <span class="accent-text" style="display:grid;place-items:center">${icon('bell', 28)}</span>
-              <div>
-                <div style="font-size:16px;font-weight:800;color:var(--ink)">CHEF DIDI HAS REACHED YOUR LOCATION!</div>
-                <div style="font-size:13.5px;color:var(--ink);margin-top:2px">
-                  Chef Didi is at your door ready to cook <b>${esc(activeDidi.mealName)}</b> in your kitchen using your pantry ingredients. Please let her in and show her to your kitchen.
-                </div>
-              </div>
-            </div>
-            <div class="row" style="gap:8px">
-              <a href="/didi" class="btn btn-didi btn-sm" target="_blank" rel="noopener">Open /didi Phone App ↗</a>
-              <button class="icon-btn sm" data-action="dismiss-reached-banner" title="Dismiss">${icon('close', 14)}</button>
-            </div>
-          </div>
-          <div class="didi-food-bag-banner" style="margin-top:10px;margin-bottom:0">
-            <div class="icon">${icon('cooking', 20)}</div>
-            <div class="xs"><b>Home Kitchen Cooking:</b> Chef Didi prepares this recovery meal directly in your kitchen using your fresh pantry items. Enjoy fresh athletic nutrition!</div>
-          </div>
-        </div>`;
-      } else if (activeDidi.status === 'en_route') {
-        activeDidiBannerHTML = `
-        <div class="card" style="border:1.5px solid #4285F4;background:rgba(66,133,244,0.06);margin-bottom:18px">
-          <div class="row-between wrap" style="gap:10px">
-            <div class="row" style="gap:10px">
-              <span style="color:#4285F4;display:grid;place-items:center">${icon('scooter', 26)}</span>
-              <div>
-                <div style="font-weight:800;color:var(--ink);font-size:15px">Chef Didi is on the way to your home!</div>
-                <div class="xs muted">On the way to your home for <b>${esc(activeDidi.mealName)}</b> · ETA: ~6 mins</div>
-              </div>
-            </div>
-            <a href="/didi" class="btn btn-secondary btn-sm" target="_blank" rel="noopener">Track on /didi ↗</a>
-          </div>
-        </div>`;
-      } else if (activeDidi.status === 'cooking' || activeDidi.status === 'preparing') {
-        activeDidiBannerHTML = `
-        <div class="card" style="border:1.5px solid #D06828;background:rgba(208,104,40,0.06);margin-bottom:18px">
-          <div class="row-between wrap" style="gap:10px">
-            <div class="row" style="gap:10px">
-              <span style="color:#D06828;display:grid;place-items:center">${icon('cooking', 26)}</span>
-              <div>
-                <div style="font-weight:800;color:var(--ink);font-size:15px">Chef Didi is currently cooking in your kitchen!</div>
-                <div class="xs muted">Preparing <b>${esc(activeDidi.mealName)}</b> using your pantry ingredients.</div>
-              </div>
-            </div>
-            <a href="/didi" class="btn btn-didi btn-sm" target="_blank" rel="noopener">Kitchen Status ↗</a>
-          </div>
-        </div>`;
-      } else if (activeDidi.status === 'pending') {
-        activeDidiBannerHTML = `
-        <div class="card" style="border:1.5px solid var(--warn);background:rgba(248,216,88,0.06);margin-bottom:18px">
-          <div class="row-between wrap" style="gap:10px">
-            <div class="row" style="gap:10px">
-              <span style="color:var(--warn);display:grid;place-items:center">${icon('clock', 26)}</span>
-              <div>
-                <div style="font-weight:800;color:var(--ink);font-size:15px">Order Confirmed · Chef Didi Dispatched</div>
-                <div class="xs muted">Order ${esc(activeDidi.orderNumber)} for <b>${esc(activeDidi.mealName)}</b> is ready for Chef Didi to start trip.</div>
-              </div>
-            </div>
-            <a href="/didi" class="btn btn-secondary btn-sm" target="_blank" rel="noopener">Open /didi Phone App ↗</a>
-          </div>
-        </div>`;
-      }
-    }
 
     return `
     <div class="page-head">
@@ -1808,8 +1255,6 @@ Return ONLY a JSON object with these keys:
         <span class="badge badge-accent">${icon('shield', 13)} ${esc(S.data.answers.diet)}${(S.data.answers.allergy || []).filter((x) => x !== 'None').length ? ' · no ' + esc(S.data.answers.allergy.filter((x) => x !== 'None').join(', ')) : ''}</span>
       </div>
     </div>
-
-    ${activeDidiBannerHTML}
 
     <div class="stat-grid">
       ${statCard('Protein', 'flame', sum(eaten, 'protein'), p.proteinTarget, 'g', '')}
@@ -1854,33 +1299,9 @@ Return ONLY a JSON object with these keys:
           </div>
           <div class="check-list" style="margin-bottom:14px">${top.score.why.map((w) => `<div>${icon('check', 15)}<span>${w}</span></div>`).join('')}</div>
           <div class="note" style="margin-bottom:18px"><b>Why not 100%?</b> ${top.score.not100}</div>
-          <div class="row wrap hero-actions three">
-            ${(() => {
-              const topDidi = (S.didiOrders || []).find((o) =>
-                o.mealId === top.id &&
-                o.date === todayKey() &&
-                (!S.user || !o.athlete?.uid || o.athlete.uid === S.user.uid || o.athlete.uid === 'guest')
-              );
-              if (topDidi) {
-                if (topDidi.status !== 'completed') {
-                  return `
-                    <a href="/didi" target="_blank" rel="noopener" class="btn btn-didi">${icon('chef', 16)} Chef Didi Cooking (${topDidi.status})</a>
-                    <button class="btn btn-secondary" data-action="log-meal" data-id="${top.id}" style="opacity:0.65;cursor:not-allowed" title="Chef Didi must complete all cooking steps before approving this meal">${icon('clock', 14)} Awaiting Chef Didi Approval</button>
-                    <button class="btn btn-secondary" data-action="open-meal" data-id="${top.id}">${icon('sparkle', 14)} View recipe & steps</button>
-                  `;
-                }
-                return `
-                  <button class="btn btn-didi" data-action="order-didi" data-id="${top.id}">${icon('chef', 16)} Reorder with Chef Didi</button>
-                  <button class="btn btn-primary" data-action="log-meal" data-id="${top.id}">${icon('check', 16)} Approve & Log Meal</button>
-                  <button class="btn btn-secondary" data-action="open-meal" data-id="${top.id}">${icon('sparkle', 14)} View recipe & steps</button>
-                `;
-              }
-              return `
-                <button class="btn btn-didi" data-action="order-didi" data-id="${top.id}">${icon('chef', 16)} Cook with Chef Didi</button>
-                <button class="btn btn-primary" data-action="log-meal" data-id="${top.id}">${icon('check', 16)} I ate this</button>
-                <button class="btn btn-secondary" data-action="open-meal" data-id="${top.id}">${icon('sparkle', 14)} View recipe & steps</button>
-              `;
-            })()}
+          <div class="row wrap hero-actions">
+            <button class="btn btn-primary" data-action="log-meal" data-id="${top.id}">${icon('check', 16)} I ate this</button>
+            <button class="btn btn-secondary" data-action="open-meal" data-id="${top.id}">${icon('sparkle', 14)} View recipe & steps</button>
           </div>
         </div>` : `<div class="card empty">No meals match your diet and allergy settings. Update them in Profile.</div>`}
 
@@ -1902,17 +1323,8 @@ Return ONLY a JSON object with these keys:
               </div>
               <div class="row" style="gap:8px">
                 <span class="score-pill">${m.score.total}%</span>
-                ${(() => {
-                  const mDidi = (S.didiOrders || []).find((o) =>
-                    o.mealId === m.id &&
-                    o.date === todayKey() &&
-                    (!S.user || !o.athlete?.uid || o.athlete.uid === S.user.uid || o.athlete.uid === 'guest')
-                  );
-                  if (mDidi && mDidi.status !== 'completed') {
-                    return `<a href="/didi" target="_blank" rel="noopener" class="btn btn-didi btn-sm" title="Chef Didi is preparing this meal">${icon('chef', 14)} Chef Didi Cooking</a>`;
-                  }
-                  return `<button class="btn btn-didi btn-sm" data-action="order-didi" data-id="${m.id}" title="Send order to Chef Didi">${icon('chef', 14)} Cook with Chef Didi</button>`;
-                })()}
+                <button class="btn btn-secondary btn-sm" data-action="open-meal" data-id="${m.id}">${icon('sparkle', 13)} View</button>
+                <button class="btn btn-primary btn-sm" data-action="log-meal" data-id="${m.id}">${icon('check', 13)} Log</button>
               </div>
             </div>`).join('')}
           </div>
@@ -1920,20 +1332,6 @@ Return ONLY a JSON object with these keys:
       </div>
 
       <div class="stack">
-        <div class="card">
-          <div class="card-head">
-            <div class="row" style="gap:8px"><span class="list-icon didi-mark" style="width:30px;height:30px">${icon('chef', 15)}</span><h3 class="card-title">Chef Didi Orders</h3></div>
-            <a class="btn btn-ghost btn-sm" href="/didi" target="_blank" rel="noopener">Open /didi ${icon('arrow', 13)}</a>
-          </div>
-          ${todayOrders.length ? `<div class="stack-sm">${todayOrders.map((o) => `<div class="list-row">
-            <div class="grow">
-              <div class="row-between" style="margin-bottom:4px"><span class="title">${esc(o.mealName)}</span>${statusBadgeHTML(o.status)}</div>
-              <div class="meta mono">${esc(o.orderNumber || '')} · ${o.protein}g P · ${o.calories} kcal · ${esc(o.time)}</div>
-            </div>
-          </div>`).join('')}</div>`
-          : `<div class="empty">Tap <b>“Cook with Chef Didi”</b> on any meal to send the order & recipe straight to Chef Didi at <code>/didi</code>.</div>`}
-        </div>
-
         <div class="card">
           <div class="card-head"><h3 class="card-title">Today's session</h3>${session.logged ? `<span class="xs muted">${esc(session.workout.time)}</span>` : ''}</div>
           ${session.logged ? `<div class="list-row"><span class="list-icon">${icon('dumbbell', 17)}</span><div class="grow"><div class="title">${esc(session.workout.title)}</div><div class="meta">${esc(session.workout.type)} · ${session.workout.minutes} min · ${esc(session.workout.intensity)}</div></div></div>
@@ -1964,7 +1362,6 @@ Return ONLY a JSON object with these keys:
     const d = S.historyDate, p = S.data.profile;
     const meals = S.data.meals.filter((m) => m.date === d);
     const wks = S.data.workouts.filter((w) => w.date === d);
-    const dayOrders = (S.didiOrders || []).filter((o) => o.date === d && (!S.user || !o.athlete?.uid || o.athlete.uid === S.user.uid || o.athlete.uid === 'guest'));
     const days = Array.from({ length: 7 }, (_, j) => shiftKey(today, j - 6));
     const isToday = d === today;
     const isYesterday = d === yesterday;
@@ -2041,16 +1438,7 @@ Return ONLY a JSON object with these keys:
         ${meals.length ? `<div class="stack-sm">${meals.map((m) => `<div class="list-row"><span class="list-icon">${icon('plate', 17)}</span><div class="grow"><div class="title">${esc(m.name)}</div><div class="meta mono">${m.protein}g P · ${m.carbs}g C · ${m.fat}g F · ${m.calories} kcal · ${esc(m.time)}</div></div><button class="icon-btn sm danger" data-action="del-meal" data-id="${m.id}" aria-label="Remove">${icon('trash', 14)}</button></div>`).join('')}</div>`
         : `<div class="empty">No meals logged on this day.</div>`}
       </div>
-    </div>
-
-    ${dayOrders.length ? `<div class="card" style="margin-top:20px">
-      <div class="card-head"><h3 class="card-title">Chef Didi Bookings on this day (${dayOrders.length})</h3></div>
-      <div class="stack-sm">${dayOrders.map((o) => `<div class="list-row">
-        <span class="list-icon didi-mark">${icon('chef', 17)}</span>
-        <div class="grow"><div class="title">${esc(o.mealName)} <span class="xs muted">${esc(o.orderNumber || '')}</span></div><div class="meta mono">${o.protein}g P · ${o.carbs}g C · ${o.fat}g F · ${o.calories} kcal · Booked at ${esc(o.time)}</div></div>
-        ${statusBadgeHTML(o.status)}
-      </div>`).join('')}</div>
-    </div>` : ''}`;
+    </div>`;
   }
 
   function filteredMeals() {
@@ -2085,8 +1473,8 @@ Return ONLY a JSON object with these keys:
       </div>
       <div class="foot"><span>${m.protein}g P</span><span>${m.carbs}g C</span><span>${m.calories} kcal</span></div>
       <div class="meal-card-actions">
-        <button class="btn btn-didi btn-sm" data-action="order-didi" data-id="${m.id}">${icon('chef', 14)} Cook with Chef Didi</button>
-        <button class="btn btn-secondary btn-sm" data-action="open-meal" data-id="${m.id}">Recipe & Log</button>
+        <button class="btn btn-primary btn-sm" data-action="log-meal" data-id="${m.id}">${icon('check', 14)} Log Meal</button>
+        <button class="btn btn-secondary btn-sm" data-action="open-meal" data-id="${m.id}">Recipe & Steps</button>
       </div>
     </div>`).join('')}</div>`;
   }
@@ -2094,7 +1482,7 @@ Return ONLY a JSON object with these keys:
     const { hidden } = filteredMeals();
     const filters = [['all', 'Pantry Accepted (≤2 missing)'], ['pantry_100', '100% In Pantry (0 missing)'], ['session', 'Best for today'], ['protein', '30 g+ protein'], ['light', 'Under 450 kcal']];
     return `
-    <div class="page-head"><div><p class="small muted">Ranked for you right now · Every meal can be cooked with Chef Didi</p><h1 class="page-title">Meal library</h1></div>
+    <div class="page-head"><div><p class="small muted">Ranked for you right now · Match meals to your nutrition goals and pantry</p><h1 class="page-title">Meal library</h1></div>
       <div class="row search-wrap"><input class="input" data-input="lib-search" value="${esc(S.libQuery)}" placeholder="Search meals or ingredients" autocomplete="off"></div></div>
     <div class="chips" style="margin-bottom:16px">${filters.map(([k, l]) => `<button class="chip ${S.libFilter === k ? 'on' : ''}" data-action="lib-filter" data-f="${k}">${l}</button>`).join('')}</div>
     ${hidden.length ? `<div class="note danger" style="margin-bottom:16px"><b>${hidden.length} meal${hidden.length > 1 ? 's' : ''} hidden</b> because they contain your allergens.</div>` : ''}
@@ -2161,7 +1549,7 @@ Return ONLY a JSON object with these keys:
             ${icon('box', 24)} Kitchen Pantry
           </h1>
           <p class="small muted" style="margin-top:2px;max-width:640px">
-            <b>Chef Didi prepares and cooks fresh in your kitchen using your pantry staples.</b> Rice is boiled, batters are blended, and veggies are prepped fresh by Chef Didi on arrival — you only need to keep basic raw pantry items in stock!
+            <b>Cook fresh with raw pantry staples.</b> Track your in-stock items to discover meals you can prepare immediately with what you have on hand!
           </p>
         </div>
         <div class="row wrap" style="gap:8px">
@@ -2288,500 +1676,6 @@ Return ONLY a JSON object with these keys:
   }
 
   // ------------------------------------------------------------------
-  // Render: Chef Didi Platform (/didi and /deede)
-  // ------------------------------------------------------------------
-  function filteredDidiOrders() {
-    const all = S.didiOrders || [];
-    const today = todayKey();
-    const yesterday = shiftKey(today, -1);
-    let list = all;
-    if (S.didiFilter === 'pending') list = list.filter((o) => (o.status || 'pending') === 'pending');
-    else if (S.didiFilter === 'preparing') list = list.filter((o) => o.status === 'preparing');
-    else if (S.didiFilter === 'ready') list = list.filter((o) => o.status === 'ready');
-    else if (S.didiFilter === 'completed') list = list.filter((o) => o.status === 'completed');
-    else if (S.didiFilter === 'today') list = list.filter((o) => o.date === today);
-    else if (S.didiFilter === 'yesterday') list = list.filter((o) => o.date === yesterday);
-
-    const q = (S.didiQuery || '').trim().toLowerCase();
-    if (q) {
-      list = list.filter((o) =>
-        (o.mealName || '').toLowerCase().includes(q) ||
-        (o.orderNumber || '').toLowerCase().includes(q) ||
-        (o.category || '').toLowerCase().includes(q) ||
-        (o.athlete?.name || '').toLowerCase().includes(q) ||
-        (o.ingredients || []).some((ing) => ing.toLowerCase().includes(q))
-      );
-    }
-    return list;
-  }
-
-  function renderDidiMapHTML(o) {
-    if (!o) return `<div class="card empty">No active trip found. <button class="btn btn-secondary btn-sm" data-action="didi-view-orders" style="margin-top:10px">Back to orders</button></div>`;
-    const athleteName = o.athlete?.name || 'Aarav Sharma';
-    const address = o.athlete?.address || 'Flat 402, Green Glen Heights, 27th Main Rd, HSR Layout Sector 2, Bengaluru';
-    const phone = o.athlete?.phone || '';
-    const email = o.athlete?.email || '';
-    const ingredients = o.ingredientsCarriedByDidi || o.ingredients || [];
-
-    return `
-    <div style="padding:16px" class="stack">
-      <div class="row-between wrap">
-        <div>
-          <span class="badge badge-solid mono">${esc(o.orderNumber || '#DIDI')}</span>
-          <h2 style="font-size:20px;margin-top:4px">Navigating to ${esc(athleteName)}</h2>
-        </div>
-        ${statusBadgeHTML('en_route')}
-      </div>
-
-      <!-- Temporary Simulated GPS Navigation Map -->
-      <div class="didi-map-viewport">
-        <svg class="didi-map-svg" viewBox="0 0 380 280">
-          <defs>
-            <pattern id="didi-grid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-            </pattern>
-          </defs>
-          <rect width="380" height="280" fill="#151b23"/>
-          <rect width="380" height="280" fill="url(#didi-grid)"/>
-
-          <!-- Park & Water Features -->
-          <path d="M 220 30 Q 280 20 320 60 Q 340 110 300 130 Q 240 140 210 90 Z" fill="#1a2f23" stroke="#254d35" stroke-width="1"/>
-          <text x="260" y="80" fill="#4ade80" font-size="10" opacity="0.7" font-family="sans-serif">HSR Sector Park</text>
-          <path d="M 0 200 Q 80 180 180 220 T 380 210" fill="none" stroke="#1e3a5f" stroke-width="14" opacity="0.4"/>
-          <path d="M 0 200 Q 80 180 180 220 T 380 210" fill="none" stroke="#2563eb" stroke-width="2.5" opacity="0.7"/>
-
-          <!-- City Street Grid -->
-          <path d="M 0 80 L 380 80 M 0 160 L 380 160 M 100 0 L 100 280 M 260 0 L 260 280 M 0 240 L 380 240" fill="none" stroke="#2d3748" stroke-width="8"/>
-          <path d="M 0 80 L 380 80 M 0 160 L 380 160 M 100 0 L 100 280 M 260 0 L 260 280 M 0 240 L 380 240" fill="none" stroke="#1f2937" stroke-width="5"/>
-
-          <!-- Active Route Line -->
-          <path d="M 70 230 L 100 230 L 100 160 L 260 160 L 260 90 L 310 90" fill="none" stroke="#34A853" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-          <path class="didi-route-line" d="M 70 230 L 100 230 L 100 160 L 260 160 L 260 90 L 310 90" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-
-          <!-- Hub Marker -->
-          <circle cx="70" cy="230" r="11" fill="#D06828"/>
-          <circle cx="70" cy="230" r="5" fill="#FAF0DF"/>
-          <text x="70" y="254" fill="#FAF0DF" font-size="9" font-weight="bold" text-anchor="middle" font-family="sans-serif">Didi Base Hub</text>
-
-          <!-- Customer Destination Marker -->
-          <g transform="translate(310, 90)">
-            <circle cx="0" cy="0" r="14" fill="#EA4335" opacity="0.3">
-              <animate attributeName="r" values="12;22;12" dur="2s" repeatCount="indefinite"/>
-              <animate attributeName="opacity" values="0.4;0;0.4" dur="2s" repeatCount="indefinite"/>
-            </circle>
-            <circle cx="0" cy="0" r="12" fill="#EA4335"/>
-            <path d="M -5 -2 L 0 -7 L 5 -2 L 5 5 L -5 5 Z" fill="#ffffff"/>
-            <text x="0" y="24" fill="#FAF0DF" font-size="9" font-weight="bold" text-anchor="middle" font-family="sans-serif">Customer Home</text>
-          </g>
-
-          <!-- Moving Scooter Marker -->
-          <g class="didi-moving-scooter">
-            <circle cx="0" cy="0" r="16" fill="#34A853" opacity="0.25">
-              <animate attributeName="r" values="14;24;14" dur="1.5s" repeatCount="indefinite"/>
-            </circle>
-            <circle cx="0" cy="0" r="13" fill="#34A853" stroke="#FAF0DF" stroke-width="2"/>
-            <g transform="translate(-7, -7) scale(0.6)" stroke="#FAF0DF" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10l-1.5-4.5A2 2 0 0 0 12.6 4H8"/>
-              <circle cx="7" cy="17" r="2.2" fill="#FAF0DF"/>
-              <circle cx="17" cy="17" r="2.2" fill="#FAF0DF"/>
-              <path d="M9 17h6M12 6l-2 5h4"/>
-            </g>
-          </g>
-        </svg>
-
-        <!-- Floating HUD -->
-        <div style="position:absolute;top:10px;left:10px;right:10px;background:rgba(18,24,38,0.92);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;color:#fff">
-          <div>
-            <div style="font-size:10px;color:#94a3b8;font-weight:700">NEXT TURN</div>
-            <div style="font-size:12.5px;font-weight:700">Turn left onto 27th Main Rd</div>
-          </div>
-          <div style="text-align:right">
-            <div style="font-size:13px;font-weight:800;color:#34A853">1.4 km</div>
-            <div style="font-size:10px;color:#94a3b8">~6 mins ETA</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Customer Location Details Card -->
-      <div class="didi-nav-card">
-        <div class="row-between wrap" style="align-items:flex-start;gap:8px">
-          <div>
-            <div class="xs muted" style="font-weight:700;text-transform:uppercase">Customer Kitchen Address</div>
-            <div style="font-size:15px;font-weight:700;margin-top:2px">${esc(athleteName)}</div>
-            <div class="small" style="margin-top:2px;line-height:1.4;color:var(--ink);font-weight:600;display:flex;align-items:center;gap:4px">${icon('pin', 13)} ${esc(address)}</div>
-            ${email ? `<div class="xs muted" style="margin-top:3px;display:flex;align-items:center;gap:4px">${icon('mail', 12)} ${esc(email)}</div>` : ''}
-          </div>
-          <div class="row wrap" style="gap:6px">
-            ${phone ? `<a href="tel:${esc(phone)}" class="btn btn-primary btn-sm" style="font-size:12px;padding:6px 12px">${icon('phone', 12)} Call ${esc(phone)}</a>` : ''}
-            ${email ? `<a href="mailto:${esc(email)}" class="btn btn-secondary btn-sm" style="font-size:11px;padding:6px 10px">${icon('mail', 12)} Email</a>` : ''}
-          </div>
-        </div>
-      </div>
-
-      <!-- Athlete Kitchen Cooking Banner -->
-      <div class="didi-food-bag-banner">
-        <div class="icon">${icon('cooking', 20)}</div>
-        <div>
-          <b style="color:var(--ink);display:block;margin-bottom:2px">Home Cooking Service:</b>
-          <div class="xs" style="line-height:1.4">You will cook <b>${esc(o.mealName)}</b> in athlete's home kitchen using their fresh pantry items:</div>
-          <div class="ingredients-pills" style="margin-top:6px;margin-bottom:0">
-            ${ingredients.slice(0, 6).map((ing) => `<span class="ing-pill" style="font-size:10.5px">${esc(ing)}</span>`).join('')}
-          </div>
-        </div>
-      </div>
-
-      <!-- Big Thumb Button: REACHED -->
-      <div style="margin-top:10px">
-        <button class="didi-thumb-btn reached" data-action="didi-reached" data-id="${o.id}">
-          ${icon('check', 18)} I HAVE REACHED
-        </button>
-        <div class="xs muted" style="text-align:center;margin-top:6px">
-          Tapping this immediately alerts customer that you have arrived at their kitchen
-        </div>
-        <button class="btn btn-ghost btn-block btn-sm" style="margin-top:10px" data-action="didi-view-orders">← Back to Orders Feed</button>
-      </div>
-    </div>`;
-  }
-
-  function renderDidiCookingHTML(o) {
-    if (!o) return `<div class="card empty">No order selected. <button class="btn btn-secondary btn-sm" data-action="didi-view-orders" style="margin-top:10px">Back to orders</button></div>`;
-    const athleteName = o.athlete?.name || 'Aarav Sharma';
-    const address = o.athlete?.address || '';
-    const phone = o.athlete?.phone || '';
-    const email = o.athlete?.email || '';
-    const allergies = o.athlete?.allergies || [];
-    const steps = getOrderSteps(o);
-    const ingredients = o.ingredientsCarriedByDidi || o.ingredients || [];
-    const checked = getOrderCheckedSteps(o.id);
-    const completedCount = steps.filter((_, idx) => !!checked[idx]).length;
-    const allCompleted = steps.length > 0 && completedCount === steps.length;
-    const pct = Math.round((completedCount / steps.length) * 100);
-
-    return `
-    <div style="padding:16px" class="stack">
-      <div class="row-between wrap">
-        <div>
-          <span class="badge badge-solid mono">${esc(o.orderNumber || '#DIDI')}</span>
-          <h2 style="font-size:20px;margin-top:4px">In Kitchen: ${esc(o.mealName)}</h2>
-        </div>
-        ${statusBadgeHTML('cooking')}
-      </div>
-
-      <!-- Customer Location & Contact Details -->
-      <div style="background:var(--surface-2);border-radius:10px;padding:10px 12px;border:1px solid var(--border)">
-        <div class="row-between wrap">
-          <span style="font-weight:700;font-size:14px;display:flex;align-items:center;gap:4px">${icon('user', 14)} ${esc(athleteName)}'s Kitchen</span>
-          ${phone ? `<a href="tel:${esc(phone)}" class="xs" style="color:var(--accent-text);font-weight:700;display:flex;align-items:center;gap:4px">${icon('phone', 12)} ${esc(phone)}</a>` : ''}
-        </div>
-        ${address ? `<div class="xs" style="margin-top:3px;color:var(--ink);font-weight:600;display:flex;align-items:center;gap:4px">${icon('pin', 12)} ${esc(address)}</div>` : ''}
-        ${email ? `<div class="xs muted" style="margin-top:2px;display:flex;align-items:center;gap:4px">${icon('mail', 11)} ${esc(email)}</div>` : ''}
-      </div>
-
-      <!-- Customer Notified Alert -->
-      <div class="note info" style="display:flex;align-items:center;gap:10px;padding:12px 14px">
-        <span class="accent-text" style="display:grid;place-items:center">${icon('bell', 22)}</span>
-        <div class="xs" style="line-height:1.4">
-          <b>Customer Notified:</b> ${esc(athleteName)} knows you have reached at their doorstep with all food items.
-        </div>
-      </div>
-
-      <!-- Meal & Macro Overview -->
-      <div class="macro-grid">
-        <div class="macro"><span>PROTEIN</span><b class="accent-text">${o.protein}g</b></div>
-        <div class="macro"><span>CARBS</span><b>${o.carbs}g</b></div>
-        <div class="macro"><span>FAT</span><b>${o.fat}g</b></div>
-        <div class="macro"><span>KCAL</span><b>${o.calories}</b></div>
-      </div>
-
-      ${allergies.length ? `<div class="note danger" style="padding:8px 12px;font-size:12px;display:flex;align-items:center;gap:6px"><b>${icon('alert', 13)} ATHLETE ALLERGY ALERT — DO NOT USE:</b> ${esc(allergies.join(', '))}</div>` : ''}
-
-      <!-- Kitchen Ingredients Checklist -->
-      <div class="didi-food-bag-banner">
-        <div class="icon">${icon('cooking', 20)}</div>
-        <div>
-          <b style="color:var(--ink);display:block;margin-bottom:2px">Athlete's Raw Pantry Staples:</b>
-          <div class="xs muted" style="margin-bottom:4px">Raw ingredients provided by athlete (Chef Didi prepares fresh batters, boils rice, and cooks fresh):</div>
-          <div class="ingredients-pills" style="margin-top:4px;margin-bottom:0">
-            ${ingredients.map((ing) => `<span class="ing-pill" style="font-size:11px">${esc(ing)}</span>`).join('')}
-          </div>
-        </div>
-      </div>
-
-      <!-- Interactive Cooking Steps Checklist -->
-      <div class="didi-steps-section">
-        <div class="row-between wrap" style="margin-bottom:6px;gap:6px">
-          <div>
-            <span class="xs muted" style="font-weight:700;letter-spacing:.05em;text-transform:uppercase">Cooking Steps Checklist</span>
-            <span class="badge ${allCompleted ? 'badge-accent' : 'badge-muted'}" style="margin-left:6px;font-size:11px">
-              ${completedCount} of ${steps.length} Completed
-            </span>
-          </div>
-          <span class="xs" style="font-weight:700;color:${allCompleted ? 'var(--accent-text)' : 'var(--muted)'};display:flex;align-items:center;gap:4px">
-            ${allCompleted ? `${icon('check', 13)} All Steps Complete` : 'Tap each step to check off'}
-          </span>
-        </div>
-
-        <!-- Visual Step Progress Bar -->
-        <div style="height:6px;background:var(--border);border-radius:99px;overflow:hidden;margin-bottom:12px">
-          <div style="height:100%;width:${pct}%;background:${allCompleted ? '#34A853' : 'linear-gradient(90deg, #F8D858, #D06828)'};transition:width 0.25s ease"></div>
-        </div>
-
-        ${!allCompleted ? `
-        <div class="note warn" style="margin-bottom:12px;padding:9px 12px;display:flex;align-items:center;gap:10px;font-size:12.5px;line-height:1.35">
-          <span style="color:#D06828;display:grid;place-items:center">${icon('alert', 18)}</span>
-          <div><b>Step Completion Required:</b> Chef Didi must finish and check off all ${steps.length} cooking steps before this meal can be approved and completed (${steps.length - completedCount} remaining).</div>
-        </div>
-        ` : `
-        <div class="note info" style="margin-bottom:12px;padding:9px 12px;display:flex;align-items:center;gap:10px;font-size:12.5px;line-height:1.35;border-color:#34A853;background:rgba(52,168,83,0.08)">
-          <span style="color:#34A853;display:grid;place-items:center">${icon('check', 18)}</span>
-          <div style="color:var(--ink)"><b>All Steps Completed!</b> You have finished all preparation and cooking steps. Tap below to approve the meal and credit ₹250 to your Chef Didi wallet.</div>
-        </div>
-        `}
-
-        <div class="stack-sm">
-          ${steps.map((st, idx) => {
-            const isChecked = !!checked[idx];
-            return `<div class="didi-cooking-check ${isChecked ? 'checked' : ''}" data-action="didi-toggle-step" data-step="${idx}" data-id="${o.id}">
-              <div class="didi-checkbox-custom">${isChecked ? '✓' : ''}</div>
-              <div style="font-size:13px;line-height:1.4;flex:1">
-                <div class="row-between">
-                  <span class="xs mono" style="font-weight:700;color:${isChecked ? 'var(--accent-text)' : 'var(--muted)'}">STEP ${idx + 1}</span>
-                  ${isChecked ? `<span class="xs font-bold" style="color:#34A853;font-size:11px">DONE ✓</span>` : `<span class="xs muted" style="font-size:11px">PENDING</span>`}
-                </div>
-                <div style="margin-top:2px;${isChecked ? 'color:var(--ink);text-decoration:line-through;opacity:0.85' : 'color:var(--ink)'}">${esc(st)}</div>
-              </div>
-            </div>`;
-          }).join('')}
-        </div>
-      </div>
-
-      <!-- Complete Order Button (Strictly gated by allCompleted) -->
-      <div style="margin-top:14px">
-        ${allCompleted ? `
-        <button class="didi-thumb-btn complete" data-action="didi-complete" data-id="${o.id}">
-          ${icon('check', 16)} ALL STEPS COMPLETED — APPROVE & COMPLETE MEAL (Collect ₹250)
-        </button>
-        <div class="xs muted" style="text-align:center;margin-top:6px">
-          All ${steps.length} steps verified · Completing immediately credits ₹250 to your Chef Didi account
-        </div>
-        ` : `
-        <button class="didi-thumb-btn complete didi-btn-locked" data-action="didi-complete" data-id="${o.id}" title="Cannot approve meal until all cooking steps are finished">
-          ${icon('lock', 15)} COMPLETE ALL STEPS TO APPROVE MEAL (${completedCount}/${steps.length})
-        </button>
-        <div class="xs" style="text-align:center;margin-top:6px;color:#D06828;font-weight:600;display:flex;align-items:center;justify-content:center;gap:4px">
-          ${icon('alert', 12)} Meal cannot be approved until and unless all ${steps.length} cooking steps are completed by Chef Didi above (${steps.length - completedCount} left)
-        </div>
-        `}
-        <button class="btn btn-ghost btn-block btn-sm" style="margin-top:10px" data-action="didi-view-orders">← Back to Orders Feed</button>
-      </div>
-    </div>`;
-  }
-
-  function renderDidiPayoutHTML() {
-    return `
-    <div style="padding:28px 20px;text-align:center" class="stack">
-      <div style="margin:0 auto 8px;width:72px;height:72px;border-radius:50%;background:rgba(52,168,83,0.18);display:grid;place-items:center;color:#34A853">${icon('sparkle', 38)}</div>
-      <h2 style="font-size:24px;color:var(--ink);margin:0">Payment Credited!</h2>
-      <p class="small muted" style="margin-top:4px">Great job! The payment has been deposited into your Chef Didi Wallet.</p>
-
-      <div class="card" style="background:var(--surface-2);border-radius:16px;padding:20px;margin:16px 0;border:1.5px solid rgba(248,216,88,0.4)">
-        <div class="xs muted" style="text-transform:uppercase;letter-spacing:.05em;font-weight:700">Amount Credited</div>
-        <div style="font-size:36px;font-weight:800;color:#F8D858;margin:6px 0">+₹250</div>
-        <div class="row-between" style="border-top:1px solid var(--border);padding-top:12px;margin-top:12px">
-          <span class="small muted">Updated Wallet Balance</span>
-          <span class="small" style="font-weight:800;color:var(--ink)">₹${(S.didiWallet || 1250).toLocaleString('en-IN')}</span>
-        </div>
-        <div class="row-between" style="padding-top:6px">
-          <span class="xs muted">Home Cooking Service Fee</span>
-          <span class="xs mono">₹200</span>
-        </div>
-        <div class="row-between" style="padding-top:4px">
-          <span class="xs muted">Kitchen Sanitization & Plating</span>
-          <span class="xs mono">₹50</span>
-        </div>
-        <div class="row-between" style="padding-top:6px;border-top:1px dashed var(--border);margin-top:6px">
-          <span class="xs muted">Payout Destination</span>
-          <span class="xs" style="color:var(--accent-text);font-weight:600;display:flex;align-items:center;gap:4px">HDFC Bank •••• 4092 ${icon('check', 13)}</span>
-        </div>
-      </div>
-
-      <button class="didi-thumb-btn go" data-action="didi-view-orders">
-        Back to Available Orders →
-      </button>
-    </div>`;
-  }
-
-  function renderDidiOrderCardsHTML() {
-    const list = filteredDidiOrders();
-    if (!list.length) {
-      return `<div class="card empty" style="padding:48px 20px;text-align:center">
-        <div style="margin:0 auto 12px;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);color:var(--accent-text)">${icon('chef', 32)}</div>
-        <h3 style="font-size:18px;margin-bottom:6px">No orders in this view</h3>
-        <p class="small muted">Whenever an athlete books <b>“Cook with Chef Didi”</b> and scans the QR code, the order arrives here instantly in real time via Firebase.</p>
-      </div>`;
-    }
-
-    const today = todayKey();
-    const yesterday = shiftKey(today, -1);
-
-    return `<div class="stack" style="gap:14px">${list.map((o) => {
-      const st = o.status || 'pending';
-      const dayLabel = o.date === today ? 'Today' : o.date === yesterday ? 'Yesterday' : prettyDate(o.date || today);
-      const allergies = o.athlete?.allergies || [];
-      const athleteName = o.athlete?.name || 'Aarav Sharma';
-      const address = o.athlete?.address || 'Flat 402, Green Glen Heights, HSR Layout';
-      const phone = o.athlete?.phone || '';
-      const email = o.athlete?.email || '';
-      const ingredients = o.ingredientsCarriedByDidi || o.ingredients || [];
-
-      return `<div class="card didi-order-card status-${esc(st)}" style="padding:16px">
-        <div class="row-between wrap" style="gap:8px">
-          <div class="row" style="gap:8px">
-            <span class="badge badge-solid mono">${esc(o.orderNumber || '#DIDI')}</span>
-            <span class="xs muted">${esc(dayLabel)} · ${esc(o.time || '')}</span>
-          </div>
-          <div class="row" style="gap:6px;align-items:center">
-            ${statusBadgeHTML(st)}
-            <button class="icon-btn sm" data-action="didi-delete" data-id="${o.id}" title="Remove order" style="color:#EA4335;opacity:0.85;padding:4px" aria-label="Delete order">${icon('trash', 13)}</button>
-          </div>
-        </div>
-
-        <div>
-          <div class="row-between" style="align-items:flex-start;gap:10px">
-            <h3 style="font-size:18px;margin:0">${esc(o.mealName)}</h3>
-            <span class="score-pill" style="background:rgba(248,216,88,0.18);color:#F8D858;border-color:rgba(248,216,88,0.4)">+₹250</span>
-          </div>
-          <div class="row wrap" style="gap:6px;margin-top:6px">
-            <span class="badge badge-accent">${esc(o.category || 'Athlete Meal')}</span>
-            <span class="badge badge-muted">${icon('clock', 11)} ${esc(o.prepTime || '8 mins')}</span>
-          </div>
-        </div>
-
-        <!-- Customer & Address -->
-        <div style="background:var(--surface-2);border-radius:10px;padding:10px 12px;border:1px solid var(--border)">
-          <div class="row-between">
-            <span class="small" style="font-weight:800;color:var(--ink);display:flex;align-items:center;gap:4px">${icon('user', 14)} ${esc(athleteName)}</span>
-            <span class="xs muted">${esc(o.athlete?.diet || 'Standard')}</span>
-          </div>
-          <div class="small" style="margin-top:4px;color:var(--ink);font-weight:600;line-height:1.35;display:flex;align-items:center;gap:4px">${icon('pin', 13)} ${esc(address)}</div>
-          <div class="row wrap" style="gap:8px;margin-top:6px;align-items:center">
-            ${phone ? `<a href="tel:${esc(phone)}" class="btn btn-secondary btn-sm" style="font-size:11.5px;padding:4px 9px;font-weight:700;color:var(--accent-text);display:flex;align-items:center;gap:4px">${icon('phone', 11)} Call ${esc(phone)}</a>` : ''}
-            ${email ? `<a href="mailto:${esc(email)}" class="xs muted" style="text-decoration:underline;display:flex;align-items:center;gap:4px">${icon('mail', 11)} ${esc(email)}</a>` : ''}
-          </div>
-          ${allergies.length ? `<div class="note danger" style="padding:6px 8px;font-size:11.5px;margin-top:6px;display:flex;align-items:center;gap:4px"><b>${icon('alert', 12)} ALLERGY:</b> ${esc(allergies.join(', '))}</div>` : ''}
-        </div>
-
-        <!-- Athlete Pantry Ingredients Check -->
-        <div class="didi-food-bag-banner" style="margin:4px 0">
-          <div class="icon">${icon('cooking', 18)}</div>
-          <div>
-            <b style="color:var(--ink);display:block;font-size:12px">Cook with Athlete's Pantry:</b>
-            <div class="xs" style="line-height:1.35;margin-bottom:4px">Prepared in athlete's home kitchen using their pantry items:</div>
-            <div class="ingredients-pills" style="margin-bottom:0">
-              ${ingredients.slice(0, 5).map((ing) => `<span class="ing-pill" style="font-size:10px;padding:2px 7px">${esc(ing)}</span>`).join('')}
-              ${ingredients.length > 5 ? `<span class="xs muted">+${ingredients.length - 5} more</span>` : ''}
-            </div>
-          </div>
-        </div>
-
-        <!-- Quick Macro Bar -->
-        <div class="row-between xs mono muted" style="padding:4px 2px">
-          <span>${o.protein}g Protein</span>
-          <span>${o.carbs}g Carbs</span>
-          <span>${o.calories} kcal</span>
-        </div>
-
-        <!-- Dynamic Action Button based on status -->
-        <div style="margin-top:4px">
-          ${st === 'pending' ? `<button class="didi-thumb-btn go" data-action="didi-go" data-id="${o.id}">${icon('scooter', 16)} START TRIP (GO)</button>` : ''}
-          ${st === 'en_route' ? `<button class="didi-thumb-btn reached" data-action="didi-show-map" data-id="${o.id}">${icon('map', 16)} RESUME TRIP (MAP)</button>` : ''}
-          ${st === 'reached' || st === 'cooking' || st === 'preparing' ? `<button class="didi-thumb-btn complete" data-action="didi-show-cooking" data-id="${o.id}">${icon('cooking', 16)} OPEN COOKING STEPS</button>` : ''}
-          ${st === 'completed' ? `<div class="row-between"><span class="badge badge-accent">${icon('check', 11)} Completed</span><span class="xs muted">+₹250 Paid</span><button class="btn btn-ghost btn-sm" data-action="didi-show-cooking" data-id="${o.id}">Recipe</button></div>` : ''}
-        </div>
-      </div>`;
-    }).join('')}</div>`;
-  }
-
-  function renderDidiPlatform() {
-    const all = S.didiOrders || [];
-    const today = todayKey();
-    const pendingCount = all.filter((o) => (o.status || 'pending') === 'pending').length;
-    const activeCount = all.filter((o) => ['en_route', 'reached', 'cooking', 'preparing'].includes(o.status)).length;
-    const completedCount = all.filter((o) => o.status === 'completed').length;
-
-    // Resolve active order for navigation or cooking views
-    const activeOrder = S.didiActiveOrderId
-      ? all.find((o) => o.id === S.didiActiveOrderId)
-      : all.find((o) => ['en_route', 'reached', 'cooking'].includes(o.status)) || all[0];
-
-    let mainContent = '';
-    if (S.didiView === 'map' && activeOrder) {
-      mainContent = renderDidiMapHTML(activeOrder);
-    } else if (S.didiView === 'cooking' && activeOrder) {
-      mainContent = renderDidiCookingHTML(activeOrder);
-    } else if (S.didiView === 'payout') {
-      mainContent = renderDidiPayoutHTML();
-    } else {
-      mainContent = `
-      <div style="padding:16px" class="stack">
-        <div class="row-between wrap" style="gap:8px">
-          <div>
-            <div class="xs muted" style="text-transform:uppercase;font-weight:700">Orders Stream</div>
-            <h1 style="font-size:22px;margin-top:2px">Incoming Bookings</h1>
-          </div>
-          <div class="row" style="gap:6px">
-            <button class="btn btn-secondary btn-sm" data-action="didi-refresh" style="font-size:12px">${icon('refresh', 13)} Refresh</button>
-            ${all.length ? `<button class="btn btn-ghost btn-sm" data-action="didi-clear-all" style="font-size:12px;color:#EA4335" title="Remove all orders">${icon('trash', 12)} Clear All</button>` : ''}
-          </div>
-        </div>
-
-        <!-- Filter Sub-Tabs -->
-        <div class="seg" style="margin:4px 0 8px">
-          <button class="${S.didiFilter === 'all' ? 'on' : ''}" data-action="didi-filter" data-f="all">All (${all.length})</button>
-          <button class="${S.didiFilter === 'pending' ? 'on' : ''}" data-action="didi-filter" data-f="pending">New (${pendingCount})</button>
-          <button class="${S.didiFilter === 'preparing' ? 'on' : ''}" data-action="didi-filter" data-f="preparing">Active (${activeCount})</button>
-          <button class="${S.didiFilter === 'completed' ? 'on' : ''}" data-action="didi-filter" data-f="completed">Done (${completedCount})</button>
-        </div>
-
-        <input class="input" data-input="didi-search" value="${esc(S.didiQuery)}" placeholder="Search dish, order #, athlete…" autocomplete="off" style="font-size:13.5px">
-
-        <div id="didiOrdersContainer" style="margin-top:8px">${renderDidiOrderCardsHTML()}</div>
-      </div>`;
-    }
-
-    return `
-    <div class="didi-phone-shell">
-      <!-- Phone Top Bar -->
-      <header class="didi-phone-topbar">
-        <div class="didi-partner-profile">
-          <div class="didi-avatar-wrap">
-            ${icon('chef', 22)}
-            <span class="didi-online-pip" title="Active & Ready"></span>
-          </div>
-          <div>
-            <div style="font-size:14px;font-weight:800;color:var(--ink);line-height:1.2">Chef Sunita Didi</div>
-            <div class="xs muted" style="display:flex;align-items:center;gap:4px">
-              <span class="live-dot" style="width:6px;height:6px"></span> Online Partner
-            </div>
-          </div>
-        </div>
-        <div class="row" style="gap:8px">
-          <div class="didi-wallet-chip" data-action="didi-wallet" title="View Wallet">
-            <span>₹</span><span>${(S.didiWallet || 1250).toLocaleString('en-IN')}</span>
-          </div>
-          ${themeBtn()}
-          <a class="btn btn-ghost btn-sm" href="/" style="padding:5px 8px;font-size:11.5px" title="Main Athlete Site">Web ↗</a>
-        </div>
-      </header>
-
-      <!-- Main Phone Viewport Area -->
-      <main style="flex:1;overflow-y:auto">
-        ${mainContent}
-      </main>
-    </div>`;
-  }
-
-  // ------------------------------------------------------------------
   // Modals
   // ------------------------------------------------------------------
   function renderModal() {
@@ -2874,7 +1768,7 @@ Return ONLY a JSON object with these keys:
                 return `<span class="ing-pill" style="${inKitchen ? 'background:rgba(52,168,83,0.15);border:1px solid rgba(52,168,83,0.45);color:#34A853' : 'background:rgba(234,67,53,0.1);border:1px solid rgba(234,67,53,0.35);color:var(--ink)'}">${inKitchen ? '✓ ' : '✕ '}${esc(ing)}</span>`;
               }).join('')}
             </div>
-            <div class="xs muted" style="margin-top:6px">Chef Didi boils rice, prepares fresh batters, and cooks using your raw pantry staples. Update items in your <a href="#" data-action="tab" data-tab="pantry" style="color:var(--accent-text);text-decoration:underline">Kitchen Pantry</a>.</div>
+            <div class="xs muted" style="margin-top:6px">Update available staples in your <a href="#" data-action="tab" data-tab="pantry" style="color:var(--accent-text);text-decoration:underline">Kitchen Pantry</a>.</div>
           </div>
 
           <p class="small" style="margin-bottom:6px"><b>Preparation & Cooking Instructions</b></p>
@@ -2887,244 +1781,9 @@ Return ONLY a JSON object with these keys:
         </div>
 
         <p class="xs muted" style="margin:14px 0 16px">Micronutrients: ${esc((m.micronutrients || []).join(', ') || '—')} · Allergens: ${esc((m.allergens_present || []).join(', ') || 'none declared')}</p>
-        <div class="grid-2">
-          <button class="btn btn-didi btn-block" data-action="order-didi" data-id="${m.id}">${icon('chef', 16)} Cook with Chef Didi</button>
-          ${(() => {
-            const inProgressDidi = (S.didiOrders || []).find((x) =>
-              x.mealId === m.id &&
-              x.date === logDate &&
-              x.status !== 'completed' &&
-              (!S.user || !x.athlete?.uid || x.athlete.uid === S.user.uid || x.athlete.uid === 'guest')
-            );
-            if (inProgressDidi) {
-              return `<button class="btn btn-secondary btn-block" data-action="log-meal" data-id="${m.id}" style="opacity:0.65;cursor:not-allowed" title="Chef Didi is currently preparing this meal. All steps must be completed before meal approval.">${icon('clock', 14)} Awaiting Chef Didi Completion</button>`;
-            }
-            return `<button class="btn btn-primary btn-block" data-action="log-meal" data-id="${m.id}">${icon('check', 16)} Log as eaten${logDate !== todayKey() ? ' on ' + esc(prettyDate(logDate)) : ' today'}</button>`;
-          })()}
+        <div>
+          <button class="btn btn-primary btn-block" data-action="log-meal" data-id="${m.id}">${icon('check', 16)} Log as eaten${logDate !== todayKey() ? ' on ' + esc(prettyDate(logDate)) : ' today'}</button>
         </div>
-      </div>`;
-    } else if (S.modal === 'didi-recipe') {
-      const o = (S.didiOrders || []).find((x) => x.id === S.selectedOrderId);
-      if (!o) { S.modal = null; return ''; }
-      const allergies = o.athlete?.allergies || [];
-      const steps = getOrderSteps(o);
-      const checked = getOrderCheckedSteps(o.id);
-      const completedCount = steps.filter((_, idx) => !!checked[idx]).length;
-      const allCompleted = steps.length > 0 && completedCount === steps.length;
-
-      inner = `<div class="modal wide">
-        <div class="modal-head">
-          <div class="grow">
-            <div class="row" style="gap:8px;margin-bottom:4px">
-              <span class="badge badge-solid mono">${esc(o.orderNumber || '#DIDI')}</span>
-              ${statusBadgeHTML(o.status)}
-            </div>
-            <h3>${esc(o.mealName)}</h3>
-          </div>
-          <button class="icon-btn sm" data-action="close-modal" aria-label="Close">${icon('close', 15)}</button>
-        </div>
-        <div class="didi-athlete-box" style="margin-bottom:14px">
-          <div><b>Ordered by:</b> ${esc(o.athlete?.name || 'ZAP FIT Athlete')} · <b>Diet:</b> ${esc(o.athlete?.diet || o.category)}</div>
-          <div class="xs muted">Time: ${esc(o.date)} at ${esc(o.time)} · Session: ${esc(o.athlete?.workoutSession || o.recommendedPostWorkout)}</div>
-          ${allergies.length ? `<div class="note danger" style="margin-top:6px;display:flex;align-items:center;gap:6px"><b>${icon('alert', 13)} ALLERGY ALERT — AVOID:</b> ${esc(allergies.join(', '))}</div>` : ''}
-        </div>
-        <div class="macro-grid" style="margin-bottom:14px">
-          <div class="macro"><span>PROTEIN</span><b class="accent-text">${o.protein}g</b></div>
-          <div class="macro"><span>CARBS</span><b>${o.carbs}g</b></div>
-          <div class="macro"><span>FAT</span><b>${o.fat}g</b></div>
-          <div class="macro"><span>KCAL</span><b>${o.calories}</b></div>
-        </div>
-        <p class="small" style="margin-bottom:6px"><b>Ingredients (${(o.ingredients || []).length})</b></p>
-        <div class="ingredients-pills">${(o.ingredients || []).map((ing) => `<span class="ing-pill">${esc(ing)}</span>`).join('')}</div>
-        
-        <div class="row-between" style="margin-top:14px;margin-bottom:6px">
-          <p class="small" style="margin:0"><b>Cooking Instructions (${completedCount}/${steps.length} Steps Completed)</b></p>
-          <span class="xs ${allCompleted ? 'accent-text font-bold' : 'muted'}" style="display:flex;align-items:center;gap:4px">${allCompleted ? `${icon('check', 12)} Steps Verified` : 'Tap step to check off'}</span>
-        </div>
-        <div class="stack-sm" style="margin-bottom:16px">
-          ${steps.map((st, idx) => {
-            const isChecked = !!checked[idx];
-            return `<div class="didi-cooking-check ${isChecked ? 'checked' : ''}" data-action="didi-toggle-step" data-step="${idx}" data-id="${o.id}">
-              <div class="didi-checkbox-custom">${isChecked ? '✓' : ''}</div>
-              <div style="font-size:12.5px;line-height:1.35;flex:1">
-                <span class="xs mono" style="font-weight:700">Step ${idx + 1}: </span>
-                <span style="${isChecked ? 'text-decoration:line-through;opacity:0.8' : ''}">${esc(st)}</span>
-              </div>
-            </div>`;
-          }).join('')}
-        </div>
-
-        ${!allCompleted ? `
-        <div class="note warn" style="margin-bottom:12px;font-size:12px;display:flex;align-items:center;gap:6px">
-          <span style="color:#D06828">${icon('alert', 14)}</span>
-          <div><b>Step Completion Required:</b> Chef Didi must finish all cooking steps before this meal can be approved and completed.</div>
-        </div>
-        ` : ''}
-
-        <div class="row wrap" style="gap:8px">
-          <button class="btn btn-didi grow" data-action="didi-show-cooking" data-id="${o.id}">${icon('cooking', 15)} Open Cooking View</button>
-          ${allCompleted ? `
-            <button class="btn btn-primary grow" data-action="didi-status" data-id="${o.id}" data-status="completed">${icon('check', 15)} Approve & Complete</button>
-          ` : `
-            <button class="btn btn-secondary grow" data-action="didi-status" data-id="${o.id}" data-status="completed" style="opacity:0.5;cursor:not-allowed" title="Complete all steps before approving">${icon('lock', 14)} Complete All Steps to Approve (${completedCount}/${steps.length})</button>
-          `}
-        </div>
-      </div>`;
-    } else if (S.modal === 'didi-payment') {
-      const m = MEALS.find((x) => x.id === S.pendingPaymentMealId);
-      if (!m) { S.modal = null; return ''; }
-      const price = 249;
-      const savedName = localStorage.getItem('zapfit:saved_name') || S.data?.answers?.name || S.user?.name || '';
-      const savedPhone = localStorage.getItem('zapfit:saved_phone') || '';
-      const savedEmail = localStorage.getItem('zapfit:saved_email') || (S.user?.uid && S.user.uid.includes('@') ? S.user.uid : '');
-      const savedAddress = localStorage.getItem('zapfit:saved_address') || '';
-
-      inner = `<div class="modal didi-qr-modal" style="text-align:center;max-width:460px">
-        <div class="modal-head" style="justify-content:center;position:relative">
-          <div style="display:flex;align-items:center;gap:8px">
-            <span class="didi-avatar-wrap" style="width:34px;height:34px">${icon('chef', 18)}</span>
-            <h3 style="font-size:18px;margin:0">Book Chef Didi · Details & QR</h3>
-          </div>
-          <button class="icon-btn sm" data-action="close-modal" aria-label="Close" style="position:absolute;right:0">${icon('close', 15)}</button>
-        </div>
-
-        <div style="background:var(--surface-2);border-radius:12px;padding:12px 14px;margin:10px 0;text-align:left;border:1px solid var(--border)">
-          <div class="row-between">
-            <span style="font-weight:700;font-size:15px">${esc(m.name)}</span>
-            <span class="score-pill" style="font-size:14px">₹${price}</span>
-          </div>
-          <div class="xs muted" style="margin-top:4px">${m.protein}g Protein · ${m.carbs}g Carbs · ${m.calories} kcal · ${esc(m.prep_time || '8m')} prep</div>
-        </div>
-
-        <!-- User Contact & Kitchen Address Inputs -->
-        <div style="background:var(--surface-2);border-radius:12px;padding:12px 14px;margin-bottom:12px;text-align:left;border:1px solid var(--border)">
-          <div class="row-between" style="margin-bottom:8px">
-            <span class="xs muted" style="font-weight:800;letter-spacing:.05em;text-transform:uppercase;display:flex;align-items:center;gap:4px">${icon('pin', 12)} Your Kitchen Address & Contact</span>
-            <span class="xs accent-text" style="font-weight:700">For Chef Didi</span>
-          </div>
-
-          <div class="stack-sm">
-            <div>
-              <label class="xs muted" style="font-weight:600;display:block;margin-bottom:2px" for="didi-name">Your Full Name</label>
-              <input id="didi-name" class="input" style="font-size:13.5px;padding:8px 10px" placeholder="e.g. Rahul Sharma" value="${esc(savedName)}">
-            </div>
-
-            <div class="grid-2" style="gap:8px">
-              <div>
-                <label class="xs muted" style="font-weight:600;display:block;margin-bottom:2px" for="didi-phone">Phone Number <span style="color:#EA4335">*</span></label>
-                <input id="didi-phone" type="tel" class="input" style="font-size:13.5px;padding:8px 10px" placeholder="e.g. 9876543210" value="${esc(savedPhone)}">
-              </div>
-              <div>
-                <label class="xs muted" style="font-weight:600;display:block;margin-bottom:2px" for="didi-email">Email Address <span style="color:#EA4335">*</span></label>
-                <input id="didi-email" type="email" class="input" style="font-size:13.5px;padding:8px 10px" placeholder="athlete@example.com" value="${esc(savedEmail)}">
-              </div>
-            </div>
-
-            <div>
-              <label class="xs muted" style="font-weight:600;display:block;margin-bottom:2px" for="didi-address">Complete Delivery / Kitchen Address <span style="color:#EA4335">*</span></label>
-              <textarea id="didi-address" class="input" rows="2" style="font-size:13px;padding:8px 10px;resize:vertical;min-height:50px" placeholder="Flat / House No., Apartment / Tower, Street, Landmark...">${esc(savedAddress)}</textarea>
-            </div>
-          </div>
-        </div>
-
-        <!-- Home Kitchen Notice -->
-        <div class="didi-food-bag-banner" style="text-align:left;margin-bottom:12px">
-          <div class="icon">${icon('cooking', 20)}</div>
-          <div style="font-size:12px;line-height:1.4">
-            <b style="color:var(--ink);display:block;margin-bottom:2px">Chef Didi Cooks in Your Home Kitchen!</b>
-            Chef Didi will come to your home to cook fresh recovery nutrition using raw staples from your pantry. Chef Didi handles all preparation — boiling rice, making fresh batters, chopping, and cooking fresh from scratch!
-          </div>
-        </div>
-
-        <!-- Dummy UPI QR Code -->
-        <div class="qr-frame" style="padding:10px">
-          <svg width="150" height="150" viewBox="0 0 180 180" style="display:block;margin:0 auto">
-            <rect width="180" height="180" fill="#ffffff" rx="10"/>
-            <rect x="14" y="14" width="46" height="46" fill="#121212" rx="4"/>
-            <rect x="20" y="20" width="34" height="34" fill="#ffffff" rx="2"/>
-            <rect x="26" y="26" width="22" height="22" fill="#D06828" rx="2"/>
-
-            <rect x="120" y="14" width="46" height="46" fill="#121212" rx="4"/>
-            <rect x="126" y="20" width="34" height="34" fill="#ffffff" rx="2"/>
-            <rect x="132" y="26" width="22" height="22" fill="#D06828" rx="2"/>
-
-            <rect x="14" y="120" width="46" height="46" fill="#121212" rx="4"/>
-            <rect x="20" y="126" width="34" height="34" fill="#ffffff" rx="2"/>
-            <rect x="26" y="132" width="22" height="22" fill="#D06828" rx="2"/>
-
-            <g fill="#242b35">
-              <rect x="68" y="16" width="8" height="8"/><rect x="80" y="16" width="8" height="8"/><rect x="96" y="16" width="16" height="8"/>
-              <rect x="68" y="28" width="16" height="8"/><rect x="92" y="28" width="8" height="8"/><rect x="104" y="28" width="8" height="8"/>
-              <rect x="76" y="40" width="8" height="8"/><rect x="88" y="40" width="16" height="8"/>
-              <rect x="68" y="52" width="8" height="8"/><rect x="84" y="52" width="8" height="8"/><rect x="100" y="52" width="12" height="8"/>
-
-              <rect x="16" y="68" width="8" height="8"/><rect x="28" y="68" width="16" height="8"/><rect x="52" y="68" width="8" height="8"/>
-              <rect x="124" y="68" width="16" height="8"/><rect x="148" y="68" width="16" height="8"/>
-              <rect x="20" y="80" width="16" height="8"/><rect x="44" y="80" width="16" height="8"/>
-              <rect x="120" y="80" width="8" height="8"/><rect x="136" y="80" width="24" height="8"/>
-              <rect x="16" y="92" width="8" height="8"/><rect x="32" y="92" width="8" height="8"/><rect x="48" y="92" width="12" height="8"/>
-              <rect x="124" y="92" width="16" height="8"/><rect x="152" y="92" width="8" height="8"/>
-              <rect x="24" y="104" width="16" height="8"/><rect x="48" y="104" width="8" height="8"/>
-              <rect x="120" y="104" width="20" height="8"/><rect x="148" y="104" width="16" height="8"/>
-
-              <rect x="68" y="120" width="16" height="8"/><rect x="92" y="120" width="8" height="8"/><rect x="104" y="120" width="16" height="8"/><rect x="128" y="120" width="16" height="8"/><rect x="152" y="120" width="8" height="8"/>
-              <rect x="68" y="132" width="8" height="8"/><rect x="84" y="132" width="16" height="8"/><rect x="112" y="132" width="8" height="8"/><rect x="128" y="132" width="8" height="8"/><rect x="144" y="132" width="16" height="8"/>
-              <rect x="76" y="144" width="8" height="8"/><rect x="92" y="144" width="16" height="8"/><rect x="120" y="144" width="16" height="8"/><rect x="144" y="144" width="8" height="8"/>
-              <rect x="68" y="156" width="16" height="8"/><rect x="96" y="156" width="8" height="8"/><rect x="112" y="156" width="16" height="8"/><rect x="136" y="156" width="16" height="8"/>
-            </g>
-
-            <circle cx="90" cy="90" r="19" fill="#121212" stroke="#F8D858" stroke-width="2.5"/>
-            <text x="90" y="94" text-anchor="middle" font-size="12" font-weight="bold" fill="#F8D858" font-family="sans-serif">ZAP</text>
-          </svg>
-        </div>
-
-        <div class="row wrap" style="justify-content:center;gap:6px;margin:6px 0 10px">
-          <span class="badge badge-muted" style="font-size:10.5px">GPay</span>
-          <span class="badge badge-muted" style="font-size:10.5px">PhonePe</span>
-          <span class="badge badge-muted" style="font-size:10.5px">Paytm</span>
-          <span class="badge badge-solid mono" style="font-size:10.5px">UPI: chefdidi@zapfit</span>
-        </div>
-
-        <div class="stack-sm">
-          <button class="btn btn-didi btn-block btn-lg" data-action="confirm-didi-payment" style="font-size:15px;font-weight:800">
-            ${icon('check', 16)} Payment Complete (Confirm Booking)
-          </button>
-          <button class="btn btn-ghost btn-block btn-sm" data-action="close-modal">Cancel</button>
-        </div>
-      </div>`;
-    } else if (S.modal === 'didi-wallet') {
-      const all = S.didiOrders || [];
-      const completed = all.filter((o) => o.status === 'completed');
-      inner = `<div class="modal" style="max-width:440px">
-        <div class="modal-head">
-          <div class="row" style="gap:8px">
-            <span class="didi-avatar-wrap" style="width:34px;height:34px">${icon('wallet', 18)}</span>
-            <h3>Chef Didi Wallet</h3>
-          </div>
-          <button class="icon-btn sm" data-action="close-modal" aria-label="Close">${icon('close', 15)}</button>
-        </div>
-
-        <div class="card" style="background:var(--surface-2);border-radius:14px;padding:16px;text-align:center;margin:12px 0">
-          <div class="xs muted" style="text-transform:uppercase;font-weight:700">Available Payout Balance</div>
-          <div style="font-size:32px;font-weight:800;color:#F8D858;margin:6px 0">₹${(S.didiWallet || 1250).toLocaleString('en-IN')}</div>
-          <div class="xs accent-text" style="font-weight:600;display:flex;align-items:center;justify-content:center;gap:4px">${icon('check', 12)} Linked: HDFC Bank •••• 4092</div>
-        </div>
-
-        <div class="row-between" style="margin-bottom:8px">
-          <span class="xs muted" style="font-weight:700;text-transform:uppercase">Recent Completed Orders (${completed.length})</span>
-          <span class="xs muted">₹250 / order</span>
-        </div>
-        <div class="stack-sm" style="max-height:220px;overflow-y:auto;margin-bottom:14px">
-          ${completed.length ? completed.slice(0, 10).map((o) => `<div class="row-between" style="padding:8px 10px;background:var(--surface);border:1px solid var(--border);border-radius:8px">
-            <div>
-              <div style="font-size:13px;font-weight:700">${esc(o.mealName)}</div>
-              <div class="xs muted">${esc(o.orderNumber || '#DIDI')} · ${esc(o.time || '')}</div>
-            </div>
-            <span class="xs accent-text" style="font-weight:800">+₹250</span>
-          </div>`).join('') : `<div class="empty xs">No orders completed yet today.</div>`}
-        </div>
-
-        <button class="btn btn-primary btn-block" data-action="simulate-withdraw">Simulate Instant Bank Transfer</button>
       </div>`;
     } else if (S.modal === 'ai') {
       const msgs = S.chat.length ? S.chat : [{ role: 'assistant', text: `Hi ${firstName(S.data.answers.name)}! I know your targets, today's log, yesterday's history, and your diet. Ask me anything about recovery nutrition.` }];
@@ -3225,8 +1884,7 @@ CRITICAL MANDATE: You must NEVER say "I do not have access to yesterday's data" 
 - Recovery Strategy: ${p.primaryStrategy || 'Hypertrophy / Muscle Building'}
 - Coach Focus: ${p.focus || 'Optimizing post-workout amino acid delivery and glycogen replenishment'}
 
-=== ATHLETE HOME PANTRY INVENTORY & CHEF DIDI POLICY ===
-- Chef Didi Policy: Chef Didi ONLY comes to the athlete's house to cook. She DOES NOT BRING OR PROVIDE INGREDIENTS. She cooks exclusively using the athlete's home pantry items.
+=== ATHLETE HOME PANTRY INVENTORY ===
 - Ingredients IN STOCK in Athlete's Kitchen (${inStockList.length}): ${inStockList.length ? inStockList.join(', ') : 'None marked yet'}
 - Ingredients MISSING / NEEDED (${missingList.length}): ${missingList.slice(0, 80).join(', ')}${missingList.length > 80 ? '...' : ''}
 
@@ -3245,7 +1903,7 @@ ${recentDays.join('\n\n')}
   1. Recommend ONLY from the meals listed above that have 0, 1, or at most 2 missing ingredients (prioritize 0 missing first, then 1, then 2).
   2. Clearly state which ingredients the athlete already has ready in their pantry.
   3. Clearly state the 1 or 2 missing ingredients (if any) they need to procure. If 0 ingredients are missing, tell them it is 100% ready to cook right now from their pantry.
-  4. Remind them Chef Didi will cook it in their kitchen using their own pantry items.
+
 - If the athlete asks about yesterday (e.g. "what was yesterday's report?", "how did I do yesterday?", "did I hit my macros yesterday?"):
   Examine the [YESTERDAY] section above:
   * If meals or workouts are logged: summarize their exact workouts, meals eaten, total protein and calories consumed vs daily targets, and provide positive reinforcement or advice.
@@ -3275,16 +1933,11 @@ ${recentDays.join('\n\n')}
   function render() {
     const app = $('app');
     if (!app) return;
-    if (isDidiRoute()) S.view = 'didi';
-
-    if (S.view !== 'didi') {
-      if (S.view === 'dashboard' && (!S.user || !S.data?.onboarded || !S.data?.profile)) S.view = S.user ? 'onboarding' : 'landing';
-      if (['onboarding', 'calibrating', 'calibrated'].includes(S.view) && !S.user) S.view = 'landing';
-    }
+    if (S.view === 'dashboard' && (!S.user || !S.data?.onboarded || !S.data?.profile)) S.view = S.user ? 'onboarding' : 'landing';
+    if (['onboarding', 'calibrating', 'calibrated'].includes(S.view) && !S.user) S.view = 'landing';
 
     if (!S.modal) {
-      if (S.view === 'didi') app.innerHTML = renderDidiPlatform();
-      else if (S.view === 'boot') app.innerHTML = '<div class="boot"><div class="spinner" aria-label="Loading"></div></div>';
+      if (S.view === 'boot') app.innerHTML = '<div class="boot"><div class="spinner" aria-label="Loading"></div></div>';
       else if (S.view === 'landing') app.innerHTML = renderLanding();
       else if (S.view === 'onboarding') app.innerHTML = renderOnboarding();
       else if (S.view === 'calibrating') app.innerHTML = renderCalibrating();
@@ -3295,7 +1948,7 @@ ${recentDays.join('\n\n')}
     const mc = $('modalsContainer');
     if (mc) {
       const modalKey = S.modal
-        ? `${S.modal}_${S.authTab || ''}_${S.selectedMealId || ''}_${S.pendingPaymentMealId || ''}_${S.chat?.length || 0}_${S.didiActiveOrderId || ''}`
+        ? `${S.modal}_${S.authTab || ''}_${S.selectedMealId || ''}_${S.chat?.length || 0}`
         : null;
       if (currentRenderedModalKey !== modalKey) {
         currentRenderedModalKey = modalKey;
@@ -3360,42 +2013,12 @@ ${recentDays.join('\n\n')}
       case 'restart-onb': S.modal = null; startOnboarding(); render(); break;
       case 'go-dashboard': S.view = 'dashboard'; S.tab = 'today'; render(); window.scrollTo(0, 0); toast('Your plan is live'); break;
 
-      // Dashboard & Chef Didi Actions
+      // Dashboard Actions
       case 'tab': S.tab = el.dataset.tab; S.modal = null; render(); window.scrollTo(0, 0); break;
       case 'open-workout': S.modal = 'workout'; render(); break;
       case 'open-ai': S.modal = 'ai'; render(); setTimeout(() => document.querySelector('[data-form="ai"] input')?.focus(), 50); break;
       case 'open-meal': S.selectedMealId = el.dataset.id; S.modal = 'meal'; render(); break;
       case 'log-meal': logMeal(el.dataset.id, S.tab === 'history' ? S.historyDate : todayKey()); break;
-      case 'order-didi': openDidiPaymentModal(el.dataset.id); break;
-      case 'confirm-didi-payment': confirmDidiPayment(S.pendingPaymentMealId); break;
-      case 'didi-go': didiStartTrip(el.dataset.id); break;
-      case 'didi-reached': didiMarkReached(el.dataset.id); break;
-      case 'didi-complete': didiCompleteOrder(el.dataset.id); break;
-      case 'didi-show-map': S.didiActiveOrderId = el.dataset.id; S.didiView = 'map'; render(); break;
-      case 'didi-show-cooking': S.didiActiveOrderId = el.dataset.id; S.didiView = 'cooking'; render(); break;
-      case 'didi-view-orders': S.didiView = 'orders'; render(); break;
-      case 'didi-toggle-step': {
-        const orderId = el.dataset.id || S.didiActiveOrderId || S.selectedOrderId;
-        const st = Number(el.dataset.step);
-        toggleOrderStep(orderId, st);
-        render();
-        break;
-      }
-      case 'didi-wallet': S.modal = 'didi-wallet'; render(); break;
-      case 'simulate-withdraw': {
-        const amt = S.didiWallet || 1250;
-        toast(`₹${amt.toLocaleString('en-IN')} transferred to HDFC Bank •••• 4092! Available in 1 min.`);
-        S.modal = null;
-        render();
-        break;
-      }
-      case 'dismiss-reached-banner': S.dismissedReachedBanner = true; render(); break;
-      case 'didi-status': updateDidiOrderStatus(el.dataset.id, el.dataset.status); break;
-      case 'didi-delete': deleteDidiOrder(el.dataset.id); break;
-      case 'didi-clear-all': clearAllDidiOrders(); break;
-      case 'didi-filter': S.didiFilter = el.dataset.f; render(); break;
-      case 'didi-refresh': fetchDidiOrders().then(() => toast('Synced orders with database')); break;
-      case 'didi-open-order': S.selectedOrderId = el.dataset.id; S.modal = 'didi-recipe'; render(); break;
       case 'del-meal': S.data.meals = S.data.meals.filter((m) => m.id !== el.dataset.id); persist(); toast('Meal removed'); render(); break;
       case 'del-workout': S.data.workouts = S.data.workouts.filter((w) => w.id !== el.dataset.id); persist(); toast('Workout removed'); render(); break;
       case 'day': { const n = Number(el.dataset.n); const k = shiftKey(S.historyDate, n); if (k <= todayKey()) { S.historyDate = k; render(); } break; }
@@ -3473,10 +2096,7 @@ ${recentDays.join('\n\n')}
       S.libQuery = el.value;
       const grid = $('mealGrid');
       if (grid) grid.innerHTML = mealGridHTML();
-    } else if (el.dataset.input === 'didi-search') {
-      S.didiQuery = el.value;
-      const cont = $('didiOrdersContainer');
-      if (cont) cont.innerHTML = renderDidiOrderCardsHTML();
+
     } else if (el.dataset.input === 'pantry-search') {
       S.pantrySearch = el.value;
       const pantryGrid = $('pantryGrid');
@@ -3526,18 +2146,12 @@ ${recentDays.join('\n\n')}
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && S.modal && !S.authBusy) { S.modal = null; render(); }
   });
-  window.addEventListener('popstate', () => {
-    if (isDidiRoute()) { S.view = 'didi'; render(); }
-  });
-  window.addEventListener('hashchange', () => {
-    if (isDidiRoute()) { S.view = 'didi'; render(); }
-  });
+
 
   // ------------------------------------------------------------------
-  // Boot (Backend-Managed Session & Real-Time Order Polling)
+  // Boot (Backend-Managed Session)
   // ------------------------------------------------------------------
   async function boot() {
-    if (isDidiRoute()) S.view = 'didi';
     render();
     getGoogleAuth().catch(() => {});
 
@@ -3547,7 +2161,6 @@ ${recentDays.join('\n\n')}
         const verified = await apiRequest('/api/auth', 'GET');
         if (verified && verified.user && verified.user.uid === savedUser.uid) {
           await handleSignedIn({ ...savedUser, ...verified.user });
-          subscribeDidiOrders();
           return;
         }
       } catch (e) {
@@ -3555,8 +2168,7 @@ ${recentDays.join('\n\n')}
         Store.saveSession(null);
       }
     }
-    S.view = isDidiRoute() ? 'didi' : 'landing';
-    if (isDidiRoute()) subscribeDidiOrders();
+    S.view = 'landing';
     render();
   }
 

@@ -55,7 +55,7 @@ This guide walks you through setting up **Firebase Authentication**, **Cloud Fir
 
 ### Step 4: Lock Down Firebase Realtime Database Rules
 1. In the left navigation menu, click **Build** > **Realtime Database** > **Rules**.
-2. To prevent direct public read/write access to `auth_accounts`, `athletes`, and `chef_didi_orders`, lock the database so only your authenticated backend server (via Service Account or Database Secret) can access it:
+2. To prevent direct public read/write access to `auth_accounts` and `athletes`, lock the database so only your authenticated backend server (via Service Account or Database Secret) can access it:
    ```json
    {
      "rules": {

@@ -15,7 +15,7 @@ app_template = """<!doctype html>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>ZAP FIT™ Chef Didi | AI-Powered Post-Workout Nutrition</title>
+  <title>ZAP FIT™ | AI-Powered Post-Workout Nutrition</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
@@ -65,10 +65,5 @@ output = output.replace('__SUPPLEMENTS_DATA__', supplements_json_str)
 with open('index.html', 'w', encoding='utf-8') as f:
     f.write(output)
 
-for route_dir in ['didi', 'deede']:
-    os.makedirs(route_dir, exist_ok=True)
-    with open(os.path.join(route_dir, 'index.html'), 'w', encoding='utf-8') as f:
-        f.write(output)
-
-print("Generated index.html, didi/index.html, and deede/index.html with zero credentials exposed in frontend.")
+print("Generated index.html with zero credentials exposed in frontend.")
 

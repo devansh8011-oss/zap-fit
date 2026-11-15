@@ -80,7 +80,7 @@ export default function PantryView({
           Cook with what is already in your kitchen.
         </h2>
         <p style={{ color: 'var(--ink-faint)', fontSize: '14px', maxWidth: '65ch', marginTop: '4px' }}>
-          Confirm raw staples in your fridge and pantry. Chef Didi handles all boiling, fresh batters, and cooking from scratch in your kitchen.
+          Confirm raw staples in your fridge and pantry to instantly discover meals you can prepare with what you have in stock.
         </p>
 
         {useSoon.size > 0 && (

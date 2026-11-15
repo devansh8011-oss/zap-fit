@@ -42,7 +42,6 @@ export default async function handler(req, res) {
         uid: authUid,
         meals: Array.isArray(payload.meals) ? payload.meals.slice(0, 500) : [],
         workouts: Array.isArray(payload.workouts) ? payload.workouts.slice(0, 500) : [],
-        didiOrders: Array.isArray(payload.didiOrders) ? payload.didiOrders.slice(0, 200) : [],
         updatedAt: Date.now(),
         updatedAtISO: new Date().toISOString(),
       };

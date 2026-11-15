@@ -50,8 +50,6 @@ SESSION_SECRET = (
 
 SESSION_COOKIE_NAME = 'zapfit_session'
 SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000
-VALID_STATUSES = {'pending', 'en_route', 'reached', 'cooking', 'preparing', 'ready', 'completed'}
-SAFE_ID_RE = re.compile(r'^DIDI_[0-9]+_[A-Z0-9]{2,12}$')
 
 # Sliding window rate limiter
 RATE_BUCKETS = {}
@@ -221,9 +219,6 @@ class ZapFitHandler(http.server.SimpleHTTPRequestHandler):
                         return user
         return None
 
-    def is_didi_partner_request(self):
-        return self.headers.get('X-ZapFit-Client') == 'didi-partner'
-
     def send_json(self, status, payload, extra_headers=None):
         body = json.dumps(payload).encode('utf-8')
         self.send_response(status)
@@ -296,32 +291,6 @@ class ZapFitHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_json(500, {'error': 'Failed to read athlete profile.'})
             return
 
-        if path == '/api/didi-orders':
-            session_user = self.get_authenticated_user()
-            is_didi = self.is_didi_partner_request()
-            if not session_user and not is_didi:
-                self.send_json(401, {'error': 'Unauthorized'})
-                return
-            try:
-                all_orders = rtdb_request('chef_didi_orders', 'GET') or {}
-                if is_didi:
-                    self.send_json(200, {'orders': all_orders})
-                    return
-                filtered = {
-                    oid: ord_obj
-                    for oid, ord_obj in all_orders.items()
-                    if isinstance(ord_obj, dict)
-                    and (not ord_obj.get('athlete', {}).get('uid') or ord_obj.get('athlete', {}).get('uid') == session_user['uid'])
-                }
-                self.send_json(200, {'orders': filtered})
-            except Exception:
-                self.send_json(500, {'error': 'Order service error'})
-            return
-
-        # Clean route support for /didi and /deede
-        if path.rstrip('/') in ('/didi', '/deede', '/deedee', '/chef-didi', '/chefdidi'):
-            self.path = '/index.html'
-
         return super().do_GET()
 
     def do_POST(self):
@@ -335,26 +304,6 @@ class ZapFitHandler(http.server.SimpleHTTPRequestHandler):
 
         if path == '/api/ai':
             self.handle_ai(body)
-            return
-
-        if path == '/api/didi-orders':
-            session_user = self.get_authenticated_user()
-            if not session_user:
-                self.send_json(401, {'error': 'Please sign in to book Chef Didi.'})
-                return
-            order = body.get('order') if (isinstance(body, dict) and 'order' in body) else body
-            order_id = str(order.get('id') or '').strip() if isinstance(order, dict) else ''
-            if not order or not SAFE_ID_RE.match(order_id) or not order.get('mealName'):
-                self.send_json(400, {'error': 'Invalid order payload'})
-                return
-            if not isinstance(order.get('athlete'), dict):
-                order['athlete'] = {}
-            order['athlete']['uid'] = session_user['uid']
-            try:
-                rtdb_request(f'chef_didi_orders/{order_id}', 'PUT', order)
-                self.send_json(200, {'ok': True, 'order': order})
-            except Exception:
-                self.send_json(500, {'error': 'Failed to save order'})
             return
 
         self.send_json(404, {'error': 'Not found'})
@@ -392,90 +341,15 @@ class ZapFitHandler(http.server.SimpleHTTPRequestHandler):
         self.send_json(404, {'error': 'Not found'})
 
     def do_PATCH(self):
-        parsed = urllib.parse.urlparse(self.path)
-        path = parsed.path
-        body = self.read_json_body()
-
-        if path == '/api/didi-orders':
-            session_user = self.get_authenticated_user()
-            is_didi = self.is_didi_partner_request()
-            if not session_user and not is_didi:
-                self.send_json(401, {'error': 'Unauthorized'})
-                return
-            order_id = str(body.get('id') or '').strip()
-            if not SAFE_ID_RE.match(order_id):
-                self.send_json(400, {'error': 'Invalid order id'})
-                return
-            try:
-                existing = rtdb_request(f'chef_didi_orders/{order_id}', 'GET')
-                if not existing:
-                    self.send_json(404, {'error': 'Order not found'})
-                    return
-                if not is_didi and existing.get('athlete', {}).get('uid') and existing['athlete']['uid'] != (session_user or {}).get('uid'):
-                    self.send_json(403, {'error': 'Forbidden'})
-                    return
-                raw_updates = body.get('updates') if isinstance(body.get('updates'), dict) else body
-                allowed = {}
-                if raw_updates.get('status') in VALID_STATUSES:
-                    if raw_updates['status'] == 'completed':
-                        steps = existing.get('steps') or [1, 2, 3]
-                        steps_map = raw_updates.get('completedSteps') or existing.get('completedSteps') or {}
-                        if not all(bool(steps_map.get(str(i)) or steps_map.get(i)) for i in range(len(steps))):
-                            self.send_json(400, {'error': 'All cooking steps must be completed before approval.'})
-                            return
-                    allowed['status'] = raw_updates['status']
-                if isinstance(raw_updates.get('completedSteps'), dict):
-                    allowed['completedSteps'] = raw_updates['completedSteps']
-                allowed['updatedAt'] = int(time.time() * 1000)
-                rtdb_request(f'chef_didi_orders/{order_id}', 'PATCH', allowed)
-                self.send_json(200, {'ok': True})
-            except Exception:
-                self.send_json(500, {'error': 'Failed to update order'})
-            return
-
         self.send_json(404, {'error': 'Not found'})
 
     def do_DELETE(self):
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path
-        qs = urllib.parse.parse_qs(parsed.query)
 
         if path == '/api/auth':
             cookie = f'{SESSION_COOKIE_NAME}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0'
             self.send_json(200, {'ok': True}, {'Set-Cookie': cookie})
-            return
-
-        if path == '/api/didi-orders':
-            session_user = self.get_authenticated_user()
-            is_didi = self.is_didi_partner_request()
-            if not session_user and not is_didi:
-                self.send_json(401, {'error': 'Unauthorized'})
-                return
-            clear_all = (qs.get('all') or [''])[0].strip() == '1' or (qs.get('clear') or [''])[0].strip() == 'all'
-            if clear_all:
-                if not is_didi:
-                    self.send_json(403, {'error': 'Forbidden: Bulk clear restricted to Chef Didi console'})
-                    return
-                try:
-                    rtdb_request('chef_didi_orders', 'DELETE')
-                    self.send_json(200, {'ok': True, 'clearedAll': True})
-                except Exception:
-                    self.send_json(500, {'error': 'Failed to clear orders'})
-                return
-
-            order_id = (qs.get('id') or [''])[0].strip()
-            if not SAFE_ID_RE.match(order_id):
-                self.send_json(400, {'error': 'Invalid order id'})
-                return
-            try:
-                existing = rtdb_request(f'chef_didi_orders/{order_id}', 'GET')
-                if existing and not is_didi and existing.get('athlete', {}).get('uid') and existing['athlete']['uid'] != (session_user or {}).get('uid'):
-                    self.send_json(403, {'error': 'Forbidden'})
-                    return
-                rtdb_request(f'chef_didi_orders/{order_id}', 'DELETE')
-                self.send_json(200, {'ok': True, 'deletedId': order_id})
-            except Exception:
-                self.send_json(500, {'error': 'Failed to delete order'})
             return
 
         self.send_json(404, {'error': 'Not found'})
