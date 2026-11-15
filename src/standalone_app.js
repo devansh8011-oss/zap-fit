@@ -1771,7 +1771,10 @@ Return ONLY a JSON object with these keys:
             <div class="xs muted" style="margin-top:6px">Update available staples in your <a href="#" data-action="tab" data-tab="pantry" style="color:var(--accent-text);text-decoration:underline">Kitchen Pantry</a>.</div>
           </div>
 
-          <p class="small" style="margin-bottom:6px"><b>Preparation & Cooking Instructions</b></p>
+          <div class="row-between" style="margin:16px 0 8px">
+            <b class="small" style="color:var(--ink);font-size:13.5px">Preparation & Cooking Steps</b>
+            <span class="xs muted" style="font-weight:600">${steps.length} step${steps.length === 1 ? '' : 's'}</span>
+          </div>
           <div class="recipe-step-list">
             ${steps.map((st, idx) => `<div class="recipe-step-item">
               <span class="recipe-step-badge">Step ${idx + 1}</span>
@@ -1780,7 +1783,16 @@ Return ONLY a JSON object with these keys:
           </div>
         </div>
 
-        <p class="xs muted" style="margin:14px 0 16px">Micronutrients: ${esc((m.micronutrients || []).join(', ') || '—')} · Allergens: ${esc((m.allergens_present || []).join(', ') || 'none declared')}</p>
+        <div class="meal-detail-meta-box">
+          <div class="meal-detail-meta-item">
+            <span class="meal-meta-label">Micronutrients:</span>
+            <span class="meal-meta-val">${esc((m.micronutrients || []).join(', ') || '—')}</span>
+          </div>
+          <div class="meal-detail-meta-item">
+            <span class="meal-meta-label">Allergens:</span>
+            <span class="meal-meta-val ${m.allergens_present?.length ? 'has-allergens' : ''}">${esc((m.allergens_present || []).join(', ') || 'None declared')}</span>
+          </div>
+        </div>
         <div>
           <button class="btn btn-primary btn-block" data-action="log-meal" data-id="${m.id}">${icon('check', 16)} Log as eaten${logDate !== todayKey() ? ' on ' + esc(prettyDate(logDate)) : ' today'}</button>
         </div>

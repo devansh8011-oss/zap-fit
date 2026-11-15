@@ -185,7 +185,7 @@ MEALS = [
     "prep_time": "8 mins",
     "cook_time": "15 mins",
     "steps": [
-      "Wash brown rice and boils in a pot until tender and fluffy.",
+      "Wash brown rice and boil in a pot until tender and fluffy.",
       "In a skillet, sauté cooked rajma (kidney beans) and sweet corn with cumin seeds, diced tomatoes, and salt for 4 minutes.",
       "Slice fresh ripe avocado and chop fresh coriander.",
       "Scoop freshly boiled brown rice into a wide bowl and top with the spiced rajma and sweet corn.",
@@ -237,7 +237,7 @@ MEALS = [
     "prep_time": "3 mins",
     "cook_time": "5 mins",
     "steps": [
-      "Bring water to a boil in a saucepan, adds rolled oats, and cooks for 4-5 minutes until thick.",
+      "Bring water to a boil in a saucepan, add rolled oats, and cooks for 4-5 minutes until thick.",
       "Remove from heat and whisk in pea protein powder until completely smooth.",
       "Stir in creamy peanut butter and ground cinnamon until well incorporated.",
       "Slice fresh ripe banana evenly over the oatmeal.",
@@ -263,7 +263,7 @@ MEALS = [
     "prep_time": "10 mins",
     "cook_time": "15 mins",
     "steps": [
-      "Wash red masoor lentils and pressure-cooks with turmeric, salt, and water until soft.",
+      "Wash red masoor lentils and pressure-cook with turmeric, salt, and water until soft.",
       "Prepare tadka: temper cumin seeds and chopped tomatoes in 1 tsp oil, then stir into the cooked dal.",
       "Knead whole wheat flour with water into a soft dough and roll into round rotis.",
       "Cook rotis on a hot tawa until puffed and soft.",
@@ -315,7 +315,7 @@ MEALS = [
     "prep_time": "8 mins",
     "cook_time": "15 mins",
     "steps": [
-      "Wash basmati rice and boils in water until fluffy and tender.",
+      "Wash basmati rice and boil in water until fluffy and tender.",
       "In a pot, simmer cooked rajma with diced bell peppers, tomato puree, cumin seeds, and spices for 10 minutes.",
       "Season with salt and stir until the curry becomes rich and fragrant.",
       "Ladle the hot rajma over a bed of freshly boiled basmati rice.",
@@ -367,7 +367,7 @@ MEALS = [
     "prep_time": "10 mins",
     "cook_time": "10 mins",
     "steps": [
-      "Knead whole wheat flour and rolls fresh rotis, cooking them on the tawa.",
+      "Knead whole wheat flour and roll fresh rotis, cooking them on the tawa.",
       "Pan-roast boiled chickpeas with cumin powder, lemon juice, and a pinch of salt until lightly crisp.",
       "Mash ripe avocado with a dash of lemon juice and spread across the warm roti.",
       "Layer roasted chickpeas, sliced cucumber, and fresh coriander in the center.",
@@ -449,7 +449,7 @@ MEALS = [
     "prep_time": "8 mins",
     "cook_time": "10 mins",
     "steps": [
-      "Crumble fresh paneer and finely dices capsicum (bell peppers) and tomatoes.",
+      "Crumble fresh paneer and finely dice capsicum (bell peppers) and tomatoes.",
       "Heat olive oil in a pan, add cumin seeds, and let them crackle.",
       "Add chopped capsicum and tomatoes; sauté for 3-4 minutes until tender.",
       "Add crumbled paneer and salt, tossing gently for 2-3 minutes on medium flame.",
@@ -475,7 +475,7 @@ MEALS = [
     "prep_time": "5 mins",
     "cook_time": "6 mins",
     "steps": [
-      "Wash spinach and separates egg whites into a bowl.",
+      "Wash spinach and separate egg whites into a bowl.",
       "Whisk egg whites with salt and freshly cracked black pepper until frothy.",
       "Heat a pan with a drop of olive oil, sauté spinach for 60 seconds until wilted.",
       "Pour whisked egg whites evenly over the spinach and cook on low heat until set, then fold.",
@@ -709,7 +709,7 @@ MEALS = [
     "prep_time": "8 mins",
     "cook_time": "10 mins",
     "steps": [
-      "Wash white rice and boils in a pot until tender, spreading on a plate to cool slightly.",
+      "Wash white rice and boil in a pot until tender, spreading on a plate to cool slightly.",
       "Finely dice carrots and mince garlic.",
       "Heat a wok with 1 tsp oil, scramble egg whites until fluffy, and set aside.",
       "Sauté garlic, green peas, and carrots for 3 minutes on high flame.",
@@ -869,7 +869,7 @@ MEALS = [
     "prep_time": "8 mins",
     "cook_time": "15 mins",
     "steps": [
-      "Wash basmati rice and boils in a pot until tender and fragrant.",
+      "Wash basmati rice and boil in a pot until tender and fragrant.",
       "Finely chop onions, tomatoes, and garlic.",
       "Heat oil in a pan, temper cumin seeds, then sauté onions and garlic until golden.",
       "Add minced chicken (keema), tomatoes, and spices; cook for 10-12 minutes until thoroughly done.",
@@ -973,7 +973,7 @@ MEALS = [
     "prep_time": "8 mins",
     "cook_time": "12 mins",
     "steps": [
-      "Rinse basmati rice and boils in a pot until light and fluffy.",
+      "Rinse basmati rice and boil in a pot until light and fluffy.",
       "Clean and devein fresh prawns (shrimp); marinate with turmeric, lemon juice, and salt.",
       "Heat olive oil in a tawa and sear prawns on high heat for 2 minutes per side until pink and succulent.",
       "Slice crisp fresh cucumber and chop fresh coriander.",
@@ -1129,7 +1129,7 @@ MEALS = [
     "prep_time": "8 mins",
     "cook_time": "15 mins",
     "steps": [
-      "Wash basmati rice and boils in a pot until tender.",
+      "Wash basmati rice and boil in a pot until tender.",
       "Dice chicken breast into bite-sized pieces and season with garlic, salt, and black pepper.",
       "Sauté chicken and fresh broccoli florets in olive oil for 6-8 minutes until chicken is tender.",
       "Scoop freshly boiled rice into a recovery bowl.",
@@ -1263,7 +1263,7 @@ MEALS = [
     "prep_time": "8 mins",
     "cook_time": "15 mins",
     "steps": [
-      "Wash basmati rice and boils in a pot until grains are separate and fluffy.",
+      "Wash basmati rice and boil in a pot until grains are separate and fluffy.",
       "Pressure-cook soaked lobiya (black-eyed peas) until tender.",
       "Heat oil in a pan, add hing (asafoetida) and cumin seeds, then stir in fresh tomato puree and spices.",
       "Add the cooked lobiya and simmer for 8-10 minutes until the gravy thickens.",
@@ -1419,7 +1419,7 @@ MEALS = [
     "prep_time": "8 mins",
     "cook_time": "15 mins",
     "steps": [
-      "Wash basmati rice and boils in water until fluffy.",
+      "Wash basmati rice and boil in water until fluffy.",
       "Peel, dice, and boil raw banana cubes; sauté with cumin seeds, chopped tomatoes, and rock salt.",
       "Whisk fresh homemade curd until smooth.",
       "Layer warm basmati rice in a bowl, add spiced raw banana subzi, and spoon cool curd on the side.",
@@ -1605,7 +1605,7 @@ MEALS = [
     "prep_time": "8 mins",
     "cook_time": "12 mins",
     "steps": [
-      "Wash quinoa and boils in 2 cups water until light and fluffy.",
+      "Wash quinoa and boil in 2 cups water until light and fluffy.",
       "Sauté cooked black beans with sweet corn, chopped tomatoes, and salt for 3 minutes.",
       "Slice ripe avocado and chop fresh coriander.",
       "Layer quinoa in a bowl and top with the black bean and corn mix.",
@@ -1915,7 +1915,7 @@ MEALS = [
     "prep_time": "8 mins",
     "cook_time": "15 mins",
     "steps": [
-      "Wash basmati rice and boils in water until grains are tender and fluffy.",
+      "Wash basmati rice and boil in water until grains are tender and fluffy.",
       "Slice carrots into rounds and steam for 3-4 minutes.",
       "Season chicken breast with salt and black pepper; pan-sear in olive oil for 6 minutes per side.",
       "Slice cooked chicken breast neatly.",
